@@ -1,7 +1,7 @@
 # Config
 vars: {
   d2-config: {
-    layout-engine: dagre
+    layout-engine: elk # dagre
   }
 }
 
@@ -12,7 +12,7 @@ explain: |md
 }
 
 inactive: Inactive Proxy
-inactive.shape: circle
+inactive.shape: rectangle
 inactive.style {
   font: mono
   font-color: "#595959"
@@ -22,7 +22,7 @@ inactive.style {
 }
 
 active: Active Proxy
-active.shape: circle
+active.shape: rectangle
 active.style {
   font: mono
   font-color: "#FFFFFF"
@@ -31,9 +31,9 @@ active.style {
   stroke-width: 2
 }
 
-invalided: Invalided Proxy
-invalided.shape: circle
-invalided.style {
+invalid: Invalid Proxy
+invalid.shape: rectangle
+invalid.style {
   font: mono
   font-color: "#FFFFFF"
   fill: "#DB3E3D"
@@ -41,43 +41,43 @@ invalided.style {
   stroke-width: 2
 }
 
-direction: right
-inactive -> active: Start {
+# direction: down
+inactive -> active: activate {
   style: {
     stroke: "#303030"
     font-size: 20
   }
 }
 
-inactive -> inactive: Edit {
+# inactive -> inactive: Edit {
+#  style: {
+#    stroke: "#303030"
+#    font-size: 20
+#  }
+# }
+
+active  -> inactive: deactivate {
   style: {
     stroke: "#303030"
     font-size: 20
   }
 }
 
-active  -> inactive: Stop {
+active  -> invalid: invalidate {
   style: {
     stroke: "#303030"
     font-size: 20
   }
 }
 
-active  -> invalided: Test {
+invalid -> active: reactivate {
   style: {
     stroke: "#303030"
     font-size: 20
   }
 }
 
-active  -> invalided: Error {
-  style: {
-    stroke: "#303030"
-    font-size: 20
-  }
-}
-
-invalided -> inactive: Edit {
+invalid  -> inactive: deactivate {
   style: {
     stroke: "#303030"
     font-size: 20
