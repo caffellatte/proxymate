@@ -1,0 +1,18 @@
+{
+  "name": "proxymate",
+  "version": "0.0.1",
+  "description": "Desktop application for proxy tunneling",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "d2-fsm": "d2 --watch ./.d2/fsm.d2"
+  },
+  "keywords": ["electron", "react", "proxy"],
+  "author": {
+    "name": "Mikhail Lutsenko",
+    "email": "m.g.lutsenko@gmail.com",
+    "url": "https://caffellatte.website/"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/caffellatte/proxymate#readme"
+}
