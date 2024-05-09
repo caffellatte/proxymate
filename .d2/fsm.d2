@@ -1,0 +1,85 @@
+# Config
+vars: {
+  d2-config: {
+    layout-engine: dagre
+  }
+}
+
+explain: |md
+  # State machine diagram for proxy tunnel
+| {
+  near: top-center
+}
+
+inactive: Inactive Proxy
+inactive.shape: circle
+inactive.style {
+  font: mono
+  font-color: "#595959"
+  fill: "#C5C5C5"
+  stroke: "#303030"
+  stroke-width: 2
+}
+
+active: Active Proxy
+active.shape: circle
+active.style {
+  font: mono
+  font-color: "#FFFFFF"
+  fill: "#3ABBB3"
+  stroke: "#303030"
+  stroke-width: 2
+}
+
+invalided: Invalided Proxy
+invalided.shape: circle
+invalided.style {
+  font: mono
+  font-color: "#FFFFFF"
+  fill: "#DB3E3D"
+  stroke: "#303030"
+  stroke-width: 2
+}
+
+direction: right
+inactive -> active: Start {
+  style: {
+    stroke: "#303030"
+    font-size: 20
+  }
+}
+
+inactive -> inactive: Edit {
+  style: {
+    stroke: "#303030"
+    font-size: 20
+  }
+}
+
+active  -> inactive: Stop {
+  style: {
+    stroke: "#303030"
+    font-size: 20
+  }
+}
+
+active  -> invalided: Test {
+  style: {
+    stroke: "#303030"
+    font-size: 20
+  }
+}
+
+active  -> invalided: Error {
+  style: {
+    stroke: "#303030"
+    font-size: 20
+  }
+}
+
+invalided -> inactive: Edit {
+  style: {
+    stroke: "#303030"
+    font-size: 20
+  }
+}
