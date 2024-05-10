@@ -31,8 +31,11 @@
     "typescript": "~4.5.4",
     "vite": "^5.0.12"
   },
-
-  "keywords": ["electron", "react", "proxy"],
+  "keywords": [
+    "electron",
+    "react",
+    "proxy"
+  ],
   "author": {
     "name": "Mikhail Lutsenko",
     "email": "m.g.lutsenko@gmail.com",
@@ -40,6 +43,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "xstate": "^5.13.0"
   }
 }

@@ -26,6 +26,16 @@
  * ```
  */
 
-import './index.css';
+import "./index.css";
+import { actor } from "./machine";
 
-console.log('👋 This message is being logged by "renderer.ts", included via Vite');
+console.log(
+  '👋 This message is being logged by "renderer.ts", included via Vite',
+);
+
+actor.subscribe((snapshot) => {
+  console.log("Value:", snapshot.value);
+});
+actor.start();
+actor.send({ type: "toggle" });
+actor.send({ type: "toggle" });
