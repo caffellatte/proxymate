@@ -6,11 +6,7 @@ export interface IPorts {
 export type ValidPorts = IPorts &
   (Required<Pick<IPorts, "http">> | Required<Pick<IPorts, "socks">>);
 
-export enum State {
-  active = "ACTIVE",
-  inactive = "INACTIVE",
-  invalid = "INVALID",
-}
+export type State = "active" | "inactive" | "invalid";
 
 export interface IProxy {
   id: number;
