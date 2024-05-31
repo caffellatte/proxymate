@@ -12,5 +12,9 @@
     "plugin:import/electron",
     "plugin:import/typescript"
   ],
+  "rules": {
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off"
+  },
   "parser": "@typescript-eslint/parser"
 }
