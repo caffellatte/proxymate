@@ -3,7 +3,7 @@
     "target": "ESNext",
     "module": "commonjs",
     "allowJs": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "noImplicitAny": true,
@@ -12,6 +12,5 @@
     "outDir": "dist",
     "moduleResolution": "node",
     "resolveJsonModule": true
-  },
-  "include": ["/src/**/*.ts", "/src/**/*.tsx"]
+  }
 }

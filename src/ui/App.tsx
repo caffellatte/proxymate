@@ -1,4 +1,3 @@
-import React from "react";
 import { actor } from "../machine";
 
 const App = () => {
