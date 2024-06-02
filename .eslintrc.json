@@ -23,6 +23,9 @@
   },
   "parser": "@typescript-eslint/parser",
   "settings": {
+    "import/resolver": {
+      "typescript": {}
+    },
     "react": {
       "version": "detect"
     }
