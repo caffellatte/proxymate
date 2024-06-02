@@ -1,4 +1,5 @@
 import { actor } from "../machine";
+import { Button } from "./components/ui/button";
 
 const App = () => {
   actor.subscribe((snapshot) => {
@@ -11,6 +12,7 @@ const App = () => {
   return (
     <>
       <h1 className="text-3xl font-bold underline">Hello World!</h1>
+      <Button>Test</Button>
     </>
   );
 };
