@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from "electron";
 import path from "path";
 
-import Database from "@/core/db";
+import { db } from "@/core/db";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -50,11 +50,19 @@ app.on("activate", () => {
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
-    const db = new Database();
-    db.put("test", "Test", 42);
-    db.get("test").then((data) => {
-      console.log(data);
+    db.proxies.put({
+      name: "Test name 1",
+      description: "Test description 1",
+      host: "111.12.12.12",
+      ports: {
+        http: 9000,
+      },
+      state: "inactive",
+      username: "admin",
+      password: "password",
     });
+    const data = db.proxies.get(1);
+    console.log("data:", data);
   }
 });
 

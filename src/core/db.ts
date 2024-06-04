@@ -1,28 +1,26 @@
-import PouchDB from "pouchdb";
+import { app } from "electron";
+import Dexie, { type EntityTable } from "dexie";
+import { indexedDB, IDBKeyRange } from "fake-indexeddb";
 
-type Person = {
-  name: string;
-  age: number;
+import { IProxy } from "@/types";
+
+const userData = app.getPath("userData");
+
+console.log("userData:", userData);
+
+const db = new Dexie("ProxiesDatabse", {
+  indexedDB: indexedDB,
+  IDBKeyRange: IDBKeyRange,
+}) as Dexie & {
+  proxies: EntityTable<IProxy, "id">;
 };
 
-class Databse {
-  persons: PouchDB.Database<Person>;
+db.version(1).stores({
+  proxies: "++id, name",
+});
 
-  constructor() {
-    this.persons = new PouchDB<Person>("dbname");
-  }
+db.open().catch(function (error) {
+  console.error("ERROR: " + error);
+});
 
-  public put(id: string, name: string, age: number) {
-    this.persons.put({
-      _id: id,
-      name: name,
-      age: age,
-    });
-  }
-
-  public async get(id: string) {
-    return await this.persons.get(id);
-  }
-}
-
-export default Databse;
+export { db };
