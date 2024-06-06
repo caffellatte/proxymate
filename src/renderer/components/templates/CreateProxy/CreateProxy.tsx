@@ -1,4 +1,13 @@
-import { Button, Input } from "@/renderer/components/ui";
+import {
+  Button,
+  Input,
+  Label,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/renderer/components/ui";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { proxyCreateSchema, ProxyCreateFormSchema } from "@/types";
@@ -39,33 +48,54 @@ const CreateProxy = () => {
   };
 
   return (
-    <div>
-      CreateProxy
+    <DialogContent className="max-w-[425px]">
       <form onSubmit={proxyCreateHandleSubmit(proxyCreateOnSubmit)}>
-        <div>
-          <Controller
-            name="name"
-            control={proxyCreateControl}
-            defaultValue={""}
-            render={({ field: { onChange, value, name, ref } }) => (
-              <Input
-                placeholder="name"
-                maxLength={36}
-                id="name"
-                type="text"
-                name={name}
-                value={value}
-                onChange={onChange}
-                ref={ref}
+        <DialogHeader>
+          <DialogTitle>Create proxy</DialogTitle>
+          <DialogDescription>
+            {"Create new proxy here. Click save when you're done."}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="flex flex-col gap-3">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">
+                Name
+              </Label>
+              <Controller
+                name="name"
+                control={proxyCreateControl}
+                defaultValue={""}
+                render={({ field: { onChange, value, name, ref } }) => (
+                  <Input
+                    placeholder="name"
+                    maxLength={36}
+                    id="name"
+                    type="text"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    ref={ref}
+                    className="col-span-3"
+                  />
+                )}
               />
+            </div>
+            {proxyCreateErrors.name && (
+              <p className="text-destructive">
+                {proxyCreateErrors.name.message}
+              </p>
             )}
-          />
-          {proxyCreateErrors.name && <p>{proxyCreateErrors.name.message}</p>}
+          </div>
         </div>
-        {proxyCreateErrors.host && <p>{proxyCreateErrors.host.message}</p>}
-        <Button>Test</Button>
+        {proxyCreateErrors.host && (
+          <p className="text-destructive">{proxyCreateErrors.host.message}</p>
+        )}
+        <DialogFooter>
+          <Button type="submit">Save</Button>
+        </DialogFooter>
       </form>
-    </div>
+    </DialogContent>
   );
 };
 

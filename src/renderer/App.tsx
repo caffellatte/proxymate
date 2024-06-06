@@ -1,5 +1,6 @@
 import { actor } from "../machine";
 import { CreateProxy } from "@/renderer/components/templates";
+import { Button, Dialog, DialogTrigger } from "@/renderer/components/ui/";
 
 const App = () => {
   actor.subscribe((snapshot) => {
@@ -12,7 +13,12 @@ const App = () => {
   return (
     <>
       <h1 className="text-3xl font-bold underline">Hello World!</h1>
-      <CreateProxy />
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="outline">Create Proxy</Button>
+        </DialogTrigger>
+        <CreateProxy />
+      </Dialog>
     </>
   );
 };
