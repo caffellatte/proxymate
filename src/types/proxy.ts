@@ -29,24 +29,36 @@ export const proxyCreateSchema = z
   .object({
     name: z
       .string()
-      .min(4, { message: "This field is required (min 4 characters)" }),
+      .min(4, { message: "Name field is required (min 4 characters)" }),
     description: z.string().optional(),
     host: z
       .string({
-        required_error: "This field is required (min 4 characters)",
+        required_error: "Description field is required (min 4 characters)",
         invalid_type_error: "This field is required (min 4 characters)",
       })
       .min(4, { message: "This field is required (min 4 characters)" }),
     ports: z.object({
       port_http: z
-        .number()
-        .min(1, { message: "This field is required (min 1 digit)" })
-        .max(5, { message: "This field is required (max 5 digits)" })
+        .union([
+          z
+            .number()
+            .int()
+            .positive()
+            .min(1, { message: "This field is required (min 1 digit)" })
+            .max(5, { message: "This field is required (max 5 digits)" }),
+          z.nan(),
+        ])
         .optional(),
       port_socks: z
-        .number()
-        .min(1, { message: "This field is required (min 1 digit)" })
-        .max(5, { message: "This field is required (max 5 digits)" })
+        .union([
+          z
+            .number()
+            .int()
+            .positive()
+            .min(1, { message: "This field is required (min 1 digit)" })
+            .max(5, { message: "This field is required (max 5 digits)" }),
+          z.nan(),
+        ])
         .optional(),
     }),
     username: z.string().optional(),
