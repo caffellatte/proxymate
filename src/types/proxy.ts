@@ -32,32 +32,43 @@ export const proxyCreateSchema = z
       .min(4, { message: "Name field is required (min 4 characters)" }),
     description: z.string().optional(),
     host: z
-      .string({
-        required_error: "Description field is required (min 4 characters)",
-        invalid_type_error: "This field is required (min 4 characters)",
-      })
-      .min(4, { message: "This field is required (min 4 characters)" }),
+      .string()
+      .min(4, { message: "Host field is required (min 4 characters)" }),
     ports: z.object({
       port_http: z
         .union([
-          z
-            .number()
-            .int()
-            .positive()
-            .min(1, { message: "This field is required (min 1 digit)" })
-            .max(5, { message: "This field is required (max 5 digits)" }),
-          z.nan(),
+          z.coerce
+            .number({
+              message: "must be a number",
+            })
+            .int({
+              message: "must be a whole number",
+            })
+            .positive({
+              message: "must be positive",
+            })
+            .min(1, { message: "HTTP port from 1 to 65535 are available" })
+            .max(65535, { message: "HTTP port from 1 to 65535 are available" }),
+          z.literal(""),
         ])
         .optional(),
       port_socks: z
         .union([
-          z
-            .number()
-            .int()
-            .positive()
-            .min(1, { message: "This field is required (min 1 digit)" })
-            .max(5, { message: "This field is required (max 5 digits)" }),
-          z.nan(),
+          z.coerce
+            .number({
+              message: "must be a number",
+            })
+            .int({
+              message: "must be a whole number",
+            })
+            .positive({
+              message: "must be positive",
+            })
+            .min(1, { message: "SOCKS5 port from 1 to 65535 are available" })
+            .max(65535, {
+              message: "SOCKS5 port from 1 to 65535 are available",
+            }),
+          z.literal(""),
         ])
         .optional(),
     }),
@@ -66,16 +77,13 @@ export const proxyCreateSchema = z
   })
   .refine(
     (data) => {
-      if (
-        data.ports.port_http === undefined ||
-        data.ports.port_socks === undefined
-      ) {
-        return false;
+      if (data.ports.port_http !== "" || data.ports.port_socks !== "") {
+        return true;
       }
-      return true;
+      return false;
     },
     {
-      message: "Specify at least one port",
+      message: "Specify at least one port (HTTP or SOCKS5)",
       path: ["ports"],
     },
   );

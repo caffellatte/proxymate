@@ -9,7 +9,8 @@ import {
   Label,
   Typography,
 } from "@/renderer/components/ui";
-import { useForm, Controller } from "react-hook-form";
+import { useEffect } from "react";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { proxyCreateSchema, ProxyCreateFormSchema } from "@/types";
 
@@ -26,6 +27,31 @@ const CreateProxy = () => {
   } = useForm<ProxyCreateFormSchema>({
     resolver: proxyCreateResolver,
   });
+
+  const watchedPortHttp = useWatch({
+    control: proxyCreateControl,
+    name: "ports.port_http",
+  });
+
+  const watchedPortSocks = useWatch({
+    control: proxyCreateControl,
+    name: "ports.port_http",
+  });
+
+  useEffect(() => {
+    if (proxyCreateErrors.ports?.root) {
+      if (watchedPortHttp) {
+        if (watchedPortHttp || watchedPortSocks) {
+          proxyCreateClearErrors("ports");
+        }
+      }
+    }
+  }, [
+    watchedPortHttp,
+    watchedPortSocks,
+    proxyCreateErrors.ports?.root,
+    proxyCreateClearErrors,
+  ]);
 
   const proxyCreateOnSubmit = async ({
     name,
@@ -86,9 +112,16 @@ const CreateProxy = () => {
               />
             </div>
             {proxyCreateErrors.name && (
-              <Typography variant="small" color="error">
-                {proxyCreateErrors.name.message}
-              </Typography>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <div></div>
+                <Typography
+                  variant="small"
+                  color="error"
+                  className="col-span-3"
+                >
+                  {proxyCreateErrors.name.message}
+                </Typography>
+              </div>
             )}
           </div>
           {/* Description */}
@@ -117,9 +150,16 @@ const CreateProxy = () => {
               />
             </div>
             {proxyCreateErrors.description && (
-              <Typography variant="small" color="error">
-                {proxyCreateErrors.description.message}
-              </Typography>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <div></div>
+                <Typography
+                  variant="small"
+                  color="error"
+                  className="col-span-3"
+                >
+                  {proxyCreateErrors.description.message}
+                </Typography>
+              </div>
             )}
           </div>
           {/* Host */}
@@ -148,9 +188,16 @@ const CreateProxy = () => {
               />
             </div>
             {proxyCreateErrors.host && (
-              <Typography variant="small" color="error">
-                {proxyCreateErrors.host.message}
-              </Typography>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <div></div>
+                <Typography
+                  variant="small"
+                  color="error"
+                  className="col-span-3"
+                >
+                  {proxyCreateErrors.host.message}
+                </Typography>
+              </div>
             )}
           </div>
           {/* HTTP port */}
@@ -162,11 +209,10 @@ const CreateProxy = () => {
               <Controller
                 name="ports.port_http"
                 control={proxyCreateControl}
-                defaultValue={NaN}
+                defaultValue={""}
                 render={({ field: { onChange, value, name, ref } }) => (
                   <Input
                     placeholder="Proxy HTTP port"
-                    maxLength={5}
                     id="ports.port_http"
                     type="number"
                     name={name}
@@ -178,11 +224,29 @@ const CreateProxy = () => {
                 )}
               />
             </div>
-
+            {proxyCreateErrors.ports?.root && (
+              <div className="grid grid-cols-4 items-center gap-4">
+                <div></div>
+                <Typography
+                  variant="small"
+                  color="error"
+                  className="col-span-3"
+                >
+                  {proxyCreateErrors.ports.root.message}
+                </Typography>
+              </div>
+            )}
             {proxyCreateErrors.ports?.port_http && (
-              <Typography variant="small" color="error">
-                {proxyCreateErrors.ports.port_http.message}
-              </Typography>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <div></div>
+                <Typography
+                  variant="small"
+                  color="error"
+                  className="col-span-3"
+                >
+                  {proxyCreateErrors.ports.port_http.message}
+                </Typography>
+              </div>
             )}
           </div>
           {/* SOCKS5 port */}
@@ -194,36 +258,47 @@ const CreateProxy = () => {
               <Controller
                 name="ports.port_socks"
                 control={proxyCreateControl}
-                defaultValue={NaN}
+                defaultValue={""}
                 render={({ field: { onChange, value, name, ref } }) => (
                   <Input
                     placeholder="Proxy SOCKS5 port"
-                    maxLength={5}
                     id="port_socks"
-                    type="text"
+                    type="number"
                     name={name}
                     value={value}
-                    onChange={(event) =>
-                      onChange?.(parseInt(event.target.value, 10))
-                    }
-                    // onChange={onChange}
+                    onChange={onChange}
                     ref={ref}
                     className="col-span-3"
                   />
                 )}
               />
             </div>
-            {proxyCreateErrors.ports && (
-              <Typography variant="small" color="error">
-                {proxyCreateErrors.ports.message}
-              </Typography>
+            {proxyCreateErrors.ports?.root && (
+              <div className="grid grid-cols-4 items-center gap-4">
+                <div></div>
+                <Typography
+                  variant="small"
+                  color="error"
+                  className="col-span-3"
+                >
+                  {proxyCreateErrors.ports.root.message}
+                </Typography>
+              </div>
             )}
             {proxyCreateErrors.ports?.port_socks && (
-              <Typography variant="small" color="error">
-                {proxyCreateErrors.ports.port_socks.message}
-              </Typography>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <div></div>
+                <Typography
+                  variant="small"
+                  color="error"
+                  className="col-span-3"
+                >
+                  {proxyCreateErrors.ports.port_socks.message}
+                </Typography>
+              </div>
             )}
           </div>
+          {/* Default Port */}
           {/* Username */}
           <div className="flex flex-col gap-3">
             <div className="grid grid-cols-4 items-center gap-4">
@@ -281,14 +356,14 @@ const CreateProxy = () => {
               />
             </div>
             {proxyCreateErrors.username && (
-              <Typography variant="small" color="error">
+              <Typography variant="small" color="error" className="text-right">
                 {proxyCreateErrors.username.message}
               </Typography>
             )}
           </div>
         </div>
         {proxyCreateErrors.proxyCreateError && (
-          <Typography variant="small" color="error">
+          <Typography variant="small" color="error" className="text-right">
             {proxyCreateErrors.proxyCreateError.message}
           </Typography>
         )}
