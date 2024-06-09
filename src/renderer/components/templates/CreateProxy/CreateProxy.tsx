@@ -7,6 +7,8 @@ import {
   DialogFooter,
   Input,
   Label,
+  Switch,
+  Textarea,
   Typography,
 } from "@/renderer/components/ui";
 import { useEffect } from "react";
@@ -28,28 +30,24 @@ const CreateProxy = () => {
     resolver: proxyCreateResolver,
   });
 
-  const watchedPortHttp = useWatch({
+  const watchedAuthentication = useWatch({
     control: proxyCreateControl,
-    name: "ports.port_http",
-  });
-
-  const watchedPortSocks = useWatch({
-    control: proxyCreateControl,
-    name: "ports.port_http",
+    name: "authentication.authentication",
   });
 
   useEffect(() => {
-    if (proxyCreateErrors.ports?.root) {
-      if (watchedPortHttp) {
-        if (watchedPortHttp || watchedPortSocks) {
-          proxyCreateClearErrors("ports");
-        }
+    if (
+      proxyCreateErrors.authentication?.username ||
+      proxyCreateErrors.authentication?.password
+    ) {
+      if (!watchedAuthentication) {
+        proxyCreateClearErrors("authentication");
       }
     }
   }, [
-    watchedPortHttp,
-    watchedPortSocks,
-    proxyCreateErrors.ports?.root,
+    watchedAuthentication,
+    proxyCreateErrors.authentication?.username,
+    proxyCreateErrors.authentication?.password,
     proxyCreateClearErrors,
   ]);
 
@@ -77,8 +75,11 @@ const CreateProxy = () => {
   console.log(proxyCreateErrors);
 
   return (
-    <DialogContent className="max-w-[480px]">
-      <form onSubmit={proxyCreateHandleSubmit(proxyCreateOnSubmit)}>
+    <DialogContent className="max-w-[604px]">
+      <form
+        onSubmit={proxyCreateHandleSubmit(proxyCreateOnSubmit)}
+        className="flex flex-col gap-4"
+      >
         <DialogHeader>
           <DialogTitle>Create proxy</DialogTitle>
           <DialogDescription>
@@ -126,8 +127,8 @@ const CreateProxy = () => {
           </div>
           {/* Description */}
           <div className="flex flex-col gap-3">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="description" className="text-right">
+            <div className="grid grid-cols-4 items-start gap-4">
+              <Label htmlFor="description" className="text-right pt-2.5">
                 Description
               </Label>
               <Controller
@@ -135,11 +136,9 @@ const CreateProxy = () => {
                 control={proxyCreateControl}
                 defaultValue={""}
                 render={({ field: { onChange, value, name, ref } }) => (
-                  <Input
+                  <Textarea
                     placeholder="Proxy description"
-                    maxLength={120}
                     id="description"
-                    type="text"
                     name={name}
                     value={value}
                     onChange={onChange}
@@ -162,21 +161,58 @@ const CreateProxy = () => {
               </div>
             )}
           </div>
+          {/* Port */}
+          <div className="flex flex-col gap-3">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="port" className="text-right">
+                Port
+              </Label>
+              <Controller
+                name="port"
+                control={proxyCreateControl}
+                defaultValue={""}
+                render={({ field: { onChange, value, name, ref } }) => (
+                  <Input
+                    placeholder="Port"
+                    id="port"
+                    type="number"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    ref={ref}
+                    className="col-span-3"
+                  />
+                )}
+              />
+            </div>
+            {proxyCreateErrors.port && (
+              <div className="grid grid-cols-4 items-center gap-4">
+                <div></div>
+                <Typography
+                  variant="small"
+                  color="error"
+                  className="col-span-3"
+                >
+                  {proxyCreateErrors.port.message}
+                </Typography>
+              </div>
+            )}
+          </div>
           {/* Host */}
           <div className="flex flex-col gap-3">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="description" className="text-right">
-                Host
+              <Label htmlFor="proxy_host" className="text-right">
+                Proxy host
               </Label>
               <Controller
-                name="host"
+                name="proxy_host"
                 control={proxyCreateControl}
                 defaultValue={""}
                 render={({ field: { onChange, value, name, ref } }) => (
                   <Input
                     placeholder="Proxy host"
                     maxLength={120}
-                    id="host"
+                    id="proxy_host"
                     type="text"
                     name={name}
                     value={value}
@@ -187,7 +223,7 @@ const CreateProxy = () => {
                 )}
               />
             </div>
-            {proxyCreateErrors.host && (
+            {proxyCreateErrors.proxy_host && (
               <div className="grid grid-cols-4 items-center gap-4">
                 <div></div>
                 <Typography
@@ -195,25 +231,25 @@ const CreateProxy = () => {
                   color="error"
                   className="col-span-3"
                 >
-                  {proxyCreateErrors.host.message}
+                  {proxyCreateErrors.proxy_host.message}
                 </Typography>
               </div>
             )}
           </div>
-          {/* HTTP port */}
+          {/* Proxy port */}
           <div className="flex flex-col gap-3">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="ports.port_http" className="text-right">
-                HTTP Port
+              <Label htmlFor="proxy_port" className="text-right">
+                Proxy port
               </Label>
               <Controller
-                name="ports.port_http"
+                name="proxy_port"
                 control={proxyCreateControl}
                 defaultValue={""}
                 render={({ field: { onChange, value, name, ref } }) => (
                   <Input
-                    placeholder="Proxy HTTP port"
-                    id="ports.port_http"
+                    placeholder="Proxy port"
+                    id="proxy_port"
                     type="number"
                     name={name}
                     value={value}
@@ -224,7 +260,7 @@ const CreateProxy = () => {
                 )}
               />
             </div>
-            {proxyCreateErrors.ports?.root && (
+            {proxyCreateErrors.proxy_port && (
               <div className="grid grid-cols-4 items-center gap-4">
                 <div></div>
                 <Typography
@@ -232,88 +268,52 @@ const CreateProxy = () => {
                   color="error"
                   className="col-span-3"
                 >
-                  {proxyCreateErrors.ports.root.message}
-                </Typography>
-              </div>
-            )}
-            {proxyCreateErrors.ports?.port_http && (
-              <div className="grid grid-cols-4 items-center gap-4">
-                <div></div>
-                <Typography
-                  variant="small"
-                  color="error"
-                  className="col-span-3"
-                >
-                  {proxyCreateErrors.ports.port_http.message}
+                  {proxyCreateErrors.proxy_port.message}
                 </Typography>
               </div>
             )}
           </div>
-          {/* SOCKS5 port */}
-          <div className="flex flex-col gap-3">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="port_socks" className="text-right">
-                SOCKS5 Port
-              </Label>
-              <Controller
-                name="ports.port_socks"
-                control={proxyCreateControl}
-                defaultValue={""}
-                render={({ field: { onChange, value, name, ref } }) => (
-                  <Input
-                    placeholder="Proxy SOCKS5 port"
-                    id="port_socks"
-                    type="number"
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    ref={ref}
-                    className="col-span-3"
-                  />
-                )}
-              />
-            </div>
-            {proxyCreateErrors.ports?.root && (
-              <div className="grid grid-cols-4 items-center gap-4">
-                <div></div>
-                <Typography
-                  variant="small"
-                  color="error"
+          {/* Authentication */}
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label
+              htmlFor="authentication.authentication"
+              className="text-right"
+            >
+              Authentication
+            </Label>
+            <Controller
+              name="authentication.authentication"
+              control={proxyCreateControl}
+              defaultValue={false}
+              render={({ field: { onChange, value, name, ref } }) => (
+                <Switch
+                  id="authentication.authentication"
+                  name={name}
+                  checked={value}
+                  value="off"
+                  onCheckedChange={onChange}
+                  ref={ref}
                   className="col-span-3"
-                >
-                  {proxyCreateErrors.ports.root.message}
-                </Typography>
-              </div>
-            )}
-            {proxyCreateErrors.ports?.port_socks && (
-              <div className="grid grid-cols-4 items-center gap-4">
-                <div></div>
-                <Typography
-                  variant="small"
-                  color="error"
-                  className="col-span-3"
-                >
-                  {proxyCreateErrors.ports.port_socks.message}
-                </Typography>
-              </div>
-            )}
+                />
+              )}
+            />
           </div>
-          {/* Default Port */}
           {/* Username */}
           <div className="flex flex-col gap-3">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
+              <Label htmlFor="authentication.username" className="text-right">
                 Username
               </Label>
               <Controller
-                name="username"
+                name="authentication.username"
                 control={proxyCreateControl}
                 defaultValue={""}
                 render={({ field: { onChange, value, name, ref } }) => (
                   <Input
+                    disabled={watchedAuthentication ? false : true}
                     placeholder="Proxy username"
                     maxLength={120}
-                    id="username"
+                    id="authentication.username"
                     type="text"
                     name={name}
                     value={value}
@@ -324,27 +324,35 @@ const CreateProxy = () => {
                 )}
               />
             </div>
-            {proxyCreateErrors.username && (
-              <Typography variant="small" color="error">
-                {proxyCreateErrors.username.message}
-              </Typography>
+            {proxyCreateErrors.authentication?.username && (
+              <div className="grid grid-cols-4 items-center gap-4">
+                <div></div>
+                <Typography
+                  variant="small"
+                  color="error"
+                  className="col-span-3"
+                >
+                  {proxyCreateErrors.authentication?.username.message}
+                </Typography>
+              </div>
             )}
           </div>
           {/* Password */}
           <div className="flex flex-col gap-3">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="password" className="text-right">
-                Username
+              <Label htmlFor="authentication.password" className="text-right">
+                Password
               </Label>
               <Controller
-                name="password"
+                name="authentication.password"
                 control={proxyCreateControl}
                 defaultValue={""}
                 render={({ field: { onChange, value, name, ref } }) => (
                   <Input
+                    disabled={watchedAuthentication ? false : true}
                     placeholder="Proxy password"
                     maxLength={120}
-                    id="password"
+                    id="authentication.password"
                     type="text"
                     name={name}
                     value={value}
@@ -355,10 +363,17 @@ const CreateProxy = () => {
                 )}
               />
             </div>
-            {proxyCreateErrors.username && (
-              <Typography variant="small" color="error" className="text-right">
-                {proxyCreateErrors.username.message}
-              </Typography>
+            {proxyCreateErrors.authentication?.password && (
+              <div className="grid grid-cols-4 items-center gap-4">
+                <div></div>
+                <Typography
+                  variant="small"
+                  color="error"
+                  className="col-span-3"
+                >
+                  {proxyCreateErrors.authentication?.password.message}
+                </Typography>
+              </div>
             )}
           </div>
         </div>

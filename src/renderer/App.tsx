@@ -11,15 +11,16 @@ const App = () => {
   actor.send({ type: "toggle" });
 
   return (
-    <>
-      <h1 className="text-3xl font-bold underline">Hello World!</h1>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button variant="outline">Create Proxy</Button>
-        </DialogTrigger>
-        <CreateProxy />
-      </Dialog>
-    </>
+    <div className="container py-5">
+      <header className="flex justify-end">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline">Create Proxy</Button>
+          </DialogTrigger>
+          <CreateProxy />
+        </Dialog>
+      </header>
+    </div>
   );
 };
 

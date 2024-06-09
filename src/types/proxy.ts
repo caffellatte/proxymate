@@ -1,22 +1,17 @@
-export interface IPorts {
-  http?: number;
-  socks?: number;
-}
-
-export type ValidPorts = IPorts &
-  (Required<Pick<IPorts, "http">> | Required<Pick<IPorts, "socks">>);
-
 export type State = "active" | "inactive" | "invalid";
 
 export interface IProxy {
   id: number;
   name: string;
   description: string;
-  host: string;
-  ports: ValidPorts;
+  port: number;
   state: State;
-  username?: string;
-  password?: string;
+  proxy_host: string;
+  proxy_port: number;
+  // TODO: type guard for authentication
+  authentication?: boolean;
+  proxy_username?: string;
+  proxy_password?: string;
 }
 
 import { z } from "zod";
@@ -25,68 +20,101 @@ import { z } from "zod";
  * Create
  */
 
-export const proxyCreateSchema = z
-  .object({
-    name: z
-      .string()
-      .min(4, { message: "Name field is required (min 4 characters)" }),
-    description: z.string().optional(),
-    host: z
-      .string()
-      .min(4, { message: "Host field is required (min 4 characters)" }),
-    ports: z.object({
-      port_http: z
-        .union([
-          z.coerce
-            .number({
-              message: "must be a number",
-            })
-            .int({
-              message: "must be a whole number",
-            })
-            .positive({
-              message: "must be positive",
-            })
-            .min(1, { message: "HTTP port from 1 to 65535 are available" })
-            .max(65535, { message: "HTTP port from 1 to 65535 are available" }),
-          z.literal(""),
-        ])
-        .optional(),
-      port_socks: z
-        .union([
-          z.coerce
-            .number({
-              message: "must be a number",
-            })
-            .int({
-              message: "must be a whole number",
-            })
-            .positive({
-              message: "must be positive",
-            })
-            .min(1, { message: "SOCKS5 port from 1 to 65535 are available" })
-            .max(65535, {
-              message: "SOCKS5 port from 1 to 65535 are available",
-            }),
-          z.literal(""),
-        ])
-        .optional(),
-    }),
-    username: z.string().optional(),
-    password: z.string().optional(),
-  })
-  .refine(
-    (data) => {
-      if (data.ports.port_http !== "" || data.ports.port_socks !== "") {
+export const proxyCreateSchema = z.object({
+  name: z.string().min(1, { message: "Name field is required" }),
+  description: z.string().optional(),
+  port: z
+    .union([
+      z.coerce
+        .number({
+          message: "Port must be a number",
+        })
+        .int({
+          message: "Port must be a whole number",
+        })
+        .positive({
+          message: "Port must be positive",
+        })
+        .min(1025, { message: "Port must be more than 1025" })
+        .max(65535, { message: "Port must be less than 655355" }),
+      z.literal(""),
+    ])
+    .refine(
+      (proxy_port) => {
+        if (proxy_port === "") {
+          return false;
+        }
         return true;
-      }
-      return false;
-    },
-    {
-      message: "Specify at least one port (HTTP or SOCKS5)",
-      path: ["ports"],
-    },
-  );
+      },
+      {
+        message: "Port field is required",
+        path: [""],
+      },
+    ),
+  proxy_host: z.string().min(4, { message: "Host field is required" }),
+  proxy_port: z
+    .union([
+      z.coerce
+        .number({
+          message: "Proxy port must be a number",
+        })
+        .int({
+          message: "Proxy port must be a whole number",
+        })
+        .positive({
+          message: "Proxy port must be positive",
+        })
+        .min(1025, { message: "Proxy port must be more than 1025" })
+        .max(65535, { message: "Proxy port must be less than 65535" }),
+      z.literal(""),
+    ])
+    .refine(
+      (proxy_port) => {
+        if (proxy_port === "") {
+          return false;
+        }
+        return true;
+      },
+      {
+        message: "Proxy port field is required",
+        path: [""],
+      },
+    ),
+  authentication: z
+    .object({
+      authentication: z.boolean().optional(),
+      username: z.string().optional(),
+      password: z.string().optional(),
+    })
+    .refine(
+      (data) => {
+        if (data.authentication) {
+          if (data.username === "") {
+            return false;
+          }
+        }
+        return true;
+      },
+      {
+        message: "Username field is required",
+        path: ["username"],
+      },
+    )
+    .refine(
+      (data) => {
+        if (data.authentication) {
+          if (data.password === "") {
+            return false;
+          }
+        }
+        return true;
+      },
+      {
+        message: "Password field is required",
+        path: ["password"],
+      },
+    ),
+});
 
 export type ProxyCreateFormSchema = z.infer<typeof proxyCreateSchema> & {
   proxyCreateError: string;
