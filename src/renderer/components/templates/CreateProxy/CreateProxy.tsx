@@ -54,12 +54,19 @@ const CreateProxy = () => {
   const proxyCreateOnSubmit = async ({
     name,
     description,
-    host,
-    ports,
-    username,
-    password,
+    port,
+    proxy_host,
+    proxy_port,
+    authentication,
   }: ProxyCreateFormSchema) => {
-    console.log(name, description, host, ports, username, password);
+    console.log(
+      name,
+      description,
+      port,
+      proxy_host,
+      proxy_port,
+      authentication,
+    );
     proxyCreateClearErrors("proxyCreateError");
     try {
       // proxyCreate.({ name, description, host, ports, username, password });
