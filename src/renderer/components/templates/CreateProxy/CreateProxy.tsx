@@ -69,7 +69,16 @@ const CreateProxy = () => {
     );
     proxyCreateClearErrors("proxyCreateError");
     try {
-      // proxyCreate.({ name, description, host, ports, username, password });
+      const proxy = {
+        name: name,
+        description: description,
+        port: port as number,
+        proxy_host: proxy_host,
+        proxy_port: proxy_port as number,
+        authentication: authentication,
+      };
+      const response = await window.electronAPI.proxyCreate(proxy);
+      console.log(response);
       proxyCreateReset();
     } catch (e) {
       proxyCreateSetError("proxyCreateError", {
@@ -78,8 +87,6 @@ const CreateProxy = () => {
       });
     }
   };
-
-  console.log(proxyCreateErrors);
 
   return (
     <DialogContent className="max-w-[604px]">
