@@ -1,7 +1,13 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain, IpcMainInvokeEvent } from "electron";
 import path from "path";
 
-import { db } from "@/core/db";
+import { IProxy } from "./types";
+async function proxyCreate(
+  event: IpcMainInvokeEvent,
+  proxy: Omit<IProxy, "id" | "state">,
+) {
+  return proxy;
+}
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -45,25 +51,19 @@ app.on("window-all-closed", () => {
   }
 });
 
-app.on("activate", () => {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-    db.proxies.put({
-      name: "Test name 1",
-      description: "Test description 1",
-      host: "111.12.12.12",
-      ports: {
-        http: 9000,
-      },
-      state: "inactive",
-      username: "admin",
-      password: "password",
-    });
-    const data = db.proxies.get(1);
-    console.log("data:", data);
-  }
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// Some APIs can only be used after this event occurs.
+app.whenReady().then(() => {
+  ipcMain.handle("proxy:create", (event, ...args) => {
+    return proxyCreate(event, args[0]);
+  });
+
+  app.on("activate", () => {
+    // On macOS it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
 });
 
 // In this file you can include the rest of your app's specific main process

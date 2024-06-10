@@ -9,9 +9,11 @@ export interface IProxy {
   proxy_host: string;
   proxy_port: number;
   // TODO: type guard for authentication
-  authentication?: boolean;
-  proxy_username?: string;
-  proxy_password?: string;
+  authentication: {
+    authentication?: boolean;
+    proxy_username?: string;
+    proxy_password?: string;
+  };
 }
 
 import { z } from "zod";

@@ -1,2 +1,7 @@
-// See the Electron documentation for details on how to use preload scripts:
-// https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
+import { contextBridge, ipcRenderer } from "electron";
+import { IProxy } from "@/types";
+
+contextBridge.exposeInMainWorld("electronAPI", {
+  proxyCreate: (proxy: Omit<IProxy, "id" | "state">) =>
+    ipcRenderer.invoke("proxy:create", proxy),
+});
