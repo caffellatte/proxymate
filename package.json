@@ -59,6 +59,7 @@
     "@radix-ui/react-switch": "^1.0.3",
     "@vitejs/plugin-react": "^4.3.0",
     "class-variance-authority": "^0.7.0",
+    "classic-level": "^1.4.1",
     "clsx": "^2.1.1",
     "dexie": "^4.0.7",
     "electron-squirrel-startup": "^1.0.0",
