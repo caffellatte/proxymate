@@ -1,6 +1,7 @@
 import path from "path";
 import { proxyCreate } from "@/ipc";
 import { app, BrowserWindow, ipcMain } from "electron";
+import { db, testDb } from "@/core/db";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -48,6 +49,7 @@ app.on("window-all-closed", () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  testDb(db);
   ipcMain.handle("proxy:create", (event, ...args) => {
     return proxyCreate(event, args[0]);
   });
