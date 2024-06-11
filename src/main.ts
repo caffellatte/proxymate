@@ -1,13 +1,6 @@
-import { app, BrowserWindow, ipcMain, IpcMainInvokeEvent } from "electron";
 import path from "path";
-
-import { IProxy } from "./types";
-async function proxyCreate(
-  event: IpcMainInvokeEvent,
-  proxy: Omit<IProxy, "id" | "state">,
-) {
-  return proxy;
-}
+import { proxyCreate } from "@/ipc";
+import { app, BrowserWindow, ipcMain } from "electron";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {

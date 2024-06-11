@@ -80,10 +80,10 @@ const CreateProxy = () => {
       const response = await window.electronAPI.proxyCreate(proxy);
       console.log(response);
       proxyCreateReset();
-    } catch (e) {
+    } catch (error) {
       proxyCreateSetError("proxyCreateError", {
         type: "custom",
-        message: "Proxy Create error",
+        message: error.message,
       });
     }
   };
@@ -392,7 +392,7 @@ const CreateProxy = () => {
           </div>
         </div>
         {proxyCreateErrors.proxyCreateError && (
-          <Typography variant="small" color="error" className="text-right">
+          <Typography variant="small" color="error">
             {proxyCreateErrors.proxyCreateError.message}
           </Typography>
         )}
