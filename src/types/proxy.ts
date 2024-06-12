@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export type State = "active" | "inactive" | "invalid";
 
 export interface IProxy {
@@ -15,8 +17,6 @@ export interface IProxy {
     proxy_password?: string;
   };
 }
-
-import { z } from "zod";
 
 /**
  * Create
