@@ -1,2 +1,2 @@
-export * from "./Database";
-export * from "./Ipc";
+export { default as Database } from "./Database";
+export { default as Ipc } from "./Ipc";
