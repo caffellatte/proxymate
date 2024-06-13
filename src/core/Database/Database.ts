@@ -33,13 +33,31 @@ class Proxies {
     this.proxiesDatabase = proxiesDatabase;
   }
 
-  create(proxy: Omit<IProxy, "id" | "state">) {
+  clear() {
     return new Promise((resolve, reject) => {
-      this.proxiesDatabase.put("test", proxy, (err) => {
+      this.proxiesDatabase.clear(null, (err) => {
+        if (err) reject(err);
+        resolve("ok");
+      });
+    });
+  }
+
+  create(id: string, proxy: Omit<IProxy, "id" | "state">) {
+    return new Promise((resolve, reject) => {
+      this.proxiesDatabase.put(id, proxy, (err) => {
         if (err) reject(err);
         resolve(proxy);
       });
     });
+  }
+
+  async getLastKey() {
+    for await (const key of this.proxiesDatabase.keys({
+      reverse: true,
+      limit: 1,
+    })) {
+      return key;
+    }
   }
 }
 
@@ -61,4 +79,4 @@ class Proxies {
 //   }
 // }
 
-export { Database };
+export default Database;
