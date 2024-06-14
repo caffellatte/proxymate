@@ -4,4 +4,6 @@ import { IProxy } from "@/types";
 contextBridge.exposeInMainWorld("electronAPI", {
   proxyCreate: (proxy: Omit<IProxy, "id" | "state">) =>
     ipcRenderer.invoke("proxy:create", proxy),
+
+  proxyList: () => ipcRenderer.invoke("proxy:list"),
 });
