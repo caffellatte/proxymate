@@ -1,5 +1,5 @@
 import { actor } from "../machine";
-import { CreateProxy } from "@/renderer/components/templates";
+import { CreateProxy, ProxiesList } from "@/renderer/components/templates";
 import { Button, Dialog, DialogTrigger } from "@/renderer/components/ui/";
 
 const App = () => {
@@ -11,7 +11,7 @@ const App = () => {
   actor.send({ type: "toggle" });
 
   return (
-    <div className="container py-5">
+    <div className="container py-5 flex flex-col">
       <header className="flex justify-end">
         <Dialog>
           <DialogTrigger asChild>
@@ -20,6 +20,9 @@ const App = () => {
           <CreateProxy />
         </Dialog>
       </header>
+      <main>
+        <ProxiesList />
+      </main>
     </div>
   );
 };

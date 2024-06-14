@@ -1,5 +1,5 @@
 import type { Database as IDatabase } from "@/core";
-import { proxyCreate } from "./handlers";
+import { proxyCreate, proxyList } from "./handlers";
 
 class Ipc {
   public database: IDatabase;
@@ -9,6 +9,7 @@ class Ipc {
   }
 
   public proxyCreate = proxyCreate(this);
+  public proxyList = proxyList(this);
 }
 
 export default Ipc;

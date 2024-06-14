@@ -1,5 +1,6 @@
 import { ClassicLevel } from "classic-level";
-import { AnyJson, IProxy, ILevelDatabase, IProxiesDatabase } from "@/types";
+import { AnyJson, ILevelDatabase, IProxiesDatabase, IProxy } from "@/types";
+import { Proxies } from "./sublevels";
 
 class Database {
   private levelDatabase: ILevelDatabase;
@@ -15,49 +16,14 @@ class Database {
       },
     );
     // Create proxy sublevel database
-    this.proxiesDatabase = this.levelDatabase.sublevel<string, AnyJson>(
-      "proxies",
-      {
-        valueEncoding: "json",
-      },
-    );
+    this.proxiesDatabase = this.levelDatabase.sublevel<
+      string,
+      Omit<IProxy, "state">[]
+    >("proxies", {
+      valueEncoding: "json",
+    });
     // Proxies subclass
     this.proxies = new Proxies(this.proxiesDatabase);
-  }
-}
-
-class Proxies {
-  private proxiesDatabase: IProxiesDatabase;
-
-  constructor(proxiesDatabase: IProxiesDatabase) {
-    this.proxiesDatabase = proxiesDatabase;
-  }
-
-  clear() {
-    return new Promise((resolve, reject) => {
-      this.proxiesDatabase.clear(null, (err) => {
-        if (err) reject(err);
-        resolve("ok");
-      });
-    });
-  }
-
-  create(id: string, proxy: Omit<IProxy, "id" | "state">) {
-    return new Promise((resolve, reject) => {
-      this.proxiesDatabase.put(id, proxy, (err) => {
-        if (err) reject(err);
-        resolve(proxy);
-      });
-    });
-  }
-
-  async getLastKey() {
-    for await (const key of this.proxiesDatabase.keys({
-      reverse: true,
-      limit: 1,
-    })) {
-      return key;
-    }
   }
 }
 

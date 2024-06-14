@@ -62,6 +62,11 @@ app.whenReady().then(() => {
       proxy: args[0],
     });
   });
+  ipcMain.handle("proxy:list", (event) => {
+    return ipc.proxyList({
+      event: event,
+    });
+  });
 
   app.on("activate", () => {
     // On macOS it's common to re-create a window in the app when the
