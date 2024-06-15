@@ -18,8 +18,9 @@ class Database {
     // Create proxy sublevel database
     this.proxiesDatabase = this.levelDatabase.sublevel<
       string,
-      Omit<IProxy, "state">[]
+      Omit<IProxy, "id" | "state">
     >("proxies", {
+      keyEncoding: "utf8",
       valueEncoding: "json",
     });
     // Proxies subclass
