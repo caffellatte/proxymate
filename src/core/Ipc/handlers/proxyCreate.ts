@@ -9,14 +9,12 @@ interface IProxyCreateParams {
 }
 
 const proxyCreate = (ipc: Ipc) => async (params: IProxyCreateParams) => {
-  let key = "1";
   const lastKey = await ipc.database.proxies.getLastKey();
   console.log("lastKey:", lastKey);
+  console.log("typeof lastKey:", typeof lastKey);
 
-  if (lastKey) {
-    key = (parseInt(lastKey, 10) + 1).toString();
-  }
-  const testProxy = await ipc.database.proxies.create(key, params.proxy);
+  const newKey = lastKey ? (parseInt(lastKey, 10) + 1).toString() : "1";
+  const testProxy = await ipc.database.proxies.create(newKey, params.proxy);
   console.log(testProxy);
   return testProxy;
 };
