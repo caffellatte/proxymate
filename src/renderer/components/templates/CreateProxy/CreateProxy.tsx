@@ -11,14 +11,18 @@ import {
   Textarea,
   Typography,
 } from "@/renderer/components/ui";
-import { useEffect } from "react";
+import { useEffect, FC, SetStateAction, Dispatch } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { proxyCreateSchema, ProxyCreateFormSchema } from "@/types";
 
 const proxyCreateResolver = zodResolver(proxyCreateSchema);
 
-const CreateProxy = () => {
+interface ICreateProxyProps {
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+const CreateProxy: FC<ICreateProxyProps> = ({ setOpen }) => {
   const {
     reset: proxyCreateReset,
     clearErrors: proxyCreateClearErrors,
@@ -59,14 +63,14 @@ const CreateProxy = () => {
     proxy_port,
     authentication,
   }: ProxyCreateFormSchema) => {
-    console.log(
-      name,
-      description,
-      port,
-      proxy_host,
-      proxy_port,
-      authentication,
-    );
+    // console.log(
+    //   name,
+    //   description,
+    //   port,
+    //   proxy_host,
+    //   proxy_port,
+    //   authentication,
+    // );
     proxyCreateClearErrors("proxyCreateError");
     try {
       const proxy = {
@@ -78,8 +82,11 @@ const CreateProxy = () => {
         authentication: authentication,
       };
       const response = await window.electronAPI.proxyCreate(proxy);
-      console.log(response);
+      // console.log(response);
       proxyCreateReset();
+      if (response) {
+        setOpen(false);
+      }
     } catch (error) {
       proxyCreateSetError("proxyCreateError", {
         type: "custom",

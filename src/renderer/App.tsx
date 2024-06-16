@@ -1,6 +1,7 @@
 import { actor } from "../machine";
 import { CreateProxy, ProxiesList } from "@/renderer/components/templates";
 import { Button, Dialog, DialogTrigger } from "@/renderer/components/ui/";
+import { useState } from "react";
 
 const App = () => {
   actor.subscribe((snapshot) => {
@@ -10,14 +11,20 @@ const App = () => {
   actor.send({ type: "toggle" });
   actor.send({ type: "toggle" });
 
+  const [createProxyDialogOpen, setCcreateProxyDialogOpen] =
+    useState<boolean>(false);
+
   return (
     <div className="container py-5 flex flex-col">
       <header className="flex justify-end">
-        <Dialog>
+        <Dialog
+          open={createProxyDialogOpen}
+          onOpenChange={setCcreateProxyDialogOpen}
+        >
           <DialogTrigger asChild>
             <Button variant="outline">Create Proxy</Button>
           </DialogTrigger>
-          <CreateProxy />
+          <CreateProxy setOpen={setCcreateProxyDialogOpen} />
         </Dialog>
       </header>
       <main>
