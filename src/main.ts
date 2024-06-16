@@ -62,6 +62,12 @@ app.whenReady().then(() => {
       proxy: args[0],
     });
   });
+  ipcMain.handle("proxy:delete", (event, ...args) => {
+    return ipc.proxyDelete({
+      event: event,
+      id: args[0],
+    });
+  });
   ipcMain.handle("proxy:list", (event) => {
     return ipc.proxyList({
       event: event,

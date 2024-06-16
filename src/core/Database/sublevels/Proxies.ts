@@ -25,6 +25,15 @@ class Proxies {
     });
   }
 
+  delete(id: string) {
+    return new Promise((resolve, reject) => {
+      this.proxiesDatabase.del(id, (err) => {
+        if (err) reject(err);
+        resolve(id);
+      });
+    });
+  }
+
   async getLastKey() {
     for await (const key of this.proxiesDatabase.keys({
       reverse: true,
