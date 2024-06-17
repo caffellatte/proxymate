@@ -1,9 +1,13 @@
 import { IProxy } from "@/types";
-import { useState } from "react";
+import { useState, FC, SetStateAction, Dispatch } from "react";
 import { Button, Typography } from "@/renderer/components/ui";
 import { X } from "lucide-react";
 
-const ProxiesList = () => {
+interface IProxiesListProps {
+  setSelectedForEditProxy: Dispatch<SetStateAction<string | null>>;
+}
+
+const ProxiesList: FC<IProxiesListProps> = ({ setSelectedForEditProxy }) => {
   const [proxies, setProxies] = useState<Omit<IProxy, "state">[] | []>([]);
   window.electronAPI.proxyList().then((data) => {
     setProxies(data);
@@ -17,6 +21,16 @@ const ProxiesList = () => {
             <div key={id} className="flex flex-col">
               <div className="flex items-center justify-between">
                 <Typography variant="large">{name}</Typography>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setSelectedForEditProxy(id.toString());
+                  }}
+                >
+                  Edit
+                </Button>
                 <Button
                   type="button"
                   variant="destructive"
