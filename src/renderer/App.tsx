@@ -1,7 +1,11 @@
 import { actor } from "../machine";
-import { CreateProxy, ProxiesList } from "@/renderer/components/templates";
+import {
+  CreateProxy,
+  EditProxy,
+  ProxiesList,
+} from "@/renderer/components/templates";
 import { Button, Dialog, DialogTrigger } from "@/renderer/components/ui/";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const App = () => {
   actor.subscribe((snapshot) => {
@@ -11,24 +15,52 @@ const App = () => {
   actor.send({ type: "toggle" });
   actor.send({ type: "toggle" });
 
-  const [createProxyDialogOpen, setCcreateProxyDialogOpen] =
+  const [createProxyDialogOpen, setCreateProxyDialogOpen] =
     useState<boolean>(false);
+
+  const [editProxyDialogOpen, setEditProxyDialogOpen] =
+    useState<boolean>(false);
+
+  const [selectedForEditProxy, setSelectedForEditProxy] = useState<
+    string | null
+  >(null);
+
+  useEffect(() => {
+    if (selectedForEditProxy !== null) {
+      setEditProxyDialogOpen(true);
+    }
+  }, [selectedForEditProxy]);
+
+  useEffect(() => {
+    if (!editProxyDialogOpen) {
+      setSelectedForEditProxy(null);
+    }
+  }, [editProxyDialogOpen]);
 
   return (
     <div className="container py-5 flex flex-col">
       <header className="flex justify-end">
         <Dialog
           open={createProxyDialogOpen}
-          onOpenChange={setCcreateProxyDialogOpen}
+          onOpenChange={setCreateProxyDialogOpen}
         >
           <DialogTrigger asChild>
             <Button variant="outline">Create Proxy</Button>
           </DialogTrigger>
-          <CreateProxy setOpen={setCcreateProxyDialogOpen} />
+          <CreateProxy setOpen={setCreateProxyDialogOpen} />
+        </Dialog>
+        <Dialog
+          open={editProxyDialogOpen}
+          onOpenChange={setEditProxyDialogOpen}
+        >
+          <EditProxy
+            selectedForEditProxy={selectedForEditProxy}
+            setOpen={setCreateProxyDialogOpen}
+          />
         </Dialog>
       </header>
       <main>
-        <ProxiesList />
+        <ProxiesList setSelectedForEditProxy={setSelectedForEditProxy} />
       </main>
     </div>
   );
