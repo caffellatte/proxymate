@@ -2,13 +2,10 @@ declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 declare const MAIN_WINDOW_VITE_NAME: string;
 
 import path from "path";
-import { app, BrowserWindow, ipcMain } from "electron";
-import { Ipc, Database } from "@/core";
+import { app, BrowserWindow } from "electron";
+import Core from "@/core";
 
-const databaseLocationPath = path.join(app.getPath("userData"), "db");
-
-const databse = new Database(databaseLocationPath);
-const ipc = new Ipc(databse);
+const core = new Core();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -30,7 +27,7 @@ const createWindow = () => {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
     mainWindow.loadFile(
-      path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`),
+      path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)
     );
   }
 
@@ -56,24 +53,7 @@ app.on("window-all-closed", () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  ipcMain.handle("proxy:create", (event, ...args) => {
-    return ipc.proxyCreate({
-      event: event,
-      proxy: args[0],
-    });
-  });
-  ipcMain.handle("proxy:delete", (event, ...args) => {
-    return ipc.proxyDelete({
-      event: event,
-      id: args[0],
-    });
-  });
-  ipcMain.handle("proxy:list", (event) => {
-    return ipc.proxyList({
-      event: event,
-    });
-  });
-
+  core.start();
   app.on("activate", () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
