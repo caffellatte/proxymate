@@ -1,4 +1,4 @@
-import { actor } from "../machine";
+import { proxyActor } from "../machine";
 import {
   CreateProxy,
   EditProxy,
@@ -8,12 +8,11 @@ import { Button, Dialog, DialogTrigger } from "@/renderer/components/ui/";
 import { useEffect, useState } from "react";
 
 const App = () => {
-  actor.subscribe((snapshot) => {
+  proxyActor.subscribe((snapshot) => {
     console.log("Value:", snapshot.value);
   });
-  actor.start();
-  actor.send({ type: "toggle" });
-  actor.send({ type: "toggle" });
+  proxyActor.start();
+  proxyActor.send({ type: "activate" });
 
   const [createProxyDialogOpen, setCreateProxyDialogOpen] =
     useState<boolean>(false);
