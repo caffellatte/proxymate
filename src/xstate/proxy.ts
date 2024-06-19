@@ -1,8 +1,18 @@
+import { IProxy } from "@/types";
+
 import { createMachine, createActor } from "xstate";
 const proxyMachine = createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5QAcBOB7AHgTwHQEkA7AQwGMAXASwDcwBiMq648sAbQAYBdRFdWSlXSFeITIgAcARgDsuGQE4AbBJkBWADQhsiAMz7cUjgt0SFatQBYOUyzIC+9rWix4AghRr0IYRjRbs3KLI-IKUwqLiCEYSSrgcAEwyupa66lo6CGq6UrhKijKJHFY2do7OGDi4Hkz0lITMADaUEAGcPEggIQJCIp1RRia4EgnSCZrakrlqHLO2Fta2KuVdlXhETS10qL6ezKztwaG9kYhq47gLKumTCAkX90pqMoUlSxIrLlUbxM0QdD4-PtAh0+D1wn1QFFzmpLlZrhNMqZLLhLNkpLpzG8yitCOgfPBOl9MmCwhF+ogALRKDJU2EKBkKCRWNFM9EOJyrVwEEh7MBHcHkqGIJRPXC6UZSca0hCmWH5BSFBLFRY4ircmpeAVkyFiRBStLxDgyMaIxAJXRxcY5TELUoc9XfBq-Frak4UhCWBIyowJXCPZ6vVXLRz2IA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QAcBOB7AHgTwHQEkA7AQwGMAXASwDcwBiMq648sAbQAYBdRFdWSlXSFeITIgAcHCbgBsHAIwBWAOwcVCgMzalAGhDZEAJgCcHXBKVLNClZoAslhSdmaAvm-1oseAIIUaeggwRhoWdm5RZH5BSmFRcQQFaVlcDiM7e00VPQNEawU5FRM1Iw4le0V7FQ8vDBxcfyZ6SkJmABtKCHDOHiQQaIEhEX7E5JNNCyMJBSNcwwQZ3CUOVYV7K0r12Qlagfq8Ig6uulQQgOZWXqiY4YTEZUnNIyMNzWly+yNn-QXZWXsy1MNi+KgkmlkEz23gaR2InQgdGCoUuET6fCGcRGoESSlkKlwmhMFWKakUtl+xjMFisNkyThc7j2hHQwXg-RhCwxsXio0QAFpZJSEPylLgTBKJaoONUNtITNCDgQSBcwDdMbycYh5OY8ao8c8FJY5sKKoD1LJgfIlGZVIqfI1VeqedixA9vgTVmDZvNjBDcHMbETNlUap59g64QjnXc+QgvsLkkYA0ZZKo1BUqjsPB4gA */
   id: "proxy",
+  types: {
+    events: {} as
+      | { type: "activate" }
+      | { type: "deactivate" }
+      | { type: "invalidate" }
+      | { type: "reactivate" },
+  },
   initial: "Inactive",
+  context: {} as { proxy: Omit<IProxy, "state"> },
   states: {
     Inactive: {
       on: {
