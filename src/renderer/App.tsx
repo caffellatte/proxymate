@@ -1,4 +1,4 @@
-import { proxyActor } from "../machine";
+import { proxyActor } from "@/xstate";
 import {
   CreateProxy,
   EditProxy,
