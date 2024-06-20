@@ -25,6 +25,16 @@ class Proxies {
     });
   }
 
+  get(id: string) {
+    return new Promise((resolve, reject) => {
+      console.log("get -> id:", id);
+      this.proxiesDatabase.get(id, (err, proxy) => {
+        if (err) reject(err);
+        resolve(proxy);
+      });
+    });
+  }
+
   delete(id: string) {
     return new Promise((resolve, reject) => {
       this.proxiesDatabase.del(id, (err) => {

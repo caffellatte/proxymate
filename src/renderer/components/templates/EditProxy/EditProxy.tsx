@@ -28,6 +28,16 @@ const EditProxy: FC<ICreateProxyProps> = ({
   selectedForEditProxy,
 }) => {
   console.log(selectedForEditProxy);
+
+  useEffect(() => {
+    if (selectedForEditProxy !== null) {
+      console.log("selectedForEditProxy:", selectedForEditProxy);
+      window.electronAPI.proxyGet(selectedForEditProxy).then((data) => {
+        console.log(data);
+      });
+    }
+  }, [selectedForEditProxy]);
+
   const {
     reset: proxyCreateReset,
     clearErrors: proxyCreateClearErrors,
