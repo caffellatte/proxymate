@@ -31,6 +31,12 @@ class Core {
         event: event,
       });
     });
+    ipcMain.handle("proxy:get", (event, ...args) => {
+      return this.ipc.proxyGet({
+        event: event,
+        id: args[0],
+      });
+    });
   }
 }
 
