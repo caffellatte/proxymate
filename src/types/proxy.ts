@@ -13,8 +13,8 @@ export interface IProxy {
   // TODO: type guard for authentication
   authentication: {
     authentication?: boolean;
-    proxy_username?: string;
-    proxy_password?: string;
+    username?: string;
+    password?: string;
   };
 }
 
@@ -51,7 +51,7 @@ export const proxyCreateSchema = z.object({
       {
         message: "Port field is required",
         path: [""],
-      },
+      }
     ),
   proxy_host: z.string().min(4, { message: "Host field is required" }),
   proxy_port: z
@@ -80,7 +80,7 @@ export const proxyCreateSchema = z.object({
       {
         message: "Proxy port field is required",
         path: [""],
-      },
+      }
     ),
   authentication: z
     .object({
@@ -100,7 +100,7 @@ export const proxyCreateSchema = z.object({
       {
         message: "Username field is required",
         path: ["username"],
-      },
+      }
     )
     .refine(
       (data) => {
@@ -114,7 +114,7 @@ export const proxyCreateSchema = z.object({
       {
         message: "Password field is required",
         path: ["password"],
-      },
+      }
     ),
 });
 

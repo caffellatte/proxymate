@@ -14,7 +14,7 @@ import {
 import { useEffect, FC, SetStateAction, Dispatch } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { proxyCreateSchema, ProxyCreateFormSchema } from "@/types";
+import { proxyCreateSchema, ProxyCreateFormSchema, isKey } from "@/types";
 
 const proxyCreateResolver = zodResolver(proxyCreateSchema);
 
@@ -29,15 +29,6 @@ const EditProxy: FC<ICreateProxyProps> = ({
 }) => {
   console.log(selectedForEditProxy);
 
-  useEffect(() => {
-    if (selectedForEditProxy !== null) {
-      console.log("selectedForEditProxy:", selectedForEditProxy);
-      window.electronAPI.proxyGet(selectedForEditProxy).then((data) => {
-        console.log(data);
-      });
-    }
-  }, [selectedForEditProxy]);
-
   const {
     reset: proxyCreateReset,
     clearErrors: proxyCreateClearErrors,
@@ -45,6 +36,7 @@ const EditProxy: FC<ICreateProxyProps> = ({
     setError: proxyCreateSetError,
     control: proxyCreateControl,
     formState: { errors: proxyCreateErrors },
+    setValue: proxySetValue,
   } = useForm<ProxyCreateFormSchema>({
     resolver: proxyCreateResolver,
   });
@@ -53,6 +45,40 @@ const EditProxy: FC<ICreateProxyProps> = ({
     control: proxyCreateControl,
     name: "authentication.authentication",
   });
+
+  useEffect(() => {
+    if (selectedForEditProxy !== null) {
+      console.log("selectedForEditProxy:", selectedForEditProxy);
+      window.electronAPI.proxyGet(selectedForEditProxy).then((data) => {
+        const { authentication, ...rest } = data;
+
+        console.log(data);
+
+        const keys = Object.keys(rest);
+
+        keys.forEach((key) => {
+          if (isKey(rest, key)) {
+            if (rest[key]) {
+              console.log("kkey:", key);
+              console.log("rest[key]", rest[key]);
+              proxySetValue(key, rest[key]);
+            }
+          }
+        });
+
+        if (authentication.authentication) {
+          proxySetValue(
+            "authentication.authentication",
+            authentication.authentication
+          );
+          console.log(authentication.username);
+          proxySetValue("authentication.username", authentication.username);
+          console.log(authentication.password);
+          proxySetValue("authentication.password", authentication.password);
+        }
+      });
+    }
+  }, [selectedForEditProxy, proxySetValue]);
 
   useEffect(() => {
     if (
@@ -96,7 +122,10 @@ const EditProxy: FC<ICreateProxyProps> = ({
         proxy_port: proxy_port as number,
         authentication: authentication,
       };
-      const response = await window.electronAPI.proxyCreate(proxy);
+      const response = await window.electronAPI.proxyUpdate(
+        selectedForEditProxy,
+        proxy
+      );
       // console.log(response);
       proxyCreateReset();
       if (response) {
