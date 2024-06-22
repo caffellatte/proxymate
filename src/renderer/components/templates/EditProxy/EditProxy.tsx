@@ -122,7 +122,7 @@ const EditProxy: FC<ICreateProxyProps> = ({
         proxy_port: proxy_port as number,
         authentication: authentication,
       };
-      const response = await window.electronAPI.proxyUpdate(
+      const response = await window.electronAPI.proxyEdit(
         selectedForEditProxy,
         proxy
       );
