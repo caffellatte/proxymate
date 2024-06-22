@@ -7,14 +7,14 @@ export interface IElectronAPI {
 
   proxyDelete: (id: string) => Promise<string>;
 
-  proxyGet: (id: string) => Promise<Omit<IProxy, "id" | "state">>;
-
-  proxyList: () => Promise<Omit<IProxy, "state">[]>;
-
-  proxyUpdate: (
+  proxyEdit: (
     id: string,
     proxy: Omit<IProxy, "id" | "state">
   ) => Promise<Omit<IProxy, "id" | "state">>;
+
+  proxyGet: (id: string) => Promise<Omit<IProxy, "id" | "state">>;
+
+  proxyList: () => Promise<Omit<IProxy, "state">[]>;
 }
 
 declare global {

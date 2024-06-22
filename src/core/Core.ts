@@ -26,15 +26,22 @@ class Core {
         id: args[0],
       });
     });
-    ipcMain.handle("proxy:list", (event) => {
-      return this.ipc.proxyList({
+    ipcMain.handle("proxy:edit", (event, ...args) => {
+      return this.ipc.proxyEdit({
         event: event,
+        id: args[0],
+        proxy: args[1],
       });
     });
     ipcMain.handle("proxy:get", (event, ...args) => {
       return this.ipc.proxyGet({
         event: event,
         id: args[0],
+      });
+    });
+    ipcMain.handle("proxy:list", (event) => {
+      return this.ipc.proxyList({
+        event: event,
       });
     });
   }

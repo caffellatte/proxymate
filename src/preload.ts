@@ -12,6 +12,11 @@ contextBridge.exposeInMainWorld("electronAPI", {
    */
   proxyDelete: (id: string) => ipcRenderer.invoke("proxy:delete", id),
   /**
+   * proxyEdit
+   */
+  proxyEdit: (id: string, proxy: Omit<IProxy, "id" | "state">) =>
+    ipcRenderer.invoke("proxy:edit", id, proxy),
+  /**
    *
    * proxyGet
    */

@@ -54,7 +54,7 @@ const App = () => {
         >
           <EditProxy
             selectedForEditProxy={selectedForEditProxy}
-            setOpen={setCreateProxyDialogOpen}
+            setOpen={setEditProxyDialogOpen}
           />
         </Dialog>
       </header>
