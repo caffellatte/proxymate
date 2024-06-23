@@ -1,9 +1,6 @@
 import { proxyActor } from "@/xstate";
-import {
-  CreateProxy,
-  EditProxy,
-  ProxiesList,
-} from "@/renderer/components/templates";
+import { ProxiesList } from "@/renderer/components/templates";
+import { CreateProxy, EditProxy } from "@/renderer/components/dialogs";
 import { Button, Dialog, DialogTrigger } from "@/renderer/components/ui/";
 import { useEffect, useState } from "react";
 
