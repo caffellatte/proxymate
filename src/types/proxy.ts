@@ -19,10 +19,10 @@ export interface IProxy {
 }
 
 /**
- * Create
+ * proxySchema
  */
 
-export const proxyCreateSchema = z.object({
+export const proxySchema = z.object({
   name: z.string().min(1, { message: "Name field is required" }),
   description: z.string().optional(),
   port: z
@@ -118,6 +118,6 @@ export const proxyCreateSchema = z.object({
     ),
 });
 
-export type ProxyCreateFormSchema = z.infer<typeof proxyCreateSchema> & {
-  proxyCreateError: string;
+export type ProxyFormSchema = z.infer<typeof proxySchema> & {
+  proxyError: string;
 };
