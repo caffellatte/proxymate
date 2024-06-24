@@ -47,6 +47,15 @@ const CreateProxy: FC<ICreateProxyProps> = ({ setOpen }) => {
     proxyCreateClearErrors,
   ]);
 
+  // TODO: mayby add for `authentication.authentication = false` case
+  // useEffect(() => {
+  //   if (!watchedAuthentication) {
+  //     proxySetValue("authentication.authentication", false);
+  //     proxySetValue("authentication.username", "");
+  //     proxySetValue("authentication.password", "");
+  //   }
+  // }, [watchedAuthentication, proxySetValue]);
+
   const proxyCreateOnSubmit = async ({
     name,
     description,
