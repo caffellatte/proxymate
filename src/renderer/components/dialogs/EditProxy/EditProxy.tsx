@@ -55,15 +55,12 @@ const EditProxy: FC<ICreateProxyProps> = ({
           }
         });
 
-        // TODO: fix authentication.authentication = false
         if (authentication.authentication) {
           proxySetValue(
             "authentication.authentication",
             authentication.authentication
           );
-          console.log(authentication.username);
           proxySetValue("authentication.username", authentication.username);
-          console.log(authentication.password);
           proxySetValue("authentication.password", authentication.password);
         }
       });
@@ -85,6 +82,14 @@ const EditProxy: FC<ICreateProxyProps> = ({
     proxyEditErrors.authentication?.password,
     proxyEditClearErrors,
   ]);
+
+  useEffect(() => {
+    if (!watchedAuthentication) {
+      proxySetValue("authentication.authentication", false);
+      proxySetValue("authentication.username", "");
+      proxySetValue("authentication.password", "");
+    }
+  }, [watchedAuthentication, proxySetValue]);
 
   const proxyEditOnSubmit = async ({
     name,

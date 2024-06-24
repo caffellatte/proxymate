@@ -1,7 +1,7 @@
 import { proxyActor } from "@/xstate";
-import { ProxiesList } from "@/renderer/components/templates";
-import { CreateProxy, EditProxy } from "@/renderer/components/dialogs";
-import { Button, Dialog, DialogTrigger } from "@/renderer/components/ui/";
+
+import { Header } from "@/renderer/components/common";
+import { Main } from "@/renderer/components/views";
 import { useEffect, useState } from "react";
 
 const App = () => {
@@ -35,29 +35,14 @@ const App = () => {
 
   return (
     <div className="container py-5 flex flex-col">
-      <header className="flex justify-end">
-        <Dialog
-          open={createProxyDialogOpen}
-          onOpenChange={setCreateProxyDialogOpen}
-        >
-          <DialogTrigger asChild>
-            <Button variant="outline">Create Proxy</Button>
-          </DialogTrigger>
-          <CreateProxy setOpen={setCreateProxyDialogOpen} />
-        </Dialog>
-        <Dialog
-          open={editProxyDialogOpen}
-          onOpenChange={setEditProxyDialogOpen}
-        >
-          <EditProxy
-            selectedForEditProxy={selectedForEditProxy}
-            setOpen={setEditProxyDialogOpen}
-          />
-        </Dialog>
-      </header>
-      <main>
-        <ProxiesList setSelectedForEditProxy={setSelectedForEditProxy} />
-      </main>
+      <Header
+        createProxyDialogOpen={createProxyDialogOpen}
+        setCreateProxyDialogOpen={setCreateProxyDialogOpen}
+        editProxyDialogOpen={editProxyDialogOpen}
+        setEditProxyDialogOpen={setEditProxyDialogOpen}
+        selectedForEditProxy={selectedForEditProxy}
+      />
+      <Main setSelectedForEditProxy={setSelectedForEditProxy} />
     </div>
   );
 };
