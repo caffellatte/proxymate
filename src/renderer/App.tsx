@@ -34,7 +34,7 @@ const App = () => {
   }, [editProxyDialogOpen]);
 
   return (
-    <div className="container py-5 flex flex-col">
+    <div className="container py-5 flex flex-col gap-6">
       <Header
         createProxyDialogOpen={createProxyDialogOpen}
         setCreateProxyDialogOpen={setCreateProxyDialogOpen}
