@@ -1,6 +1,8 @@
 import { CreateProxy, EditProxy } from "@/renderer/components/dialogs";
 import { Button, Dialog, DialogTrigger } from "@/renderer/components/ui/";
 import { FC, SetStateAction, Dispatch } from "react";
+import { uiMachine } from "@/xstate";
+import { Actor, StateFrom } from "xstate";
 
 interface IHeaderProps {
   createProxyDialogOpen: boolean;
@@ -8,6 +10,8 @@ interface IHeaderProps {
   editProxyDialogOpen: boolean;
   setEditProxyDialogOpen: Dispatch<SetStateAction<boolean>>;
   selectedForEditProxy: string | null;
+  uiSend: Actor<typeof uiMachine>["send"];
+  uiState: StateFrom<typeof uiMachine>;
 }
 
 const Header: FC<IHeaderProps> = ({
@@ -16,6 +20,7 @@ const Header: FC<IHeaderProps> = ({
   editProxyDialogOpen,
   setEditProxyDialogOpen,
   selectedForEditProxy,
+  uiSend,
 }) => {
   return (
     <header className="flex justify-end">
@@ -24,7 +29,14 @@ const Header: FC<IHeaderProps> = ({
         onOpenChange={setCreateProxyDialogOpen}
       >
         <DialogTrigger asChild>
-          <Button variant="outline">Create Proxy</Button>
+          <Button
+            onClick={() => {
+              uiSend({ type: "create" });
+            }}
+            variant="outline"
+          >
+            Create Proxy
+          </Button>
         </DialogTrigger>
         <CreateProxy setOpen={setCreateProxyDialogOpen} />
       </Dialog>
