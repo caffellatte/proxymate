@@ -66,4 +66,4 @@ const proxyMachine = createMachine({
 
 const proxyActor = createActor(proxyMachine);
 
-export { proxyActor };
+export { proxyActor, proxyMachine };

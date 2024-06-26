@@ -1,37 +1,39 @@
 import { createMachine, createActor } from "xstate";
 const uiMachine = createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5QFcCWA6ANgewIYVQDsoACABwCdsAPVOAYk1VgBcBtABgF1FQztYqFqmyFeIaogBMARgBs6AKwzFcqYoA0IAJ6IZAZinoOJkzICc5jpZkAOAL72taLHgLFyVWgzABbMizanDxIIPyCwqLikgiyCsqq6lq6CLYySqYcFlY2Dk4gLpQ0dLAkTKz0+BDB4uFCImKhMYr6CnKJ5opSACxq5gDsmjrS-f3o5vJy-Ry2-d0cLXnOGADuYJgAxti+YJUQ1dy1AvVRTYgtbR1dvVIDQym2tuiDptnWE0sFGEXepeUs9Ag6zALDANVCdUijVAMSktg46DhMlu1z6g30yWk+n0xky3SkHH6+lmyMcy3QVRIBFwOCg9FgyA2GzgpSqkHBfGOUOi51a6HafVRt0GmNiUjG3Um01m80WZK+6CBmBBYCpqBp2DpDKZLKpwNBHLCXIaPNi8iUKjU92kthxijxBKJJMc+UI2CB8FCaCOERNZwQAFo5KKg-KXDh8ERSD8Sj6TtCJIh8aLHuhJXIM7Z2v12rZup9Cl4SmVmCw49z-fpzE9zMLDHM0S1RVJsRlTPjCcT+qT8i41pttmBy36YUmODjJZLCQ3hU3hqlzIj7WZLO87GGMJTqbTh6dRwhpov9BxukTxTc7s3xeMpTM5gtiRvFfrVdvNbuE80cSL5xYcbNl2PXJzHzF17CAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QFcCWA6VEA2YDEEYuALmANoAMAuoqAA4D2sqxqDAdrSAB6IC0AZgAsATnQAmCgICM4gKwAaEAE9E4oQDZ0AgOzSKOgByjZ+kUIC+FpWkw58AYwBOYAIalKNJCEbNWHLl4EQVF0OXFhXUUVRFkKdE0hYyirGwwsXDxIFk8uXxY2Tm8gjSEw6Wk9Qx1o1QRpDXF0HRENarlUkFts4jxsVFhiXO98-yLQIL4k9FakoSilOukxOQppAQpJQwEd3c7bQhJ8fsHh+iYCgOL+SQF0CoFxQ1laxAE5MqFpOWERR6EPvN9hhnG5SH0BkNqHkLmNAjdpIZmuJxBo5I1XvUVmsNltdntOuwGIR4N40DC-IV4cEhJsZnIdFIXot+BodDMRIYNCIWg0NPy2cC7LgKZdxjx+N8xDodJEaiyEJJpBI9DoNDsRE8GdJLNYuhhDmBSKK4ddgu8yiIGUz5AqLQlvr9-oCBELQe4wCaqWaQuzwnLMcswjjNhRtvjXXruhAWF6rhNENM2vKYljg+tQ+H8VYrEA */
   id: "ui",
-  initial: "loading proxies",
+  initial: "idle",
   states: {
-    "loading proxies": {
+    idle: {
       on: {
-        list: "proxies list",
-        empty: "welcome",
+        delete: "delete",
+        create: "create",
+        edit: "edit",
       },
     },
 
-    "proxies list": {
+    delete: {
       on: {
-        delete: "delete dialog",
-      },
-    },
-
-    welcome: {},
-
-    "add dialog": {
-      on: {
-        "success added": {
-          target: "proxies list",
+        list: {
+          target: "idle",
           reenter: true,
         },
       },
     },
 
-    "delete dialog": {
+    create: {
       on: {
-        "success delete": {
-          target: "proxies list",
+        list: {
+          target: "idle",
+          reenter: true,
+        },
+      },
+    },
+
+    edit: {
+      on: {
+        list: {
+          target: "idle",
           reenter: true,
         },
       },
@@ -41,4 +43,4 @@ const uiMachine = createMachine({
 
 const uiActor = createActor(uiMachine);
 
-export { uiActor };
+export { uiActor, uiMachine };
