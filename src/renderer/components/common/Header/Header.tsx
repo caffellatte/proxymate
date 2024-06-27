@@ -1,44 +1,37 @@
-import { CreateProxy, EditProxy } from "@/renderer/components/dialogs";
-import { Button, Dialog, DialogTrigger } from "@/renderer/components/ui/";
+import { uiActor } from "@/xstate";
+import { useSelector } from "@xstate/react";
 import { FC, SetStateAction, Dispatch } from "react";
-import { uiMachine } from "@/xstate";
-import { Actor, StateFrom } from "xstate";
+import { Button, Dialog } from "@/renderer/components/ui/";
+import { CreateProxy, EditProxy } from "@/renderer/components/dialogs";
 
 interface IHeaderProps {
-  createProxyDialogOpen: boolean;
-  setCreateProxyDialogOpen: Dispatch<SetStateAction<boolean>>;
   editProxyDialogOpen: boolean;
   setEditProxyDialogOpen: Dispatch<SetStateAction<boolean>>;
   selectedForEditProxy: string | null;
-  uiSend: Actor<typeof uiMachine>["send"];
-  uiState: StateFrom<typeof uiMachine>;
 }
 
 const Header: FC<IHeaderProps> = ({
-  createProxyDialogOpen,
-  setCreateProxyDialogOpen,
   editProxyDialogOpen,
   setEditProxyDialogOpen,
   selectedForEditProxy,
-  uiSend,
 }) => {
+  const state = useSelector(uiActor, (state) => state);
+  console.log(state);
+
+  console.log("state.matches('create')", state.matches("create"));
+
   return (
     <header className="flex justify-end">
-      <Dialog
-        open={createProxyDialogOpen}
-        onOpenChange={setCreateProxyDialogOpen}
-      >
-        <DialogTrigger asChild>
-          <Button
-            onClick={() => {
-              uiSend({ type: "create" });
-            }}
-            variant="outline"
-          >
-            Create Proxy
-          </Button>
-        </DialogTrigger>
-        <CreateProxy setOpen={setCreateProxyDialogOpen} />
+      <Dialog open={state.matches("create")}>
+        <Button
+          onClick={() => {
+            uiActor.send({ type: "create" });
+          }}
+          variant="outline"
+        >
+          Create Proxy
+        </Button>
+        <CreateProxy />
       </Dialog>
       <Dialog open={editProxyDialogOpen} onOpenChange={setEditProxyDialogOpen}>
         <EditProxy
