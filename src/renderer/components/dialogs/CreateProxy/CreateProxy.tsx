@@ -1,5 +1,5 @@
-import { DialogContent } from "@/renderer/components/ui";
-import { useEffect, FC, SetStateAction, Dispatch } from "react";
+import { DialogContent, DialogClose } from "@/renderer/components/ui";
+import { useEffect, FC } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -7,14 +7,14 @@ import {
   ProxyFormSchema as ProxyCreateFormSchema,
 } from "@/types";
 import { ProxyForm } from "@/renderer/components/templates";
+import { uiActor } from "@/xstate";
 
 const proxyCreateResolver = zodResolver(proxyCreateSchema);
 
-interface ICreateProxyProps {
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}
-
-const CreateProxy: FC<ICreateProxyProps> = ({ setOpen }) => {
+const CreateProxy: FC = () => {
+  /**
+   * TODO: rename functions (remove `Create`)
+   */
   const {
     reset: proxyCreateReset,
     clearErrors: proxyCreateClearErrors,
@@ -22,6 +22,7 @@ const CreateProxy: FC<ICreateProxyProps> = ({ setOpen }) => {
     setError: proxyCreateSetError,
     control: proxyCreateControl,
     formState: { errors: proxyCreateErrors },
+    setValue: proxySetValue,
   } = useForm<ProxyCreateFormSchema>({
     resolver: proxyCreateResolver,
   });
@@ -47,14 +48,13 @@ const CreateProxy: FC<ICreateProxyProps> = ({ setOpen }) => {
     proxyCreateClearErrors,
   ]);
 
-  // TODO: mayby add for `authentication.authentication = false` case
-  // useEffect(() => {
-  //   if (!watchedAuthentication) {
-  //     proxySetValue("authentication.authentication", false);
-  //     proxySetValue("authentication.username", "");
-  //     proxySetValue("authentication.password", "");
-  //   }
-  // }, [watchedAuthentication, proxySetValue]);
+  useEffect(() => {
+    if (!watchedAuthentication) {
+      proxySetValue("authentication.authentication", false);
+      proxySetValue("authentication.username", "");
+      proxySetValue("authentication.password", "");
+    }
+  }, [watchedAuthentication, proxySetValue]);
 
   const proxyCreateOnSubmit = async ({
     name,
@@ -86,7 +86,7 @@ const CreateProxy: FC<ICreateProxyProps> = ({ setOpen }) => {
       // console.log(response);
       proxyCreateReset();
       if (response) {
-        setOpen(false);
+        uiActor.send({ type: "list" });
       }
     } catch (error) {
       proxyCreateSetError("proxyError", {
@@ -97,7 +97,12 @@ const CreateProxy: FC<ICreateProxyProps> = ({ setOpen }) => {
   };
 
   return (
-    <DialogContent className="max-w-[604px]">
+    <DialogContent
+      onInteractOutside={() => {
+        uiActor.send({ type: "list" });
+      }}
+      className="max-w-[604px]"
+    >
       <ProxyForm
         title="Add Proxy"
         handleSubmit={proxyCreateHandleSubmit}
@@ -105,6 +110,11 @@ const CreateProxy: FC<ICreateProxyProps> = ({ setOpen }) => {
         proxyControl={proxyCreateControl}
         proxyErrors={proxyCreateErrors}
         watchedAuthentication={watchedAuthentication}
+      />
+      <DialogClose
+        onClick={() => {
+          uiActor.send({ type: "list" });
+        }}
       />
     </DialogContent>
   );
