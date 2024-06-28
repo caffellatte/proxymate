@@ -1,14 +1,10 @@
-import { FC, SetStateAction, Dispatch } from "react";
+import { FC } from "react";
 import { ProxiesList } from "@/renderer/components/templates";
 
-interface IMainProps {
-  setSelectedForEditProxy: Dispatch<SetStateAction<string>>;
-}
-
-const Main: FC<IMainProps> = ({ setSelectedForEditProxy }) => {
+const Main: FC = () => {
   return (
     <main>
-      <ProxiesList setSelectedForEditProxy={setSelectedForEditProxy} />
+      <ProxiesList />
     </main>
   );
 };

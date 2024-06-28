@@ -1,14 +1,14 @@
-import { FC, Dispatch, SetStateAction } from "react";
+import { FC } from "react";
 import { Button, Label, Typography } from "@/renderer/components/ui";
 import { IProxy } from "@/types";
 import { X } from "lucide-react";
+import { uiActor } from "@/xstate";
 
 interface IProxyCardProps {
   proxy: Omit<IProxy, "state">;
-  setSelectedForEditProxy: Dispatch<SetStateAction<string | null>>;
 }
 
-const ProxyCard: FC<IProxyCardProps> = ({ proxy, setSelectedForEditProxy }) => {
+const ProxyCard: FC<IProxyCardProps> = ({ proxy }) => {
   const { id, name, description, port } = proxy;
 
   return (
@@ -21,7 +21,7 @@ const ProxyCard: FC<IProxyCardProps> = ({ proxy, setSelectedForEditProxy }) => {
             variant="outline"
             size="sm"
             onClick={() => {
-              setSelectedForEditProxy(id.toString());
+              uiActor.send({ type: "edit", proxyId: id.toString() });
             }}
           >
             Edit
