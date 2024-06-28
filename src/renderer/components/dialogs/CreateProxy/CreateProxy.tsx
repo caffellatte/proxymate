@@ -9,12 +9,9 @@ import {
 import { ProxyForm } from "@/renderer/components/templates";
 import { uiActor } from "@/xstate";
 
-const proxyCreateResolver = zodResolver(proxyCreateSchema);
+const proxyResolver = zodResolver(proxyCreateSchema);
 
 const CreateProxy: FC = () => {
-  /**
-   * TODO: rename functions (remove `Create`)
-   */
   const {
     reset: proxyCreateReset,
     clearErrors: proxyCreateClearErrors,
@@ -24,7 +21,7 @@ const CreateProxy: FC = () => {
     formState: { errors: proxyCreateErrors },
     setValue: proxySetValue,
   } = useForm<ProxyCreateFormSchema>({
-    resolver: proxyCreateResolver,
+    resolver: proxyResolver,
   });
 
   const watchedAuthentication = useWatch({

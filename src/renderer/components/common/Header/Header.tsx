@@ -1,20 +1,10 @@
 import { uiActor } from "@/xstate";
 import { useSelector } from "@xstate/react";
-import { FC, SetStateAction, Dispatch } from "react";
+import { FC } from "react";
 import { Button, Dialog } from "@/renderer/components/ui/";
 import { CreateProxy, EditProxy } from "@/renderer/components/dialogs";
 
-interface IHeaderProps {
-  editProxyDialogOpen: boolean;
-  setEditProxyDialogOpen: Dispatch<SetStateAction<boolean>>;
-  selectedForEditProxy: string | null;
-}
-
-const Header: FC<IHeaderProps> = ({
-  editProxyDialogOpen,
-  setEditProxyDialogOpen,
-  selectedForEditProxy,
-}) => {
+const Header: FC = () => {
   const state = useSelector(uiActor, (state) => state);
   console.log(state);
 
@@ -33,11 +23,8 @@ const Header: FC<IHeaderProps> = ({
         </Button>
         <CreateProxy />
       </Dialog>
-      <Dialog open={editProxyDialogOpen} onOpenChange={setEditProxyDialogOpen}>
-        <EditProxy
-          selectedForEditProxy={selectedForEditProxy}
-          setOpen={setEditProxyDialogOpen}
-        />
+      <Dialog open={state.matches("edit")}>
+        <EditProxy />
       </Dialog>
     </header>
   );

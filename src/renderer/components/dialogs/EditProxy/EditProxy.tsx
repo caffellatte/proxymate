@@ -1,22 +1,16 @@
-import { DialogContent } from "@/renderer/components/ui";
-import { useEffect, FC, SetStateAction, Dispatch } from "react";
+import { DialogContent, DialogClose } from "@/renderer/components/ui";
+import { useEffect, FC } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { proxySchema, ProxyFormSchema, isKey } from "@/types";
 import { ProxyForm } from "@/renderer/components/templates";
+import { uiActor } from "@/xstate";
+import { useSelector } from "@xstate/react";
 
-const proxyCreateResolver = zodResolver(proxySchema);
+const proxyResolver = zodResolver(proxySchema);
 
-interface ICreateProxyProps {
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  selectedForEditProxy: string | null;
-}
-
-const EditProxy: FC<ICreateProxyProps> = ({
-  setOpen,
-  selectedForEditProxy,
-}) => {
-  console.log(selectedForEditProxy);
+const EditProxy: FC = () => {
+  const proxyId = useSelector(uiActor, (state) => state.context.proxyId);
 
   const {
     reset: proxyEditReset,
@@ -27,7 +21,7 @@ const EditProxy: FC<ICreateProxyProps> = ({
     formState: { errors: proxyEditErrors },
     setValue: proxySetValue,
   } = useForm<ProxyFormSchema>({
-    resolver: proxyCreateResolver,
+    resolver: proxyResolver,
   });
 
   const watchedAuthentication = useWatch({
@@ -36,9 +30,9 @@ const EditProxy: FC<ICreateProxyProps> = ({
   });
 
   useEffect(() => {
-    if (selectedForEditProxy !== null) {
-      console.log("selectedForEditProxy:", selectedForEditProxy);
-      window.electronAPI.proxyGet(selectedForEditProxy).then((data) => {
+    if (proxyId) {
+      console.log("proxyId:", proxyId);
+      window.electronAPI.proxyGet(proxyId).then((data) => {
         const { authentication, ...rest } = data;
 
         console.log(data);
@@ -65,7 +59,7 @@ const EditProxy: FC<ICreateProxyProps> = ({
         }
       });
     }
-  }, [selectedForEditProxy, proxySetValue]);
+  }, [proxyId, proxySetValue]);
 
   useEffect(() => {
     if (
@@ -117,14 +111,11 @@ const EditProxy: FC<ICreateProxyProps> = ({
         proxy_port: proxy_port as number,
         authentication: authentication,
       };
-      const response = await window.electronAPI.proxyEdit(
-        selectedForEditProxy,
-        proxy
-      );
+      const response = await window.electronAPI.proxyEdit(proxyId, proxy);
       // console.log(response);
       proxyEditReset();
       if (response) {
-        setOpen(false);
+        uiActor.send({ type: "list" });
       }
     } catch (error) {
       proxyEditSetError("proxyError", {
@@ -135,7 +126,12 @@ const EditProxy: FC<ICreateProxyProps> = ({
   };
 
   return (
-    <DialogContent className="max-w-[604px]">
+    <DialogContent
+      onInteractOutside={() => {
+        uiActor.send({ type: "list" });
+      }}
+      className="max-w-[604px]"
+    >
       <ProxyForm
         title="Edit Proxy"
         handleSubmit={proxyEditHandleSubmit}
@@ -143,6 +139,11 @@ const EditProxy: FC<ICreateProxyProps> = ({
         proxyControl={proxyEditControl}
         proxyErrors={proxyEditErrors}
         watchedAuthentication={watchedAuthentication}
+      />
+      <DialogClose
+        onClick={() => {
+          uiActor.send({ type: "list" });
+        }}
       />
     </DialogContent>
   );
