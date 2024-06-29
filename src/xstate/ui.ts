@@ -10,8 +10,13 @@ const uiMachine = createMachine({
   states: {
     idle: {
       on: {
-        delete: "delete",
         create: "create",
+        delete: {
+          target: "delete",
+          actions: assign({
+            proxyId: ({ event }) => event.proxyId,
+          }),
+        },
         edit: {
           target: "edit",
           actions: assign({
@@ -25,6 +30,9 @@ const uiMachine = createMachine({
       on: {
         list: {
           target: "idle",
+          actions: assign({
+            proxyId: null,
+          }),
           reenter: true,
         },
       },

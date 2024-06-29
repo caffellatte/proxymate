@@ -2,7 +2,11 @@ import { uiActor } from "@/xstate";
 import { useSelector } from "@xstate/react";
 import { FC } from "react";
 import { Button, Dialog } from "@/renderer/components/ui/";
-import { CreateProxy, EditProxy } from "@/renderer/components/dialogs";
+import {
+  CreateProxy,
+  DeleteProxy,
+  EditProxy,
+} from "@/renderer/components/dialogs";
 
 const Header: FC = () => {
   const state = useSelector(uiActor, (state) => state);
@@ -25,6 +29,9 @@ const Header: FC = () => {
       </Dialog>
       <Dialog open={state.matches("edit")}>
         <EditProxy />
+      </Dialog>
+      <Dialog open={state.matches("delete")}>
+        <DeleteProxy />
       </Dialog>
     </header>
   );
