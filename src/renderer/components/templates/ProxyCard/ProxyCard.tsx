@@ -28,12 +28,10 @@ const ProxyCard: FC<IProxyCardProps> = ({ proxy }) => {
           </Button>
           <Button
             type="button"
-            variant="destructive"
+            variant="outline"
             size="sm"
             onClick={() => {
-              window.electronAPI.proxyDelete(id.toString()).then((data) => {
-                alert(data);
-              });
+              uiActor.send({ type: "delete", proxyId: id.toString() });
             }}
           >
             <X />
