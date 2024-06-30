@@ -7,12 +7,12 @@ import {
   DeleteProxy,
   EditProxy,
 } from "@/renderer/components/dialogs";
+import debug from "debug";
+const logger = debug("renderer:Header");
 
 const Header: FC = () => {
   const state = useSelector(uiActor, (state) => state);
-  console.log(state);
-
-  console.log("state.matches('create')", state.matches("create"));
+  logger(state);
 
   return (
     <header className="flex justify-end">

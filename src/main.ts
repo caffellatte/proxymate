@@ -6,9 +6,11 @@ declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 declare const MAIN_WINDOW_VITE_NAME: string;
 
 import path from "path";
+import debug from "debug";
 import { app, BrowserWindow } from "electron";
 import Core from "@/core";
 
+debug.enable("*");
 const core = new Core();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
