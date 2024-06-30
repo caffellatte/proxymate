@@ -6,6 +6,8 @@ import { proxySchema, ProxyFormSchema, isKey } from "@/types";
 import { ProxyForm } from "@/renderer/components/templates";
 import { uiActor } from "@/xstate";
 import { useSelector } from "@xstate/react";
+import debug from "debug";
+const logger = debug("renderer:dialogs:EditProxy");
 
 const proxyResolver = zodResolver(proxySchema);
 
@@ -31,19 +33,19 @@ const EditProxy: FC = () => {
 
   useEffect(() => {
     if (proxyId) {
-      console.log("proxyId:", proxyId);
+      logger("proxyId:", proxyId);
       window.electronAPI.proxyGet(proxyId).then((data) => {
         const { authentication, ...rest } = data;
 
-        console.log(data);
+        logger(data);
 
         const keys = Object.keys(rest);
 
         keys.forEach((key) => {
           if (isKey(rest, key)) {
             if (rest[key]) {
-              console.log("kkey:", key);
-              console.log("rest[key]", rest[key]);
+              logger("key:", key);
+              logger("rest[key]", rest[key]);
               proxySetValue(key, rest[key]);
             }
           }

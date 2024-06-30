@@ -1,4 +1,6 @@
 import { IProxy, IProxiesDatabase } from "@/types";
+import debug from "debug";
+const logger = debug("sublevels:proxies");
 
 class Proxies {
   private proxiesDatabase: IProxiesDatabase;
@@ -27,7 +29,7 @@ class Proxies {
 
   get(id: string) {
     return new Promise((resolve, reject) => {
-      console.log("get -> id:", id);
+      logger("get -> id:", id);
       this.proxiesDatabase.get(id, (err, proxy) => {
         if (err) reject(err);
         resolve(proxy);
