@@ -1,7 +1,37 @@
 import { IProxy } from "@/types";
 
-import { createMachine, createActor } from "xstate";
-const proxyMachine = createMachine({
+import { createMachine, createActor, setup } from "xstate";
+
+const proxyMachine = setup({
+  types: {
+    context: {} as {
+      id: string;
+      name: string;
+      description: string;
+      port: number;
+      proxy_host: string;
+      proxy_port: number;
+      authentication: {
+        authentication?: boolean;
+        username?: string;
+        password?: string;
+      };
+    },
+    input: {} as {
+      id: string;
+      name: string;
+      description: string;
+      port: number;
+      proxy_host: string;
+      proxy_port: number;
+      authentication: {
+        authentication?: boolean;
+        username?: string;
+        password?: string;
+      };
+    },
+  },
+}).createMachine({
   /** @xstate-layout N4IgpgJg5mDOIC5QAcBOB7AHgTwHQEkA7AQwGMAXASwDcwBiMq648sAbQAYBdRFdWSlXSFeITIgAcHCbgBsHAIwBWAOwcVCgMzalAGhDZEAJgCcHXBKVLNClZoAslhSdmaAvm-1oseAIIUaeggwRhoWdm5RZH5BSmFRcQQFaVlcDiM7e00VPQNEawU5FRM1Iw4le0V7FQ8vDBxcfyZ6SkJmABtKCHDOHiQQaIEhEX7E5JNNCyMJBSNcwwQZ3CUOVYV7K0r12Qlagfq8Ig6uulQQgOZWXqiY4YTEZUnNIyMNzWly+yNn-QXZWXsy1MNi+KgkmlkEz23gaR2InQgdGCoUuET6fCGcRGoESSlkKlwmhMFWKakUtl+xjMFisNkyThc7j2hHQwXg-RhCwxsXio0QAFpZJSEPylLgTBKJaoONUNtITNCDgQSBcwDdMbycYh5OY8ao8c8FJY5sKKoD1LJgfIlGZVIqfI1VeqedixA9vgTVmDZvNjBDcHMbETNlUap59g64QjnXc+QgvsLkkYA0ZZKo1BUqjsPB4gA */
   id: "proxy",
   types: {
@@ -11,16 +41,29 @@ const proxyMachine = createMachine({
       | { type: "invalidate" }
       | { type: "reactivate" },
   },
+
   initial: "Inactive",
-  context: {} as { proxy: Omit<IProxy, "state"> },
+  context: ({ input }) => ({
+    id: input.id,
+    name: input.name,
+    description: input.description,
+    port: input.port,
+    proxy_host: input.proxy_host,
+    proxy_port: input.proxy_port,
+    authentication: {
+      authentication: input.authentication.authentication,
+      username: input.authentication.username,
+      password: input.authentication.password,
+    },
+  }),
   states: {
     Inactive: {
       on: {
         activate: {
           target: "Active",
-          actions: {
-            type: "clearError",
-          },
+          // actions: {
+          //   type: "clearError",
+          // },
         },
       },
       description:
@@ -33,12 +76,12 @@ const proxyMachine = createMachine({
         },
         invalidate: {
           target: "Invalid",
-          actions: {
-            type: "setError",
-            params: {
-              code: 400,
-            },
-          },
+          // actions: {
+          //   type: "setError",
+          //   params: {
+          //     code: 400,
+          //   },
+          // },
         },
       },
       description: "The proxy is currently active and is tunneling traffic.",
@@ -47,15 +90,15 @@ const proxyMachine = createMachine({
       on: {
         reactivate: {
           target: "Active",
-          actions: {
-            type: "clearError",
-          },
+          // actions: {
+          //   type: "clearError",
+          // },
         },
         deactivate: {
           target: "Inactive",
-          actions: {
-            type: "clearError",
-          },
+          // actions: {
+          //   type: "clearError",
+          // },
         },
       },
       description:
