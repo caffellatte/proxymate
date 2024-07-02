@@ -1,29 +1,36 @@
 import { IProxy } from "@/types";
 import { useState, FC } from "react";
 import { ProxyCard } from "@/renderer/components/templates";
-import { createMachine, assign } from "xstate";
-import { proxyMachine } from "@/xstate";
+import { useMachine } from "@xstate/react";
+import { proxiesMachine } from "@/xstate";
+import debug from "debug";
+import { useEffect } from "react";
+
+const logger = debug("renderer:ProxiesList");
 
 const ProxiesList: FC = () => {
-  const [proxies, setProxies] = useState<Omit<IProxy, "state">[] | []>([]);
-  window.electronAPI.proxyList().then((data) => {
-    setProxies(data);
-  });
+  const [state, send] = useMachine(proxiesMachine);
 
-  const parentMachine = createMachine({
-    entry: [
-      assign({
-        childMachineRef: ({ spawn }) => spawn(proxyMachine, { id: "child" }),
-      }),
-    ],
-  });
+  console.log(state);
+
+  useEffect(() => {
+    window.electronAPI.proxyList().then((data) => {
+      // setProxies(data);
+      data.forEach((proxy) => {
+        send({ type: "add", newProxy: proxy });
+        logger(proxy);
+      });
+    });
+  }, []);
+
+  // const [proxies, setProxies] = useState<Omit<IProxy, "state">[] | []>([]);
 
   return (
     <div>
-      {proxies.length > 0 && (
+      {state.context.proxies.length > 0 && (
         <div className="flex flex-col gap-3">
-          {proxies.map((proxy) => (
-            <ProxyCard key={proxy.id} proxy={proxy} />
+          {state.context.proxies.map((proxy, index) => (
+            <ProxyCard key={proxy.id} proxy={proxy.getSnapshot().context} />
           ))}
         </div>
       )}
