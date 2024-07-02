@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { uiActor } from "@/xstate";
 import Layout from "@/renderer/components/layout";
+import debug from "debug";
+debug.enable("*");
 
 const App = () => {
   useEffect(() => {
