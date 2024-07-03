@@ -1,37 +1,38 @@
-import { IProxy } from "@/types";
-import { useState, FC } from "react";
+import { FC } from "react";
 import { ProxyCard } from "@/renderer/components/templates";
-import { useMachine } from "@xstate/react";
-import { proxiesMachine } from "@/xstate";
+import { useSelector } from "@xstate/react";
 import debug from "debug";
-import { useEffect } from "react";
+import { proxiesActor } from "@/xstate";
 
 const logger = debug("renderer:ProxiesList");
 
 const ProxiesList: FC = () => {
-  const [state, send] = useMachine(proxiesMachine);
+  const proxiesActorState = useSelector(proxiesActor, (state) => state);
 
-  console.log(state);
+  logger(proxiesActorState);
 
-  useEffect(() => {
-    window.electronAPI.proxyList().then((data) => {
-      // setProxies(data);
-      data.forEach((proxy) => {
-        send({ type: "add", newProxy: proxy });
-        logger(proxy);
-      });
-    });
-  }, []);
+  // useEffect(() => {
+  //   if (uiActorStateValue === "idle") {
+  //     // TODO: fromPromise FSM
+
+  //   }
+  // }, [uiActorStateValue]);
 
   // const [proxies, setProxies] = useState<Omit<IProxy, "state">[] | []>([]);
 
   return (
     <div>
-      {state.context.proxies.length > 0 && (
+      {proxiesActorState.context.proxies.length > 0 && (
         <div className="flex flex-col gap-3">
-          {state.context.proxies.map((proxy, index) => (
-            <ProxyCard key={proxy.id} proxy={proxy.getSnapshot().context} />
-          ))}
+          {proxiesActorState.context.proxies.map((proxy, index) => {
+            const { id, ...proxySnapshotContext } = proxy.getSnapshot().context;
+            return (
+              <ProxyCard
+                key={index}
+                proxy={{ id: Number(id), ...proxySnapshotContext }}
+              />
+            );
+          })}
         </div>
       )}
     </div>

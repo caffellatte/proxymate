@@ -1,12 +1,22 @@
 import { useEffect } from "react";
-import { uiActor } from "@/xstate";
+import { uiActor, proxiesActor } from "@/xstate";
 import Layout from "@/renderer/components/layout";
 import debug from "debug";
 debug.enable("*");
 
+const logger = debug("renderer:App");
+
 const App = () => {
   useEffect(() => {
     uiActor.start();
+    proxiesActor.start();
+    window.electronAPI.proxyList().then((data) => {
+      // setProxies(data);
+      data.forEach((proxy) => {
+        proxiesActor.send({ type: "add", newProxy: proxy });
+        logger(proxy);
+      });
+    });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {

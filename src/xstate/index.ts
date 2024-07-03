@@ -1,3 +1,3 @@
 export * from "./proxyMachine";
 export * from "./proxiesMachine";
-export * from "./ui";
+export * from "./uiActor";
