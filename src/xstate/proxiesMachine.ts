@@ -1,8 +1,12 @@
-import { ActorRefFrom, createMachine, assign, stopChild } from "xstate";
+import {
+  ActorRefFrom,
+  createMachine,
+  assign,
+  stopChild,
+  createActor,
+} from "xstate";
 import { proxyMachine } from "./proxyMachine";
 import { IProxy } from "@/types";
-
-const makeId = () => Math.random().toString(36).substring(7);
 
 const proxiesMachine = createMachine({
   types: {} as {
@@ -64,4 +68,6 @@ const proxiesMachine = createMachine({
   },
 });
 
-export { proxiesMachine };
+const proxiesActor = createActor(proxiesMachine);
+
+export { proxiesMachine, proxiesActor };

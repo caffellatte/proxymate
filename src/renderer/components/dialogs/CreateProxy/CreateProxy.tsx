@@ -7,7 +7,10 @@ import {
   ProxyFormSchema as ProxyCreateFormSchema,
 } from "@/types";
 import { ProxyForm } from "@/renderer/components/templates";
-import { uiActor } from "@/xstate";
+import { uiActor, proxiesActor } from "@/xstate";
+import debug from "debug";
+
+const logger = debug("renderer:CreateProxy");
 
 const proxyResolver = zodResolver(proxyCreateSchema);
 
@@ -83,7 +86,9 @@ const CreateProxy: FC = () => {
       // console.log(response);
       proxyCreateReset();
       if (response) {
+        logger(response);
         uiActor.send({ type: "list" });
+        proxiesActor.send({ type: "add", newProxy: response });
       }
     } catch (error) {
       proxyCreateSetError("proxyError", {
