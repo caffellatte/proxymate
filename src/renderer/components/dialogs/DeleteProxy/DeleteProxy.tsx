@@ -7,7 +7,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/renderer/components/ui";
-import { uiActor } from "@/xstate";
+import { uiActor, proxiesActor } from "@/xstate";
 import { useSelector } from "@xstate/react";
 
 const DeleteProxy: FC = () => {
@@ -15,8 +15,10 @@ const DeleteProxy: FC = () => {
 
   const handleDeleteProxy = () => {
     window.electronAPI.proxyDelete(proxyId).then((data) => {
+      // intagrate this is xstate as fromPromise
       if (data) uiActor.send({ type: "list" });
     });
+    proxiesActor.send({ type: "remove", id: proxyId });
   };
 
   return (

@@ -84,7 +84,18 @@ const CreateProxy: FC = () => {
       };
       const response = await window.electronAPI.proxyCreate(proxy);
       // console.log(response);
-      proxyCreateReset();
+      proxyCreateReset({
+        name: "",
+        description: "",
+        port: "",
+        proxy_host: "",
+        proxy_port: "",
+        authentication: {
+          authentication: false,
+          username: "",
+          password: "",
+        },
+      });
       if (response) {
         logger(response);
         uiActor.send({ type: "list" });
