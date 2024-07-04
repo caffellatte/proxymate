@@ -7,6 +7,11 @@ import {
 } from "xstate";
 import { proxyMachine } from "./proxyMachine";
 import { IProxy } from "@/types";
+import debug from "debug";
+
+debug.enable("*");
+
+const logger = debug("proxiesMachine");
 
 const proxiesMachine = createMachine({
   types: {} as {
@@ -21,7 +26,7 @@ const proxiesMachine = createMachine({
         }
       | {
           type: "remove";
-          index: number;
+          id: string;
         };
   },
   id: "friends",
@@ -57,11 +62,15 @@ const proxiesMachine = createMachine({
     remove: {
       actions: [
         // Stop the friend actor to unsubscribe
-        stopChild(({ context, event }) => context.proxies[event.index]),
+        stopChild(({ context, event }) => {
+          return context.proxies.find(
+            (proxy) => proxy.id === `proxy-${event.id}`
+          );
+        }),
         // Remove the friend from the list by index
         assign({
           proxies: ({ context, event }) =>
-            context.proxies.filter((_, index) => index !== event.index),
+            context.proxies.filter((proxy) => proxy.id !== `proxy-${event.id}`),
         }),
       ],
     },
