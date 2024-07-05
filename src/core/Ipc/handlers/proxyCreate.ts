@@ -15,7 +15,7 @@ const proxyCreate = (ipc: Ipc) => async (params: IProxyCreateParams) => {
   logger("lastKey:", lastKey, "typeof lastKey:", typeof lastKey);
 
   const key = lastKey ? (parseInt(lastKey, 10) + 1).toString() : "1";
-  return await ipc.database.proxies.put(key, proxy);
+  return await ipc.database.proxies.put(key, { id: Number(key), ...proxy });
 };
 
 export { proxyCreate };
