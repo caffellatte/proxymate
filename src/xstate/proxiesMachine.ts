@@ -27,6 +27,10 @@ const proxiesMachine = createMachine({
       | {
           type: "remove";
           id: string;
+        }
+      | {
+          type: "update";
+          editedProxy: Omit<IProxy, "state">;
         };
   },
   id: "friends",
@@ -71,6 +75,58 @@ const proxiesMachine = createMachine({
         assign({
           proxies: ({ context, event }) =>
             context.proxies.filter((proxy) => proxy.id !== `proxy-${event.id}`),
+        }),
+      ],
+    },
+    update: {
+      // actions: [
+      //   assign({
+      //     proxies: ({ context, event }) => {
+      //       const updatedProxy = context.proxies.find(
+      //         (proxy) => proxy.id === `proxy-${event.id}`
+      //       );
+      //       logger("updatedProxy:", updatedProxy);
+
+      //       return context.proxies;
+      //     },
+      //   }),
+      // ],
+      actions: [
+        // Stop the friend actor to unsubscribe
+        stopChild(({ context, event }) => {
+          return context.proxies.find(
+            (proxy) => proxy.id === `proxy-${event.editedProxy.id}`
+          );
+        }),
+        // Remove the friend from the list by index
+        assign({
+          proxies: ({ context, event }) =>
+            context.proxies.filter(
+              (proxy) => proxy.id !== `proxy-${event.editedProxy.id}`
+            ),
+        }),
+        assign({
+          proxies: ({ context, event, spawn }) =>
+            context.proxies.concat(
+              spawn(proxyMachine, {
+                id: `proxy-${event.editedProxy.id}`,
+                input: {
+                  id: event.editedProxy.id.toString(),
+                  name: event.editedProxy.name,
+                  description: event.editedProxy.description,
+                  port: event.editedProxy.port,
+                  proxy_host: event.editedProxy.proxy_host,
+                  proxy_port: event.editedProxy.proxy_port,
+                  authentication: {
+                    authentication:
+                      event.editedProxy.authentication.authentication,
+                    username: event.editedProxy.authentication.username,
+                    password: event.editedProxy.authentication.password,
+                  },
+                },
+              })
+            ),
+          newProxy: null,
         }),
       ],
     },

@@ -11,14 +11,12 @@ const ProxiesList: FC = () => {
 
   logger(proxiesActorState);
 
-  // useEffect(() => {
-  //   if (uiActorStateValue === "idle") {
-  //     // TODO: fromPromise FSM
-
-  //   }
-  // }, [uiActorStateValue]);
-
-  // const [proxies, setProxies] = useState<Omit<IProxy, "state">[] | []>([]);
+  /**
+   * TODO (1): fromPromise FSM for DB actions
+   */
+  /**
+   * TODO (2): sort by ID
+   */
 
   return (
     <div>

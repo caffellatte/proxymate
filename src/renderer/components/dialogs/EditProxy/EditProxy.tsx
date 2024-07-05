@@ -4,7 +4,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { proxySchema, ProxyFormSchema, isKey } from "@/types";
 import { ProxyForm } from "@/renderer/components/templates";
-import { uiActor } from "@/xstate";
+import { uiActor, proxiesActor } from "@/xstate";
 import { useSelector } from "@xstate/react";
 import debug from "debug";
 const logger = debug("renderer:dialogs:EditProxy");
@@ -13,6 +13,7 @@ const proxyResolver = zodResolver(proxySchema);
 
 const EditProxy: FC = () => {
   const proxyId = useSelector(uiActor, (state) => state.context.proxyId);
+  const state = useSelector(uiActor, (state) => state);
 
   const {
     reset: proxyEditReset,
@@ -32,7 +33,7 @@ const EditProxy: FC = () => {
   });
 
   useEffect(() => {
-    if (proxyId) {
+    if (proxyId && state.matches("edit")) {
       logger("proxyId:", proxyId);
       window.electronAPI.proxyGet(proxyId).then((data) => {
         const { authentication, ...rest } = data;
@@ -61,7 +62,7 @@ const EditProxy: FC = () => {
         }
       });
     }
-  }, [proxyId, proxySetValue]);
+  }, [proxyId, proxySetValue, state]);
 
   useEffect(() => {
     if (
@@ -118,6 +119,10 @@ const EditProxy: FC = () => {
       proxyEditReset();
       if (response) {
         uiActor.send({ type: "list" });
+        proxiesActor.send({
+          type: "update",
+          editedProxy: { id: Number(proxyId), ...proxy },
+        });
       }
     } catch (error) {
       proxyEditSetError("proxyError", {
