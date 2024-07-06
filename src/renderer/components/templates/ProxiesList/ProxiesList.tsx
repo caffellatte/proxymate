@@ -27,7 +27,7 @@ const ProxiesList: FC = () => {
             return (
               <ProxyCard
                 key={index}
-                proxy={{ id: Number(id), ...proxySnapshotContext }}
+                proxy={{ id: id, ...proxySnapshotContext }}
               />
             );
           })}

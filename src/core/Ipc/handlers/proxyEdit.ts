@@ -10,7 +10,7 @@ interface IProxyEditParams {
 
 const proxyEdit = (ipc: Ipc) => async (params: IProxyEditParams) => {
   const { id, proxy } = params;
-  return await ipc.database.proxies.put(id, { id: Number(id), ...proxy });
+  return await ipc.database.proxies.put(id, { id: id, ...proxy });
 };
 
 export { proxyEdit };

@@ -1,13 +1,10 @@
 import { z } from "zod";
 
-export type State = "active" | "inactive" | "invalid";
-
 export interface IProxy {
-  id: number;
+  id: string;
   name: string;
   description: string;
   port: number;
-  state: State;
   proxy_host: string;
   proxy_port: number;
   // TODO: type guard for authentication

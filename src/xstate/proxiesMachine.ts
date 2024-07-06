@@ -16,13 +16,13 @@ const logger = debug("proxiesMachine");
 const proxiesMachine = createMachine({
   types: {} as {
     context: {
-      newProxy: Omit<IProxy, "state"> | null;
+      newProxy: IProxy | null;
       proxies: ActorRefFrom<typeof proxyMachine>[];
     };
     events:
       | {
           type: "add";
-          newProxy: Omit<IProxy, "state">;
+          newProxy: IProxy;
         }
       | {
           type: "remove";
@@ -30,7 +30,7 @@ const proxiesMachine = createMachine({
         }
       | {
           type: "update";
-          editedProxy: Omit<IProxy, "state">;
+          editedProxy: IProxy;
         };
   },
   id: "friends",
