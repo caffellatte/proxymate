@@ -22,7 +22,7 @@ class Proxies {
     return new Promise((resolve, reject) => {
       this.proxiesDatabase.put(id, proxy, (err) => {
         if (err) reject(err);
-        proxy.id = Number(id);
+        proxy.id = id;
         resolve(proxy);
       });
     });

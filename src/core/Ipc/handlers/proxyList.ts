@@ -8,13 +8,13 @@ interface IProxyListParams {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const proxyList = (ipc: Ipc) => async (params: IProxyListParams) => {
-  const data: [string, Omit<IProxy, "id" | "state">][] =
+  const data: [string, Omit<IProxy, "id">][] =
     await ipc.database.proxies.getAll();
 
   const proxies = data.map((entity) => {
     const [id, rest] = entity;
-    const proxy: Omit<IProxy, "state"> = {
-      id: parseInt(id, 10),
+    const proxy: IProxy = {
+      id: id,
       ...rest,
     };
     return proxy;

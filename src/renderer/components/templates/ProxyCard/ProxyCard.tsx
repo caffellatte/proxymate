@@ -5,7 +5,7 @@ import { X } from "lucide-react";
 import { uiActor } from "@/xstate";
 
 interface IProxyCardProps {
-  proxy: Omit<IProxy, "state">;
+  proxy: IProxy;
 }
 
 const ProxyCard: FC<IProxyCardProps> = ({ proxy }) => {

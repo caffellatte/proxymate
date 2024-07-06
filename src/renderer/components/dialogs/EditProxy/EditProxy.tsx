@@ -121,7 +121,7 @@ const EditProxy: FC = () => {
         uiActor.send({ type: "list" });
         proxiesActor.send({
           type: "update",
-          editedProxy: { id: Number(proxyId), ...proxy },
+          editedProxy: { id: proxyId, ...proxy },
         });
       }
     } catch (error) {

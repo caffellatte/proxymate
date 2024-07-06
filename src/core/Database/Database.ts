@@ -13,12 +13,12 @@ class Database {
       databaseLocationPath,
       {
         valueEncoding: "json",
-      },
+      }
     );
     // Create proxy sublevel database
     this.proxiesDatabase = this.levelDatabase.sublevel<
       string,
-      Omit<IProxy, "id" | "state">
+      Omit<IProxy, "id">
     >("proxies", {
       keyEncoding: "utf8",
       valueEncoding: "json",

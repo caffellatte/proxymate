@@ -11,5 +11,5 @@ export interface IProxiesDatabase
     ClassicLevel<string, AnyJson>,
     string | Buffer | Uint8Array,
     string,
-    Omit<IProxy, "id" | "state">
+    Omit<IProxy, "id">
   > {}

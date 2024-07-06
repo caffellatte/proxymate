@@ -1,20 +1,18 @@
 import { IProxy } from "./types";
 
 export interface IElectronAPI {
-  proxyCreate: (
-    proxy: Omit<IProxy, "id" | "state">
-  ) => Promise<Omit<IProxy, "state">>;
+  proxyCreate: (proxy: Omit<IProxy, "id">) => Promise<IProxy>;
 
   proxyDelete: (id: string) => Promise<string>;
 
   proxyEdit: (
     id: string,
-    proxy: Omit<IProxy, "id" | "state">
-  ) => Promise<Omit<IProxy, "id" | "state">>;
+    proxy: Omit<IProxy, "id">
+  ) => Promise<Omit<IProxy, "id">>;
 
-  proxyGet: (id: string) => Promise<Omit<IProxy, "id" | "state">>;
+  proxyGet: (id: string) => Promise<Omit<IProxy, "id">>;
 
-  proxyList: () => Promise<Omit<IProxy, "state">[]>;
+  proxyList: () => Promise<IProxy[]>;
 }
 
 declare global {
