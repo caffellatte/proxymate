@@ -96,6 +96,7 @@ const EditProxy: FC = () => {
     proxy_port,
     authentication,
   }: ProxyFormSchema) => {
+    if (!proxyId) return;
     // console.log(
     //   name,
     //   description,
