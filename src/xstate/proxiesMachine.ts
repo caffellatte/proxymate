@@ -7,16 +7,15 @@ import {
 } from "xstate";
 import { proxyMachine } from "./proxyMachine";
 import { IProxy } from "@/types";
-import debug from "debug";
+// import debug from "debug";
 
-debug.enable("*");
+// debug.enable("*");
 
-const logger = debug("proxiesMachine");
+// const logger = debug("proxiesMachine");
 
 const proxiesMachine = createMachine({
   types: {} as {
     context: {
-      newProxy: IProxy | null;
       proxies: ActorRefFrom<typeof proxyMachine>[];
     };
     events:
@@ -35,7 +34,6 @@ const proxiesMachine = createMachine({
   },
   id: "friends",
   context: {
-    newProxy: null,
     proxies: [],
   },
   on: {
@@ -60,18 +58,15 @@ const proxiesMachine = createMachine({
               },
             })
           ),
-        newProxy: null,
       }),
     },
     remove: {
       actions: [
-        // Stop the friend actor to unsubscribe
-        stopChild(({ context, event }) => {
-          return context.proxies.find(
-            (proxy) => proxy.id === `proxy-${event.id}`
-          );
-        }),
-        // Remove the friend from the list by index
+        // Stop the proxy actor to unsubscribe
+        ({ event }) => {
+          stopChild(`proxy-${event.id}`);
+        },
+        // Remove the proxy from the list by index
         assign({
           proxies: ({ context, event }) =>
             context.proxies.filter((proxy) => proxy.id !== `proxy-${event.id}`),
@@ -79,26 +74,12 @@ const proxiesMachine = createMachine({
       ],
     },
     update: {
-      // actions: [
-      //   assign({
-      //     proxies: ({ context, event }) => {
-      //       const updatedProxy = context.proxies.find(
-      //         (proxy) => proxy.id === `proxy-${event.id}`
-      //       );
-      //       logger("updatedProxy:", updatedProxy);
-
-      //       return context.proxies;
-      //     },
-      //   }),
-      // ],
       actions: [
-        // Stop the friend actor to unsubscribe
-        stopChild(({ context, event }) => {
-          return context.proxies.find(
-            (proxy) => proxy.id === `proxy-${event.editedProxy.id}`
-          );
-        }),
-        // Remove the friend from the list by index
+        // Stop the proxy actor to unsubscribe
+        ({ event }) => {
+          stopChild(`proxy-${event.editedProxy.id}`);
+        },
+        // Remove the proxy from the list by index
         assign({
           proxies: ({ context, event }) =>
             context.proxies.filter(
@@ -126,7 +107,6 @@ const proxiesMachine = createMachine({
                 },
               })
             ),
-          newProxy: null,
         }),
       ],
     },

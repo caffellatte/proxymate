@@ -11,7 +11,7 @@ class Proxies {
 
   clear() {
     return new Promise((resolve, reject) => {
-      this.proxiesDatabase.clear(null, (err) => {
+      this.proxiesDatabase.clear({}, (err) => {
         if (err) reject(err);
         resolve("ok");
       });

@@ -3,13 +3,13 @@ import { z } from "zod";
 export interface IProxy {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   port: number;
   proxy_host: string;
   proxy_port: number;
   // TODO: type guard for authentication
   authentication: {
-    authentication?: boolean;
+    authentication: boolean;
     username?: string;
     password?: string;
   };
@@ -81,7 +81,7 @@ export const proxySchema = z.object({
     ),
   authentication: z
     .object({
-      authentication: z.boolean().optional(),
+      authentication: z.boolean(),
       username: z.string().optional(),
       password: z.string().optional(),
     })
