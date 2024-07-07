@@ -12,11 +12,14 @@ const logger = debug("renderer:Header");
 
 const Header: FC = () => {
   const state = useSelector(uiActor, (state) => state);
+  const isCreateDialogOpen = state.matches("create");
+  const isEditDialogOpen = state.matches("edit");
+  const isDeleteDialogOpen = state.matches("delete");
   logger(state);
 
   return (
     <header className="flex justify-end">
-      <Dialog open={state.matches("create")}>
+      <Dialog open={isCreateDialogOpen}>
         <Button
           onClick={() => {
             uiActor.send({ type: "create" });
@@ -27,10 +30,10 @@ const Header: FC = () => {
         </Button>
         <CreateProxy />
       </Dialog>
-      <Dialog open={state.matches("edit")}>
+      <Dialog open={isEditDialogOpen}>
         <EditProxy />
       </Dialog>
-      <Dialog open={state.matches("delete")}>
+      <Dialog open={isDeleteDialogOpen}>
         <DeleteProxy />
       </Dialog>
     </header>

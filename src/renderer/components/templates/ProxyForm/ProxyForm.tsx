@@ -7,6 +7,11 @@ import {
   DialogFooter,
   Input,
   Label,
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
   Switch,
   Textarea,
   Typography,
@@ -17,7 +22,7 @@ import {
   Control,
   FieldErrors,
 } from "react-hook-form";
-import { ProxyFormSchema } from "@/types";
+import { ProxyFormSchema, proxyProtocols } from "@/types";
 
 interface IProxyFormProps {
   title: string;
@@ -151,6 +156,45 @@ const ProxyForm: FC<IProxyFormProps> = ({
               <div></div>
               <Typography variant="small" color="error" className="col-span-3">
                 {proxyErrors.port.message}
+              </Typography>
+            </div>
+          )}
+        </div>
+        {/* Protocol */}
+        <div className="flex flex-col gap-3">
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="proxy_protocol" className="text-right">
+              Proxy protocol
+            </Label>
+            <Controller
+              name="proxy_protocol"
+              control={proxyControl}
+              defaultValue={undefined}
+              render={({ field: { onChange, value, name } }) => (
+                <Select onValueChange={onChange} value={value} name={name}>
+                  <SelectTrigger
+                    id="proxy_protocol"
+                    aria-label="proxy_protocol"
+                    className="col-span-3"
+                  >
+                    <SelectValue placeholder="Proxy protocol" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {proxyProtocols.map(({ id, name }) => (
+                      <SelectItem key={id} value={id}>
+                        {name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </div>
+          {proxyErrors.proxy_protocol && (
+            <div className="grid grid-cols-4 items-center gap-4">
+              <div></div>
+              <Typography variant="small" color="error" className="col-span-3">
+                {proxyErrors.proxy_protocol.message}
               </Typography>
             </div>
           )}

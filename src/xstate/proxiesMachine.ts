@@ -48,6 +48,7 @@ const proxiesMachine = createMachine({
                 name: event.newProxy.name,
                 description: event.newProxy.description,
                 port: event.newProxy.port,
+                proxy_protocol: event.newProxy.proxy_protocol,
                 proxy_host: event.newProxy.proxy_host,
                 proxy_port: event.newProxy.proxy_port,
                 authentication: {
@@ -96,6 +97,7 @@ const proxiesMachine = createMachine({
                   name: event.editedProxy.name,
                   description: event.editedProxy.description,
                   port: event.editedProxy.port,
+                  proxy_protocol: event.editedProxy.proxy_protocol,
                   proxy_host: event.editedProxy.proxy_host,
                   proxy_port: event.editedProxy.proxy_port,
                   authentication: {
