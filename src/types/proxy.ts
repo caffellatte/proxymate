@@ -1,10 +1,38 @@
 import { z } from "zod";
 
+export type ProxyProtocols = {
+  id: Protocol;
+  name: string;
+};
+
+export const proxyProtocols: ProxyProtocols[] = [
+  { id: "http", name: "HTTP" },
+  { id: "https", name: "HTTPS" },
+  { id: "socks4", name: "SOCKS4" },
+  { id: "socks4a", name: "SOCKS4A" },
+  { id: "socks5", name: "SOCKS5" },
+  { id: "socks5h", name: "SOCKS5H" },
+];
+
+export const PROTOCOLS = [
+  "http",
+  "https",
+  "socks",
+  "socks4",
+  "socks4a",
+  "socks5",
+  "socks5h",
+] as const;
+
+export type Protocols = typeof PROTOCOLS;
+export type Protocol = Protocols[number];
+
 export interface IProxy {
   id: string;
   name: string;
   description?: string;
   port: number;
+  proxy_protocol: Protocol;
   proxy_host: string;
   proxy_port: number;
   // TODO: type guard for authentication
@@ -50,6 +78,12 @@ export const proxySchema = z.object({
         path: [""],
       }
     ),
+  proxy_protocol: z.enum(PROTOCOLS, {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    errorMap: (issue, ctx) => {
+      return { message: "Protocol field is required" };
+    },
+  }),
   proxy_host: z.string().min(4, { message: "Host field is required" }),
   proxy_port: z
     .union([

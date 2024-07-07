@@ -14,6 +14,7 @@ const proxyResolver = zodResolver(proxySchema);
 const EditProxy: FC = () => {
   const proxyId = useSelector(uiActor, (state) => state.context.proxyId);
   const state = useSelector(uiActor, (state) => state);
+  const isEditDialogOpen = state.matches("edit");
 
   const {
     reset: proxyEditReset,
@@ -33,7 +34,7 @@ const EditProxy: FC = () => {
   });
 
   useEffect(() => {
-    if (proxyId && state.matches("edit")) {
+    if (proxyId && isEditDialogOpen) {
       logger("proxyId:", proxyId);
       window.electronAPI.proxyGet(proxyId).then((data) => {
         const { authentication, ...rest } = data;
@@ -62,7 +63,7 @@ const EditProxy: FC = () => {
         }
       });
     }
-  }, [proxyId, proxySetValue, state]);
+  }, [proxyId, proxySetValue, isEditDialogOpen]);
 
   useEffect(() => {
     if (
@@ -92,6 +93,7 @@ const EditProxy: FC = () => {
     name,
     description,
     port,
+    proxy_protocol,
     proxy_host,
     proxy_port,
     authentication,
@@ -111,6 +113,7 @@ const EditProxy: FC = () => {
         name: name,
         description: description,
         port: port as number,
+        proxy_protocol: proxy_protocol,
         proxy_host: proxy_host,
         proxy_port: proxy_port as number,
         authentication: authentication,
@@ -119,6 +122,7 @@ const EditProxy: FC = () => {
       // console.log(response);
       proxyEditReset();
       if (response) {
+        // TODO: communication between actors
         uiActor.send({ type: "list" });
         proxiesActor.send({
           type: "update",

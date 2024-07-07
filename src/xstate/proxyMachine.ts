@@ -20,6 +20,7 @@ const proxyMachine = setup({
     name: input.name,
     description: input.description,
     port: input.port,
+    proxy_protocol: input.proxy_protocol,
     proxy_host: input.proxy_host,
     proxy_port: input.proxy_port,
     authentication: {
