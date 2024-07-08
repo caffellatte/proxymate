@@ -74,5 +74,9 @@
     "tailwindcss-animate": "^1.0.7",
     "xstate": "^5.14.0",
     "zod": "^3.23.8"
+  },
+  "overrides": {
+    "@radix-ui/react-dismissable-layer": "^1.0.5",
+    "@radix-ui/react-focus-scope": "^1.0.4"
   }
 }

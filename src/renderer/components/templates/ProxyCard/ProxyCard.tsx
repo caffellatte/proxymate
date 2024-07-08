@@ -9,7 +9,7 @@ interface IProxyCardProps {
 }
 
 const ProxyCard: FC<IProxyCardProps> = ({ proxy }) => {
-  const { id, name, description, port } = proxy;
+  const { id, name, description, port, created, updated } = proxy;
 
   return (
     <div className="flex flex-col gap-4 p-2 border rounded-md">
@@ -42,6 +42,14 @@ const ProxyCard: FC<IProxyCardProps> = ({ proxy }) => {
       <div className="flex gap-1">
         <Label>Port:</Label>
         <Typography variant="small">{port}</Typography>
+      </div>
+      <div className="flex gap-1">
+        <Label>Created:</Label>
+        <Typography variant="small">{created}</Typography>
+      </div>
+      <div className="flex gap-1">
+        <Label>Updated:</Label>
+        <Typography variant="small">{updated}</Typography>
       </div>
     </div>
   );

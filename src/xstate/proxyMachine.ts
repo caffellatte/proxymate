@@ -28,6 +28,8 @@ const proxyMachine = setup({
       username: input.authentication.username,
       password: input.authentication.password,
     },
+    created: input.created,
+    updated: input.updated,
   }),
   states: {
     Inactive: {

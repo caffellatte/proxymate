@@ -56,6 +56,8 @@ const proxiesMachine = createMachine({
                   username: event.newProxy.authentication.username,
                   password: event.newProxy.authentication.password,
                 },
+                created: event.newProxy.created,
+                updated: event.newProxy.updated,
               },
             })
           ),
@@ -106,6 +108,8 @@ const proxiesMachine = createMachine({
                     username: event.editedProxy.authentication.username,
                     password: event.editedProxy.authentication.password,
                   },
+                  created: event.editedProxy.created,
+                  updated: event.editedProxy.updated,
                 },
               })
             ),
