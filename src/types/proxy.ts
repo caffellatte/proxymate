@@ -41,6 +41,8 @@ export interface IProxy {
     username?: string;
     password?: string;
   };
+  created: number;
+  updated: number;
 }
 
 /**
@@ -79,6 +81,7 @@ export const proxySchema = z.object({
       }
     ),
   proxy_protocol: z.enum(PROTOCOLS, {
+    // TODO: unknown error
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     errorMap: (issue, ctx) => {
       return { message: "Protocol field is required" };

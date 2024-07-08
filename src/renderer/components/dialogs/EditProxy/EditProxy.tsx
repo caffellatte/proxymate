@@ -14,6 +14,7 @@ const proxyResolver = zodResolver(proxySchema);
 const EditProxy: FC = () => {
   const proxyId = useSelector(uiActor, (state) => state.context.proxyId);
   const state = useSelector(uiActor, (state) => state);
+  const proxies = useSelector(proxiesActor, (state) => state.context.proxies);
   const isEditDialogOpen = state.matches("edit");
 
   const {
@@ -36,6 +37,13 @@ const EditProxy: FC = () => {
   useEffect(() => {
     if (proxyId && isEditDialogOpen) {
       logger("proxyId:", proxyId);
+      // const _proxy = proxies
+      //   .find((proxy) => {
+      //     console.log(proxy);
+      //     return proxy.id === `proxy-${proxyId}`;
+      //   })
+      //   ?.getSnapshot().context;
+      // logger(JSON.stringify(_proxy));
       window.electronAPI.proxyGet(proxyId).then((data) => {
         const { authentication, ...rest } = data;
 
@@ -45,7 +53,7 @@ const EditProxy: FC = () => {
 
         keys.forEach((key) => {
           if (isKey(rest, key)) {
-            if (rest[key]) {
+            if (rest[key] && key !== "created" && key !== "updated") {
               logger("key:", key);
               logger("rest[key]", rest[key]);
               proxySetValue(key, rest[key]);
@@ -108,6 +116,12 @@ const EditProxy: FC = () => {
     //   authentication,
     // );
     proxyEditClearErrors("proxyError");
+    const created = proxies
+      .find((proxy) => {
+        console.log(proxy);
+        return proxy.id === `proxy-${proxyId}`;
+      })
+      ?.getSnapshot().context.created;
     try {
       const proxy = {
         name: name,
@@ -117,6 +131,8 @@ const EditProxy: FC = () => {
         proxy_host: proxy_host,
         proxy_port: proxy_port as number,
         authentication: authentication,
+        created: created as number,
+        updated: new Date().getTime(),
       };
       const response = await window.electronAPI.proxyEdit(proxyId, proxy);
       // console.log(response);

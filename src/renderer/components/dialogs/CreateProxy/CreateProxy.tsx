@@ -75,6 +75,7 @@ const CreateProxy: FC = () => {
     // );
     proxyCreateClearErrors("proxyError");
     try {
+      const created = new Date().getTime();
       const proxy = {
         name: name,
         description: description,
@@ -83,7 +84,10 @@ const CreateProxy: FC = () => {
         proxy_host: proxy_host,
         proxy_port: proxy_port as number,
         authentication: authentication,
+        created: created,
+        updated: created,
       };
+
       const response = await window.electronAPI.proxyCreate(proxy);
       // console.log(response);
       proxyCreateReset({
