@@ -169,7 +169,7 @@ const ProxyForm: FC<IProxyFormProps> = ({
             <Controller
               name="proxy_protocol"
               control={proxyControl}
-              defaultValue={undefined}
+              defaultValue={""}
               render={({ field: { onChange, value, name } }) => (
                 <Select onValueChange={onChange} value={value} name={name}>
                   <SelectTrigger

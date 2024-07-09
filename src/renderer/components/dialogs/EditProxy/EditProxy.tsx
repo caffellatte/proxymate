@@ -2,7 +2,7 @@ import { DialogContent, DialogClose } from "@/renderer/components/ui";
 import { useEffect, FC } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { proxySchema, ProxyFormSchema, isKey } from "@/types";
+import { Protocol, proxySchema, ProxyFormSchema, isKey } from "@/types";
 import { ProxyForm } from "@/renderer/components/templates";
 import { uiActor, proxiesActor } from "@/xstate";
 import { useSelector } from "@xstate/react";
@@ -127,7 +127,7 @@ const EditProxy: FC = () => {
         name: name,
         description: description,
         port: port as number,
-        proxy_protocol: proxy_protocol,
+        proxy_protocol: proxy_protocol as Protocol,
         proxy_host: proxy_host,
         proxy_port: proxy_port as number,
         authentication: authentication,
@@ -136,7 +136,19 @@ const EditProxy: FC = () => {
       };
       const response = await window.electronAPI.proxyEdit(proxyId, proxy);
       // console.log(response);
-      proxyEditReset();
+      proxyEditReset({
+        name: "",
+        description: "",
+        port: "",
+        proxy_host: "",
+        proxy_port: "",
+        proxy_protocol: "",
+        authentication: {
+          authentication: false,
+          username: "",
+          password: "",
+        },
+      });
       if (response) {
         // TODO: communication between actors
         uiActor.send({ type: "list" });

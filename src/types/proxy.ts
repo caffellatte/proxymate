@@ -80,13 +80,28 @@ export const proxySchema = z.object({
         path: [""],
       }
     ),
-  proxy_protocol: z.enum(PROTOCOLS, {
-    // TODO: unknown error
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    errorMap: (issue, ctx) => {
-      return { message: "Protocol field is required" };
-    },
-  }),
+  proxy_protocol: z
+    .union([
+      z.enum(PROTOCOLS, {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        errorMap: (issue, ctx) => {
+          return { message: "Protocol field is required" };
+        },
+      }),
+      z.literal(""),
+    ])
+    .refine(
+      (proxy_protocol) => {
+        if (proxy_protocol === "") {
+          return false;
+        }
+        return true;
+      },
+      {
+        message: "Port field is required",
+        path: [""],
+      }
+    ),
   proxy_host: z.string().min(4, { message: "Host field is required" }),
   proxy_port: z
     .union([
