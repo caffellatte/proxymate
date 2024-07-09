@@ -3,6 +3,7 @@ import { useEffect, FC } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  Protocol,
   proxySchema as proxyCreateSchema,
   ProxyFormSchema as ProxyCreateFormSchema,
 } from "@/types";
@@ -80,7 +81,7 @@ const CreateProxy: FC = () => {
         name: name,
         description: description,
         port: port as number,
-        proxy_protocol: proxy_protocol,
+        proxy_protocol: proxy_protocol as Protocol,
         proxy_host: proxy_host,
         proxy_port: proxy_port as number,
         authentication: authentication,
@@ -96,6 +97,7 @@ const CreateProxy: FC = () => {
         port: "",
         proxy_host: "",
         proxy_port: "",
+        proxy_protocol: "",
         authentication: {
           authentication: false,
           username: "",
