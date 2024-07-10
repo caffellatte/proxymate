@@ -1,4 +1,5 @@
 import type { Database as IDatabase } from "@/core";
+import type { Chain as IChain } from "@/core";
 import {
   proxyCreate,
   proxyDelete,
@@ -9,9 +10,11 @@ import {
 
 class Ipc {
   public database: IDatabase;
+  public chain: IChain;
 
-  constructor(database: IDatabase) {
+  constructor(database: IDatabase, chain: IChain) {
     this.database = database;
+    this.chain = chain;
   }
 
   public proxyCreate = proxyCreate(this);
