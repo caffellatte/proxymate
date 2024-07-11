@@ -1,21 +1,49 @@
 import { FC } from "react";
 import { Button, Label, Typography } from "@/renderer/components/ui";
-import { IProxy } from "@/types";
-import { X } from "lucide-react";
-import { uiActor } from "@/xstate";
+import { X, Play, Pause } from "lucide-react";
+import { uiActor, proxyMachine } from "@/xstate";
+import { ActorRefFrom } from "xstate";
+import { useSelector } from "@xstate/react";
 
 interface IProxyCardProps {
-  proxy: IProxy;
+  proxy: ActorRefFrom<typeof proxyMachine>;
 }
 
 const ProxyCard: FC<IProxyCardProps> = ({ proxy }) => {
-  const { id, name, description, port, created, updated } = proxy;
+  const { id, name, description, port, created, updated } =
+    proxy.getSnapshot().context;
+
+  const state = useSelector(proxy, (state) => state.value);
 
   return (
     <div className="flex flex-col gap-4 p-2 border rounded-md">
       <div className="flex items-center justify-between">
         <Typography variant="large">{name}</Typography>
         <div className="flex items-center gap-4">
+          {state.match("Inactive") && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                proxy.send({ type: "activate" });
+              }}
+            >
+              <Play />
+            </Button>
+          )}
+          {state.match("Active") && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                proxy.send({ type: "deactivate" });
+              }}
+            >
+              <Pause />
+            </Button>
+          )}
           <Button
             type="button"
             variant="outline"

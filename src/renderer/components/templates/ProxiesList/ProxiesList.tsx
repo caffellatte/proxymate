@@ -14,23 +14,20 @@ const ProxiesList: FC = () => {
   /**
    * TODO (1): fromPromise FSM for DB actions
    */
-  /**
-   * TODO (2): sort by ID
-   */
 
   return (
     <div>
       {proxiesActorState.context.proxies.length > 0 && (
         <div className="flex flex-col gap-3">
-          {proxiesActorState.context.proxies.map((proxy, index) => {
-            const { id, ...proxySnapshotContext } = proxy.getSnapshot().context;
-            return (
-              <ProxyCard
-                key={index}
-                proxy={{ id: id, ...proxySnapshotContext }}
-              />
-            );
-          })}
+          {proxiesActorState.context.proxies
+            .sort(
+              (p1, p2) =>
+                Number(p1.getSnapshot().context.id) -
+                Number(p2.getSnapshot().context.id)
+            )
+            .map((proxy, index) => {
+              return <ProxyCard key={index} proxy={proxy} />;
+            })}
         </div>
       )}
     </div>
