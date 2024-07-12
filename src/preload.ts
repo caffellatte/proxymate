@@ -25,4 +25,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
    * proxyList
    */
   proxyList: () => ipcRenderer.invoke("proxy:list"),
+
+  proxyStart: (proxy: IProxy) => ipcRenderer.invoke("proxy:start", proxy),
 });

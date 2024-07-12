@@ -2,7 +2,7 @@ import ProxyChain, { Server } from "proxy-chain";
 import { IProxy } from "@/types";
 
 class Chain {
-  private proxies: Server[];
+  private proxies: Server[] = [];
 
   public start(proxy: IProxy) {
     const {

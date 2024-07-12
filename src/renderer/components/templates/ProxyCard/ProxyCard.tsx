@@ -15,6 +15,12 @@ const ProxyCard: FC<IProxyCardProps> = ({ proxy }) => {
 
   const state = useSelector(proxy, (state) => state.value);
 
+  if (state.match("Active")) {
+    const proxytSnapshot = proxy.getSnapshot().context;
+    console.log(proxytSnapshot);
+    window.electronAPI.proxyStart(proxytSnapshot);
+  }
+
   return (
     <div className="flex flex-col gap-4 p-2 border rounded-md">
       <div className="flex items-center justify-between">

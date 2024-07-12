@@ -1,11 +1,11 @@
-import type { Database as IDatabase } from "@/core";
-import type { Chain as IChain } from "@/core";
+import type { Database as IDatabase, Chain as IChain } from "@/core";
 import {
   proxyCreate,
   proxyDelete,
   proxyEdit,
   proxyGet,
   proxyList,
+  proxyStart,
 } from "./handlers";
 
 class Ipc {
@@ -22,6 +22,7 @@ class Ipc {
   public proxyEdit = proxyEdit(this);
   public proxyGet = proxyGet(this);
   public proxyList = proxyList(this);
+  public proxyStart = proxyStart(this);
 }
 
 export default Ipc;

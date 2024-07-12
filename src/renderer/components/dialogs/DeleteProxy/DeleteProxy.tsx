@@ -14,6 +14,7 @@ const DeleteProxy: FC = () => {
   const proxyId = useSelector(uiActor, (state) => state.context.proxyId);
 
   const handleDeleteProxy = () => {
+    if (!proxyId) return;
     window.electronAPI.proxyDelete(proxyId).then((data) => {
       // intagrate this is xstate as fromPromise
       if (data) uiActor.send({ type: "list" });
