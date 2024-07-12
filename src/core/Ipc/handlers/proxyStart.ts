@@ -4,11 +4,11 @@ import { IpcMainInvokeEvent } from "electron";
 
 interface IProxyEditParams {
   event: IpcMainInvokeEvent;
-  id: string;
   proxy: IProxy;
 }
 
 const proxyStart = (ipc: Ipc) => async (params: IProxyEditParams) => {
+  console.log("proxyStart", params);
   const { proxy } = params;
   return ipc.chain.start(proxy);
 };

@@ -3,3 +3,4 @@ export * from "./proxyDelete";
 export * from "./proxyEdit";
 export * from "./proxyGet";
 export * from "./proxyList";
+export * from "./proxyStart";
