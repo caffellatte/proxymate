@@ -52,6 +52,12 @@ class Core {
         proxy: args[0],
       });
     });
+    ipcMain.handle("proxy:stop", (event, ...args) => {
+      return this.ipc.proxyStop({
+        event: event,
+        id: args[0],
+      });
+    });
   }
 }
 

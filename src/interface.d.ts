@@ -13,7 +13,10 @@ export interface IElectronAPI {
   proxyGet: (id: string) => Promise<Omit<IProxy, "id">>;
 
   proxyList: () => Promise<IProxy[]>;
+
   proxyStart: (proxy: IProxy) => void;
+
+  proxyStop: (id: string) => void;
 }
 
 declare global {
