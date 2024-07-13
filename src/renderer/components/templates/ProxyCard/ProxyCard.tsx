@@ -21,6 +21,12 @@ const ProxyCard: FC<IProxyCardProps> = ({ proxy }) => {
     window.electronAPI.proxyStart(proxytSnapshot);
   }
 
+  if (state.match("Inactive")) {
+    const proxytSnapshot = proxy.getSnapshot().context;
+    console.log(proxytSnapshot);
+    window.electronAPI.proxyStop(id);
+  }
+
   return (
     <div className="flex flex-col gap-4 p-2 border rounded-md">
       <div className="flex items-center justify-between">

@@ -2,10 +2,11 @@ import ProxyChain, { Server } from "proxy-chain";
 import { IProxy } from "@/types";
 
 class Chain {
-  private proxies: Server[] = [];
+  private servers: Record<string, Server> = {};
 
   public start(proxy: IProxy) {
     const {
+      id,
       port,
       proxy_protocol,
       proxy_host,
@@ -42,7 +43,19 @@ class Chain {
       console.error(error);
     });
 
-    this.proxies.push(server);
+    this.servers[id] = server;
+  }
+
+  public stop(id: string) {
+    /**
+     * TODO (1): stop server
+     */
+    /**
+     * TODO (2): remove server from servers
+     */
+    console.log(id);
+    console.log(this.servers);
+    console.log(this.servers[id]);
   }
 }
 
