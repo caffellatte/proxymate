@@ -13,7 +13,7 @@ class Chain {
       proxy_port,
       authentication: { authentication, username, password },
     } = proxy;
-    const server = new ProxyChain.Server({
+    this.servers[id] = new ProxyChain.Server({
       port: port,
       host: "localhost",
       verbose: true,
@@ -27,35 +27,30 @@ class Chain {
       },
     });
 
-    server.listen(() => {
-      console.log(`Proxy server is listening on port ${server.port}`);
+    this.servers[id].listen(() => {
+      console.log(`Proxy server is listening on port ${this.servers[id].port}`);
     });
 
     // Emitted when HTTP connection is closed
-    server.on("connectionClosed", ({ connectionId, stats }) => {
+    this.servers[id].on("connectionClosed", ({ connectionId, stats }) => {
       console.log(`Connection ${connectionId} closed`);
       console.dir(stats);
     });
 
     // Emitted when HTTP request fails
-    server.on("requestFailed", ({ request, error }) => {
+    this.servers[id].on("requestFailed", ({ request, error }) => {
       console.log(`Request ${request.url} failed`);
       console.error(error);
     });
-
-    this.servers[id] = server;
   }
 
   public stop(id: string) {
-    /**
-     * TODO (1): stop server
-     */
-    /**
-     * TODO (2): remove server from servers
-     */
-    console.log(id);
+    const server = this.servers[id];
+    server.close(true, () => {
+      console.log(`Proxy server ${id} was closed.`);
+    });
+    delete this.servers[id];
     console.log(this.servers);
-    console.log(this.servers[id]);
   }
 }
 
