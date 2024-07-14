@@ -15,18 +15,6 @@ const ProxyCard: FC<IProxyCardProps> = ({ proxy }) => {
 
   const state = useSelector(proxy, (state) => state.value);
 
-  if (state.match("Active")) {
-    const proxytSnapshot = proxy.getSnapshot().context;
-    console.log(proxytSnapshot);
-    window.electronAPI.proxyStart(proxytSnapshot);
-  }
-
-  if (state.match("Inactive")) {
-    const proxytSnapshot = proxy.getSnapshot().context;
-    console.log(proxytSnapshot);
-    window.electronAPI.proxyStop(id);
-  }
-
   return (
     <div className="flex flex-col gap-4 p-2 border rounded-md">
       <div className="flex items-center justify-between">
@@ -39,6 +27,8 @@ const ProxyCard: FC<IProxyCardProps> = ({ proxy }) => {
               size="sm"
               onClick={() => {
                 proxy.send({ type: "activate" });
+                const proxytSnapshot = proxy.getSnapshot().context;
+                window.electronAPI.proxyStart(proxytSnapshot);
               }}
             >
               <Play />
@@ -51,6 +41,7 @@ const ProxyCard: FC<IProxyCardProps> = ({ proxy }) => {
               size="sm"
               onClick={() => {
                 proxy.send({ type: "deactivate" });
+                window.electronAPI.proxyStop(id);
               }}
             >
               <Pause />
