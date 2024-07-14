@@ -1,6 +1,9 @@
 import ProxyChain, { Server } from "proxy-chain";
 import { IProxy } from "@/types";
 
+/**
+ * TODO: rename class Chain to Proxy | Server | ProxyServer
+ */
 class Chain {
   private servers: Record<string, Server> = {};
 

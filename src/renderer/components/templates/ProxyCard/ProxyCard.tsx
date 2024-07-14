@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Button, Label, Typography } from "@/renderer/components/ui";
-import { X, Play, Pause } from "lucide-react";
+import { X, Play, Pause, ListIcon } from "lucide-react";
 import { uiActor, proxyMachine } from "@/xstate";
 import { ActorRefFrom } from "xstate";
 import { useSelector } from "@xstate/react";
@@ -20,6 +20,16 @@ const ProxyCard: FC<IProxyCardProps> = ({ proxy }) => {
       <div className="flex items-center justify-between">
         <Typography variant="large">{name}</Typography>
         <div className="flex items-center gap-4">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              uiActor.send({ type: "log", logId: id });
+            }}
+          >
+            <ListIcon />
+          </Button>
           {state.match("Inactive") && (
             <Button
               type="button"
