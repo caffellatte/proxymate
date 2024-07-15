@@ -16,7 +16,7 @@ const ProxiesList: FC = () => {
    */
 
   return (
-    <div>
+    <div className="min-w-[400px]">
       {proxiesActorState.context.proxies.length > 0 && (
         <div className="flex flex-col gap-3">
           {proxiesActorState.context.proxies
