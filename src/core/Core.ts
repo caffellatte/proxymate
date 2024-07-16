@@ -4,15 +4,16 @@ import { app, ipcMain } from "electron";
 
 class Core {
   private chain: Chain;
-  private databse: Database;
+  private database: Database;
   private ipc: Ipc;
   private databaseLocationPath: string;
 
   constructor() {
     this.chain = new Chain();
-    this.databaseLocationPath = path.join(app.getPath("userData"), "db");
-    this.databse = new Database(this.databaseLocationPath);
-    this.ipc = new Ipc(this.databse, this.chain);
+    const databaseLocationPath = path.join(app.getPath("userData"), "db");
+    const logsLocationPath = path.join(app.getPath("userData"), "logs");
+    this.database = new Database({ databaseLocationPath, logsLocationPath });
+    this.ipc = new Ipc(this.database, this.chain);
   }
 
   public start() {

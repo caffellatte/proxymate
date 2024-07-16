@@ -7,7 +7,13 @@ class Database {
   private proxiesDatabase: IProxiesDatabase;
   public proxies: Proxies;
 
-  constructor(databaseLocationPath: string) {
+  constructor({
+    databaseLocationPath,
+  }: // logsLocationPath,
+  {
+    databaseLocationPath: string;
+    logsLocationPath: string;
+  }) {
     // Create a level database
     this.levelDatabase = new ClassicLevel<string, AnyJson>(
       databaseLocationPath,

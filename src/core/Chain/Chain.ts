@@ -1,5 +1,7 @@
 import ProxyChain, { Server } from "proxy-chain";
 import { IProxy } from "@/types";
+import debug from "debug";
+const logger = debug("chain");
 
 /**
  * TODO: rename class Chain to Proxy | Server | ProxyServer
@@ -19,9 +21,12 @@ class Chain {
     this.servers[id] = new ProxyChain.Server({
       port: port,
       host: "localhost",
-      verbose: true,
+      verbose: false,
 
-      prepareRequestFunction: () => {
+      prepareRequestFunction: ({ request, connectionId }) => {
+        logger("connectionId:", connectionId);
+        logger("request.url:", request.url);
+        logger("request.headers:", request.headers);
         return {
           upstreamProxyUrl: authentication
             ? `${proxy_protocol}://${username}:${password}@${proxy_host}:${proxy_port}`
@@ -42,6 +47,12 @@ class Chain {
 
     // Emitted when HTTP request fails
     this.servers[id].on("requestFailed", ({ request, error }) => {
+      console.log(`Request ${request.url} failed`);
+      console.error(error);
+    });
+
+    // Emitted when HTTP request fails
+    this.servers[id].on("", ({ request, error }) => {
       console.log(`Request ${request.url} failed`);
       console.error(error);
     });
