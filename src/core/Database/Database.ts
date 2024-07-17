@@ -4,13 +4,14 @@ import { Proxies } from "./sublevels";
 
 class Database {
   private levelDatabase: ILevelDatabase;
+  private logsDatabase: ILevelDatabase;
   private proxiesDatabase: IProxiesDatabase;
   public proxies: Proxies;
 
   constructor({
     databaseLocationPath,
-  }: // logsLocationPath,
-  {
+    logsLocationPath,
+  }: {
     databaseLocationPath: string;
     logsLocationPath: string;
   }) {
@@ -31,6 +32,10 @@ class Database {
     });
     // Proxies subclass
     this.proxies = new Proxies(this.proxiesDatabase);
+    // Create a logs database
+    this.logsDatabase = new ClassicLevel<string, AnyJson>(logsLocationPath, {
+      valueEncoding: "json",
+    });
   }
 }
 
