@@ -1,6 +1,9 @@
 import path from "path";
 import { Ipc, Database, Chain } from "@/core";
 import { app, ipcMain } from "electron";
+import debug from "debug";
+import { IProxyChainRequest } from "@/types";
+const logger = debug("core");
 
 class Core {
   private chain: Chain;
@@ -58,6 +61,9 @@ class Core {
         event: event,
         id: args[0],
       });
+    });
+    ipcMain.on("logs:init", (data) => {
+      return this.ipc.logsInit(data as Omit<IProxyChainRequest, "stats">);
     });
   }
 }

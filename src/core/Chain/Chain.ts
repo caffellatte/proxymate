@@ -2,6 +2,7 @@ import ProxyChain, { Server } from "proxy-chain";
 import { IProxy } from "@/types";
 import debug from "debug";
 const logger = debug("chain");
+import { ipcMain, ipcRenderer } from "electron";
 
 /**
  * TODO: rename class Chain to Proxy | Server | ProxyServer
@@ -27,6 +28,11 @@ class Chain {
         logger("connectionId:", connectionId);
         logger("request.url:", request.url);
         logger("request.headers:", request.headers);
+        ipcMain.emit("logs:init", {
+          proxyId: id,
+          connectionId: connectionId,
+          url: request.url,
+        });
         return {
           upstreamProxyUrl: authentication
             ? `${proxy_protocol}://${username}:${password}@${proxy_host}:${proxy_port}`
