@@ -1,14 +1,19 @@
 import ProxyChain, { Server } from "proxy-chain";
 import { IProxy } from "@/types";
 import debug from "debug";
+import EventEmitter from "eventemitter3";
 const logger = debug("chain");
-import { ipcMain, ipcRenderer } from "electron";
 
 /**
  * TODO: rename class Chain to Proxy | Server | ProxyServer
  */
 class Chain {
   private servers: Record<string, Server> = {};
+  private eventBus: EventEmitter;
+
+  constructor({ eventBus }: { eventBus: EventEmitter }) {
+    this.eventBus = eventBus;
+  }
 
   public start(proxy: IProxy) {
     const {
@@ -28,7 +33,7 @@ class Chain {
         logger("connectionId:", connectionId);
         logger("request.url:", request.url);
         logger("request.headers:", request.headers);
-        ipcMain.emit("logs:init", {
+        this.eventBus.emit("logs:init", {
           proxyId: id,
           connectionId: connectionId,
           url: request.url,
