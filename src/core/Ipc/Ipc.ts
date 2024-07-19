@@ -14,7 +14,7 @@ class Ipc {
   public database: IDatabase;
   public chain: IChain;
 
-  constructor(database: IDatabase, chain: IChain) {
+  constructor({ database, chain }: { database: IDatabase; chain: IChain }) {
     this.database = database;
     this.chain = chain;
   }

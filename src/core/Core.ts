@@ -3,20 +3,28 @@ import { Ipc, Database, Chain } from "@/core";
 import { app, ipcMain } from "electron";
 import debug from "debug";
 import { IProxyChainRequest } from "@/types";
+import EventEmitter from "eventemitter3";
 const logger = debug("core");
 
 class Core {
   private chain: Chain;
   private database: Database;
   private ipc: Ipc;
-  private databaseLocationPath: string;
+  private eventBus: EventEmitter;
 
   constructor() {
-    this.chain = new Chain();
+    this.eventBus = new EventEmitter();
+    this.chain = new Chain({ eventBus: this.eventBus });
     const databaseLocationPath = path.join(app.getPath("userData"), "db");
     const logsLocationPath = path.join(app.getPath("userData"), "logs");
-    this.database = new Database({ databaseLocationPath, logsLocationPath });
-    this.ipc = new Ipc(this.database, this.chain);
+    this.database = new Database({
+      databaseLocationPath: databaseLocationPath,
+      logsLocationPath: logsLocationPath,
+    });
+    this.ipc = new Ipc({
+      database: this.database,
+      chain: this.chain,
+    });
   }
 
   public start() {
@@ -62,7 +70,7 @@ class Core {
         id: args[0],
       });
     });
-    ipcMain.on("logs:init", (data) => {
+    this.eventBus.on("logs:init", (data) => {
       return this.ipc.logsInit(data as Omit<IProxyChainRequest, "stats">);
     });
   }
