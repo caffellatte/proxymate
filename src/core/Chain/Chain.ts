@@ -1,5 +1,5 @@
 import ProxyChain, { Server } from "proxy-chain";
-import { IProxy } from "@/types";
+import { IProxy, ILogsRecord } from "@/types";
 import debug from "debug";
 import EventEmitter from "eventemitter3";
 const logger = debug("chain");
@@ -33,11 +33,11 @@ class Chain {
         logger("connectionId:", connectionId);
         logger("request.url:", request.url);
         logger("request.headers:", request.headers);
-        this.eventBus.emit("logs:init", {
+        this.eventBus.emit("logs:create", {
           proxyId: id,
           connectionId: connectionId,
           url: request.url,
-        });
+        } as Omit<ILogsRecord, "stats">);
         return {
           upstreamProxyUrl: authentication
             ? `${proxy_protocol}://${username}:${password}@${proxy_host}:${proxy_port}`

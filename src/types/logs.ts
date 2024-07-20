@@ -5,9 +5,9 @@ export interface IProxyChainStats {
   trgRxBytes: number;
 }
 
-export interface IProxyChainRequest {
+export interface ILogsRecord {
   proxyId: string;
-  id: number;
+  connectionId: number;
   url: string;
-  stats: IProxyChainStats;
+  stats?: IProxyChainStats;
 }

@@ -2,7 +2,7 @@ import path from "path";
 import { Ipc, Database, Chain } from "@/core";
 import { app, ipcMain } from "electron";
 import debug from "debug";
-import { IProxyChainRequest } from "@/types";
+import { ILogsRecord } from "@/types";
 import EventEmitter from "eventemitter3";
 const logger = debug("core");
 
@@ -70,8 +70,8 @@ class Core {
         id: args[0],
       });
     });
-    this.eventBus.on("logs:init", (data) => {
-      return this.ipc.logsInit(data as Omit<IProxyChainRequest, "stats">);
+    this.eventBus.on("logs:create", (data) => {
+      return this.ipc.logCreate(data as Omit<ILogsRecord, "stats">);
     });
   }
 }

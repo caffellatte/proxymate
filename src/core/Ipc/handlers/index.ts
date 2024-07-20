@@ -1,4 +1,4 @@
-export * from "./logsInit";
+export * from "./logCreate";
 export * from "./proxyCreate";
 export * from "./proxyDelete";
 export * from "./proxyEdit";

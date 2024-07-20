@@ -1,12 +1,13 @@
 import { ClassicLevel } from "classic-level";
 import { AnyJson, ILevelDatabase, IProxiesDatabase, IProxy } from "@/types";
-import { Proxies } from "./sublevels";
+import { Proxies, Logs } from "./sublevels";
 
 class Database {
   private levelDatabase: ILevelDatabase;
   private logsDatabase: ILevelDatabase;
   private proxiesDatabase: IProxiesDatabase;
   public proxies: Proxies;
+  public logs: Logs;
 
   constructor({
     databaseLocationPath,
@@ -36,6 +37,7 @@ class Database {
     this.logsDatabase = new ClassicLevel<string, AnyJson>(logsLocationPath, {
       valueEncoding: "json",
     });
+    this.logs = new Logs(this.logsDatabase);
   }
 }
 
