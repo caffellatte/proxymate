@@ -1,6 +1,6 @@
 import type { Database as IDatabase, Chain as IChain } from "@/core";
 import {
-  logsInit,
+  logCreate,
   proxyCreate,
   proxyDelete,
   proxyEdit,
@@ -19,6 +19,7 @@ class Ipc {
     this.chain = chain;
   }
 
+  public logCreate = logCreate(this);
   public proxyCreate = proxyCreate(this);
   public proxyDelete = proxyDelete(this);
   public proxyEdit = proxyEdit(this);
@@ -26,7 +27,6 @@ class Ipc {
   public proxyList = proxyList(this);
   public proxyStart = proxyStart(this);
   public proxyStop = proxyStop(this);
-  public logsInit = logsInit(this);
 }
 
 export default Ipc;
