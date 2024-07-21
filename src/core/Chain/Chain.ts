@@ -52,6 +52,11 @@ class Chain {
 
     // Emitted when HTTP connection is closed
     this.servers[id].on("connectionClosed", ({ connectionId, stats }) => {
+      this.eventBus.emit("logs:update", {
+        proxyId: id,
+        connectionId: connectionId,
+        stats: stats,
+      } as Omit<ILogsRecord, "url">);
       console.log(`Connection ${connectionId} closed`);
       console.dir(stats);
     });

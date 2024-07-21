@@ -73,6 +73,9 @@ class Core {
     this.eventBus.on("logs:create", (data) => {
       return this.ipc.logCreate(data as Omit<ILogsRecord, "stats">);
     });
+    this.eventBus.on("logs:update", (data) => {
+      return this.ipc.logUpdate(data as Omit<ILogsRecord, "url">);
+    });
   }
 }
 

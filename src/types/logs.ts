@@ -9,5 +9,5 @@ export interface ILogsRecord {
   proxyId: string;
   connectionId: number;
   url: string;
-  stats?: IProxyChainStats;
+  stats: IProxyChainStats;
 }
