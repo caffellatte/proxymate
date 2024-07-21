@@ -27,19 +27,56 @@ class Logs {
     logger(`Add: ${proxyId} in ${this.logs}`);
   }
 
-  create(proxyId: string, log: Omit<ILogsRecord, "proxyId">) {
+  create(proxyId: string, log: Omit<ILogsRecord, "proxyId" | "stats">) {
     if (!this.logs.includes(proxyId)) this.init(proxyId);
     return new Promise((resolve, reject) => {
-      const { connectionId, ...rest } = log;
-      this.logsSublevels[proxyId].put(connectionId.toString(), rest, (err) => {
+      const { connectionId } = log;
+      const data: Omit<ILogsRecord, "proxyId"> = {
+        ...log,
+        stats: {
+          srcTxBytes: 0,
+          srcRxBytes: 0,
+          trgTxBytes: 0,
+          trgRxBytes: 0,
+        },
+      };
+      this.logsSublevels[proxyId].put(connectionId.toString(), data, (err) => {
         if (err) reject(err);
-        const savedLog: ILogsRecord = {
+        const createdLog: ILogsRecord = {
           proxyId: proxyId,
-          connectionId: connectionId,
-          ...rest,
+          ...data,
         };
-        resolve(savedLog);
+        resolve(createdLog);
       });
+    });
+  }
+
+  update(proxyId: string, log: Omit<ILogsRecord, "proxyId" | "url">) {
+    if (!this.logs.includes(proxyId)) this.init(proxyId);
+    return new Promise((resolve, reject) => {
+      const { connectionId } = log;
+      this.logsSublevels[proxyId].get(
+        connectionId.toString(),
+        (err, result) => {
+          if (err) reject(err);
+          const data: Omit<ILogsRecord, "proxyId"> = {
+            ...log,
+            url: result?.url ?? "",
+          };
+          this.logsSublevels[proxyId].put(
+            connectionId.toString(),
+            data,
+            (err) => {
+              if (err) reject(err);
+              const updatedLog: ILogsRecord = {
+                proxyId: proxyId,
+                ...data,
+              };
+              resolve(updatedLog);
+            }
+          );
+        }
+      );
     });
   }
 }
