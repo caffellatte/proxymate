@@ -17,6 +17,8 @@ export interface IElectronAPI {
   proxyStart: (proxy: IProxy) => void;
 
   proxyStop: (id: string) => void;
+
+  updateLogs: (callback: (value: ILogsRecord) => void) => void;
 }
 
 declare global {

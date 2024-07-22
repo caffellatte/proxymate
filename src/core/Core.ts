@@ -1,6 +1,6 @@
 import path from "path";
 import { Ipc, Database, Chain } from "@/core";
-import { app, ipcMain } from "electron";
+import { app, ipcMain, BrowserWindow } from "electron";
 import debug from "debug";
 import { ILogsRecord } from "@/types";
 import EventEmitter from "eventemitter3";
@@ -11,6 +11,7 @@ class Core {
   private database: Database;
   private ipc: Ipc;
   private eventBus: EventEmitter;
+  public mainWindow: BrowserWindow;
 
   constructor() {
     this.eventBus = new EventEmitter();
@@ -25,6 +26,10 @@ class Core {
       database: this.database,
       chain: this.chain,
     });
+  }
+
+  public setMainWindow(mainWindow: BrowserWindow) {
+    this.mainWindow = mainWindow;
   }
 
   public start() {
@@ -73,8 +78,11 @@ class Core {
     this.eventBus.on("logs:create", (data) => {
       return this.ipc.logCreate(data as Omit<ILogsRecord, "stats">);
     });
-    this.eventBus.on("logs:update", (data) => {
-      return this.ipc.logUpdate(data as Omit<ILogsRecord, "url">);
+    this.eventBus.on("logs:update", async (data) => {
+      const record = await this.ipc.logUpdate(data as Omit<ILogsRecord, "url">);
+      logger(record);
+      this.mainWindow.webContents.send("update-logs", record);
+      return record;
     });
   }
 }

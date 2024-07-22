@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
-import { IProxy } from "@/types";
+import { IProxy, ILogsRecord } from "@/types";
 
 contextBridge.exposeInMainWorld("electronAPI", {
   /**
@@ -33,4 +33,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
    * proxyStop
    */
   proxyStop: (id: string) => ipcRenderer.invoke("proxy:stop", id),
+  /**
+   * updateLogs
+   */
+  updateLogs: (callback: (value: ILogsRecord) => void) =>
+    ipcRenderer.on("update-logs", (_event, value) => callback(value)),
 });
