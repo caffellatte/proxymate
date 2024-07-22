@@ -7,10 +7,12 @@ const logger = debug("ipc:handlers:logUpdate");
  *  Maybe should be renamed to `logStats.ts`
  */
 
-const logUpdate = (ipc: Ipc) => async (data: Omit<ILogsRecord, "url">) => {
-  const { proxyId } = data;
-  logger(data);
-  return await ipc.database.logs.update(proxyId, data);
-};
+const logUpdate =
+  (ipc: Ipc) =>
+  async (data: Omit<ILogsRecord, "url">): Promise<ILogsRecord> => {
+    const { proxyId } = data;
+    logger(data);
+    return await ipc.database.logs.update(proxyId, data);
+  };
 
 export { logUpdate };

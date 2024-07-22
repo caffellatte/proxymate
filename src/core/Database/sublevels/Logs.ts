@@ -51,7 +51,10 @@ class Logs {
     });
   }
 
-  update(proxyId: string, log: Omit<ILogsRecord, "proxyId" | "url">) {
+  update(
+    proxyId: string,
+    log: Omit<ILogsRecord, "proxyId" | "url">
+  ): Promise<ILogsRecord> {
     if (!this.logs.includes(proxyId)) this.init(proxyId);
     return new Promise((resolve, reject) => {
       const { connectionId } = log;
