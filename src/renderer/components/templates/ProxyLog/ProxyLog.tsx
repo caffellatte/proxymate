@@ -1,4 +1,4 @@
-import { Button } from "@/renderer/components/ui";
+import { Button, ScrollArea } from "@/renderer/components/ui";
 import { uiActor } from "@/xstate";
 import { XCircle } from "lucide-react";
 import { useSelector } from "@xstate/react";
@@ -31,9 +31,11 @@ const ProxyLog = () => {
         <XCircle />
       </Button>
       {logId}
-      {logs.map((log) => (
-        <LogsRecord key={log.connectionId} log={log} />
-      ))}
+      <ScrollArea className="h-[200px] w-[350px] rounded-md border p-4">
+        {logs.map((log) => (
+          <LogsRecord key={log.connectionId} log={log} />
+        ))}
+      </ScrollArea>
     </div>
   );
 };
