@@ -84,6 +84,12 @@ class Core {
       this.mainWindow.webContents.send("update-logs", record);
       return record;
     });
+    ipcMain.handle("logs:clear", (event, ...args) => {
+      return this.ipc.logClear({
+        event: event,
+        proxyId: args[0],
+      });
+    });
   }
 }
 

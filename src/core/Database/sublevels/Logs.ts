@@ -11,6 +11,15 @@ class Logs {
     this.logsDatabase = logsDatabase;
   }
 
+  clear(proxyId: string) {
+    return new Promise((resolve, reject) => {
+      this.logsSublevels[proxyId].clear({}, (err) => {
+        if (err) reject(err);
+        resolve("ok");
+      });
+    });
+  }
+
   init(proxyId: string) {
     if (this.logs.includes(proxyId)) {
       logger("proxyId already in ", this.logs);

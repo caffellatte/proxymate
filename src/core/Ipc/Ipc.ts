@@ -1,5 +1,6 @@
 import type { Database as IDatabase, Chain as IChain } from "@/core";
 import {
+  logClear,
   logCreate,
   logUpdate,
   proxyCreate,
@@ -20,6 +21,7 @@ class Ipc {
     this.chain = chain;
   }
 
+  public logClear = logClear(this);
   public logCreate = logCreate(this);
   public logUpdate = logUpdate(this);
   public proxyCreate = proxyCreate(this);

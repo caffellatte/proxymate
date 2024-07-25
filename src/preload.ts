@@ -38,4 +38,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
    */
   updateLogs: (callback: (value: ILogsRecord) => void) =>
     ipcRenderer.on("update-logs", (_event, value) => callback(value)),
+  /**
+   * clearLogs
+   */
+  clearLogs: (proxyId: string) => ipcRenderer.invoke("logs:clear", proxyId),
 });
