@@ -1,3 +1,4 @@
+export * from "./logClear";
 export * from "./logCreate";
 export * from "./logUpdate";
 export * from "./proxyCreate";
