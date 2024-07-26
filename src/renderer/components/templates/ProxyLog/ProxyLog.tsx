@@ -1,6 +1,6 @@
 import { Button, ScrollArea } from "@/renderer/components/ui";
 import { uiActor } from "@/xstate";
-import { XCircle } from "lucide-react";
+import { XCircle, Trash2 } from "lucide-react";
 import { useSelector } from "@xstate/react";
 import debug from "debug";
 import { useState } from "react";
@@ -30,11 +30,28 @@ const ProxyLog = () => {
       >
         <XCircle />
       </Button>
+      {logId && (
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            window.electronAPI.clearLogs(logId);
+            setLogs([]);
+          }}
+          className="self-end"
+        >
+          <Trash2 />
+        </Button>
+      )}
+
       {logId}
-      <ScrollArea className="h-[200px] w-[350px] rounded-md border p-4">
-        {logs.map((log) => (
-          <LogsRecord key={log.connectionId} log={log} />
-        ))}
+      <ScrollArea className="h-screen w-full rounded-md border p-4">
+        <div className="flex flex-col gap-2">
+          {logs.map((log) => (
+            <LogsRecord key={log.connectionId} log={log} />
+          ))}
+        </div>
       </ScrollArea>
     </div>
   );
