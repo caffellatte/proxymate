@@ -9,12 +9,22 @@ import { LogsRecord } from "@/renderer/components/templates";
 const logger = debug("Renderer:ProxyLog");
 
 const ProxyLog = () => {
-  const [logs, setLogs] = useState<ILogsRecord[]>([]);
+  const [logs, setLogs] = useState<
+    Record<number, Omit<ILogsRecord, "proxyId" | "connectionId">>
+  >({});
   const logId = useSelector(uiActor, (state) => state.context.logId);
 
-  window.electronAPI.updateLogs((value) => {
+  window.electronAPI.updateLogs((value: ILogsRecord) => {
     logger(value);
-    setLogs((oldLogs) => [...oldLogs, value]);
+    if (logId !== value.proxyId) return;
+
+    setLogs((prevState) => ({
+      ...prevState,
+      [Number(value.connectionId)]: {
+        stats: value.stats,
+        url: value.url,
+      },
+    }));
   });
 
   return (
@@ -48,9 +58,14 @@ const ProxyLog = () => {
       {logId}
       <ScrollArea className="h-screen w-full rounded-md border p-4">
         <div className="flex flex-col gap-2">
-          {logs.map((log) => (
-            <LogsRecord key={log.connectionId} log={log} />
-          ))}
+          {Object.keys(logs).map((connectionId) => {
+            const log = {
+              connectionId: Number(connectionId),
+              ...logs[Number(connectionId)],
+            };
+
+            return <LogsRecord key={connectionId} log={log} />;
+          })}
         </div>
       </ScrollArea>
     </div>

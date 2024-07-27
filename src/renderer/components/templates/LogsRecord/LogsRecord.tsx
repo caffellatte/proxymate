@@ -3,7 +3,7 @@ import { ILogsRecord } from "@/types";
 import { Typography } from "@/renderer/components/ui";
 
 interface LogsRecord {
-  log: ILogsRecord;
+  log: Omit<ILogsRecord, "proxyId">;
 }
 
 const LogsRecord: FC<LogsRecord> = ({ log }) => {
