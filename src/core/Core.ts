@@ -33,6 +33,7 @@ class Core {
   }
 
   public start() {
+    logger("CORE START");
     ipcMain.handle("proxy:create", (event, ...args) => {
       return this.ipc.proxyCreate({
         event: event,
