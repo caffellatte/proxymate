@@ -15,6 +15,15 @@ const ProxyCard: FC<IProxyCardProps> = ({ proxy }) => {
 
   const state = useSelector(proxy, (state) => state.value);
 
+  const dateTimeformatter = new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+
   return (
     <div className="flex flex-col gap-4 p-2 border rounded-md">
       <div className="flex items-center justify-between">
@@ -86,11 +95,15 @@ const ProxyCard: FC<IProxyCardProps> = ({ proxy }) => {
       </div>
       <div className="flex gap-1">
         <Label>Created:</Label>
-        <Typography variant="small">{created}</Typography>
+        <Typography variant="small">
+          {dateTimeformatter.format(created)}
+        </Typography>
       </div>
       <div className="flex gap-1">
         <Label>Updated:</Label>
-        <Typography variant="small">{updated}</Typography>
+        <Typography variant="small">
+          {dateTimeformatter.format(updated)}
+        </Typography>
       </div>
     </div>
   );

@@ -56,7 +56,7 @@ const ProxyLog = () => {
       )}
 
       {logId}
-      <ScrollArea className="h-screen w-full rounded-md border p-4">
+      <ScrollArea className="h-full w-full rounded-md border p-4">
         <div className="flex flex-col gap-2">
           {Object.keys(logs).map((connectionId) => {
             const log = {
