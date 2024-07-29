@@ -14,6 +14,7 @@ import { IProxy } from "@/types";
 // const logger = debug("proxiesMachine");
 
 const proxiesMachine = createMachine({
+  /** @xstate-layout N4IgpgJg5mDOIC5QAcBOB7AHgSzgYgEMIIBtABgF1EV1ZsAXbdAO2pE0QFoBGAZgDYAdACYAnABYA7KMm8BospICsADgA0IAJ6Juk4YNH9RK3uO6jhZfuIsBfWxrRZcsPKjABbdADcw5KkggyLQMTKyBHAjC3Pq8MQqiSrxkwsKSkupaXCpKIgJySmRmCvwq3PaOGDj4AK7IEAT0fpRswXSMLGyRnMImgooqg8nipSrGGtoIPPxCVoM2fGXC-MLi9g4gzOgQcK1VLq0hHeGgkWQTiGTrtkA */
   types: {} as {
     context: {
       proxies: ActorRefFrom<typeof proxyMachine>[];
@@ -32,7 +33,7 @@ const proxiesMachine = createMachine({
           editedProxy: IProxy;
         };
   },
-  id: "friends",
+  id: "proxies",
   context: {
     proxies: [],
   },
