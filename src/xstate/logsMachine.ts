@@ -1,4 +1,4 @@
-import { createMachine, createActor } from "xstate";
+import { createMachine, createActor, assign } from "xstate";
 
 import { ILogsRecord } from "@/types";
 
@@ -19,11 +19,11 @@ const logsMachine = createMachine({
     events:
       | {
           type: "create";
-          newLog: ILogsRecord;
+          newLog: Omit<ILogsRecord, "stats">;
         }
       | {
           type: "update";
-          updatedLog: ILogsRecord;
+          updatedLog: Omit<ILogsRecord, "url">;
         }
       | {
           type: "clear";
@@ -37,6 +37,48 @@ const logsMachine = createMachine({
         update: "idle",
         clear: "idle",
       },
+    },
+  },
+
+  on: {
+    create: {
+      actions: assign({
+        logs: ({ context, event }) => {
+          return {
+            ...context.logs,
+            [Number(event.newLog.connectionId)]: {
+              stats: {
+                srcTxBytes: 0,
+                srcRxBytes: 0,
+                trgTxBytes: 0,
+                trgRxBytes: 0,
+              },
+              url: event.newLog.url,
+            },
+          };
+        },
+      }),
+    },
+
+    update: {
+      actions: assign({
+        logs: ({ context, event }) => {
+          const { [Number(event.updatedLog.connectionId)]: log, ...rest } =
+            context.logs;
+          return {
+            ...rest,
+            [Number(event.updatedLog.connectionId)]: {
+              stats: {
+                srcTxBytes: 0,
+                srcRxBytes: 0,
+                trgTxBytes: 0,
+                trgRxBytes: 0,
+              },
+              url: log.url,
+            },
+          };
+        },
+      }),
     },
   },
 });
