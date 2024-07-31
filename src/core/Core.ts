@@ -76,8 +76,13 @@ class Core {
         id: args[0],
       });
     });
-    this.eventBus.on("logs:create", (data) => {
-      return this.ipc.logCreate(data as Omit<ILogsRecord, "stats">);
+    this.eventBus.on("logs:create", async (data) => {
+      const record = await this.ipc.logCreate(
+        data as Omit<ILogsRecord, "stats">
+      );
+      logger(record);
+      this.mainWindow.webContents.send("update-logs", record);
+      return record;
     });
     this.eventBus.on("logs:update", async (data) => {
       const record = await this.ipc.logUpdate(data as Omit<ILogsRecord, "url">);

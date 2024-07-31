@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from "electron";
+import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 import { IProxy, ILogsRecord } from "@/types";
 
 contextBridge.exposeInMainWorld("electronAPI", {
@@ -36,8 +36,14 @@ contextBridge.exposeInMainWorld("electronAPI", {
   /**
    * updateLogs
    */
-  updateLogs: (callback: (value: ILogsRecord) => void) =>
-    ipcRenderer.on("update-logs", (_event, value) => callback(value)),
+  updateLogs: (callback: (value: ILogsRecord) => void): (() => void) => {
+    const subscription = (_event: IpcRendererEvent, value: ILogsRecord) =>
+      callback(value);
+    ipcRenderer.on("update-logs", subscription);
+    return () => {
+      ipcRenderer.removeListener("update-logs", subscription);
+    };
+  },
   /**
    * clearLogs
    */
