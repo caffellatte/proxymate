@@ -1,9 +1,9 @@
 import { Button, ScrollArea } from "@/renderer/components/ui";
-import { uiActor } from "@/xstate";
+import { uiActor, logsActor } from "@/xstate";
 import { XCircle, Trash2 } from "lucide-react";
 import { useSelector } from "@xstate/react";
 import debug from "debug";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ILogsRecord } from "@/types";
 import { LogsRecord } from "@/renderer/components/templates";
 const logger = debug("Renderer:ProxyLog");
@@ -14,18 +14,26 @@ const ProxyLog = () => {
   >({});
   const logId = useSelector(uiActor, (state) => state.context.logId);
 
-  window.electronAPI.updateLogs((value: ILogsRecord) => {
-    logger(value);
-    if (logId !== value.proxyId) return;
+  useEffect(() => {
+    const removeEventListener = window.electronAPI.updateLogs(
+      (value: ILogsRecord) => {
+        logger(value);
+        if (logId !== value.proxyId) return;
 
-    setLogs((prevState) => ({
-      ...prevState,
-      [Number(value.connectionId)]: {
-        stats: value.stats,
-        url: value.url,
-      },
-    }));
-  });
+        setLogs((prevState) => ({
+          ...prevState,
+          [Number(value.connectionId)]: {
+            stats: value.stats,
+            url: value.url,
+          },
+        }));
+      }
+    );
+
+    return () => {
+      removeEventListener();
+    };
+  }, []);
 
   return (
     <div className="flex flex-col items-start gap-4 p-2 border rounded-md w-full">

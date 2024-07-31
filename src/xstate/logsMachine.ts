@@ -80,6 +80,12 @@ const logsMachine = createMachine({
         },
       }),
     },
+
+    clear: {
+      actions: assign({
+        logs: {},
+      }),
+    },
   },
 });
 
