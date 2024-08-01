@@ -35,6 +35,27 @@ const ProxyLog = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const removeEventListener = window.electronAPI.createLogs(
+      (value: ILogsRecord) => {
+        logger(value);
+        if (logId !== value.proxyId) return;
+
+        setLogs((prevState) => ({
+          ...prevState,
+          [Number(value.connectionId)]: {
+            stats: value.stats,
+            url: value.url,
+          },
+        }));
+      }
+    );
+
+    return () => {
+      removeEventListener();
+    };
+  }, []);
+
   return (
     <div className="flex flex-col items-start gap-4 p-2 border rounded-md w-full">
       <Button

@@ -81,7 +81,7 @@ class Core {
         data as Omit<ILogsRecord, "stats">
       );
       logger(record);
-      this.mainWindow.webContents.send("update-logs", record);
+      this.mainWindow.webContents.send("create-logs", record);
       return record;
     });
     this.eventBus.on("logs:update", async (data) => {
