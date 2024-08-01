@@ -34,6 +34,17 @@ contextBridge.exposeInMainWorld("electronAPI", {
    */
   proxyStop: (id: string) => ipcRenderer.invoke("proxy:stop", id),
   /**
+   * createLogs
+   */
+  createLogs: (callback: (value: ILogsRecord) => void): (() => void) => {
+    const subscription = (_event: IpcRendererEvent, value: ILogsRecord) =>
+      callback(value);
+    ipcRenderer.on("create-logs", subscription);
+    return () => {
+      ipcRenderer.removeListener("create-logs", subscription);
+    };
+  },
+  /**
    * updateLogs
    */
   updateLogs: (callback: (value: ILogsRecord) => void): (() => void) => {

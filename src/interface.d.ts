@@ -18,6 +18,8 @@ export interface IElectronAPI {
 
   proxyStop: (id: string) => void;
 
+  createLogs: (callback: (value: ILogsRecord) => void) => () => void;
+
   updateLogs: (callback: (value: ILogsRecord) => void) => () => void;
 
   clearLogs: (proxyId: string) => Promise<string>;
