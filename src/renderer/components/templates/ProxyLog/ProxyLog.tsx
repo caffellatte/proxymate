@@ -14,11 +14,17 @@ const ProxyLog = () => {
   >({});
   const logId = useSelector(uiActor, (state) => state.context.logId);
 
+  const _logs = useSelector(logsActor, (state) => state.context.logs);
+
+  debug(JSON.stringify(_logs));
+
   useEffect(() => {
     const removeEventListener = window.electronAPI.updateLogs(
       (value: ILogsRecord) => {
         logger(value);
         if (logId !== value.proxyId) return;
+
+        logsActor.send({ type: "create", newLog: value });
 
         setLogs((prevState) => ({
           ...prevState,
@@ -40,6 +46,8 @@ const ProxyLog = () => {
       (value: ILogsRecord) => {
         logger(value);
         if (logId !== value.proxyId) return;
+
+        logsActor.send({ type: "update", updatedLog: value });
 
         setLogs((prevState) => ({
           ...prevState,
@@ -87,10 +95,18 @@ const ProxyLog = () => {
       {logId}
       <ScrollArea className="h-full w-full rounded-md border p-4">
         <div className="flex flex-col gap-2">
-          {Object.keys(logs).map((connectionId) => {
+          {/* {Object.keys(logs).map((connectionId) => {
             const log = {
               connectionId: Number(connectionId),
               ...logs[Number(connectionId)],
+            };
+
+            return <LogsRecord key={connectionId} log={log} />;
+          })} */}
+          {Object.keys(_logs).map((connectionId) => {
+            const log = {
+              connectionId: Number(connectionId),
+              ..._logs[Number(connectionId)],
             };
 
             return <LogsRecord key={connectionId} log={log} />;
