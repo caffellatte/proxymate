@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { uiActor, proxiesActor } from "@/xstate";
+import { uiActor, proxiesActor, logsActor } from "@/xstate";
 import Layout from "@/renderer/components/layout";
 import debug from "debug";
 debug.enable("*");
@@ -10,6 +10,7 @@ const App = () => {
   useEffect(() => {
     uiActor.start();
     proxiesActor.start();
+    logsActor.start();
     window.electronAPI.proxyList().then((data) => {
       // setProxies(data);
       data.forEach((proxy) => {

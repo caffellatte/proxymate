@@ -11,11 +11,11 @@ import debug from "debug";
 const logger = debug("renderer:Header");
 
 const Header: FC = () => {
-  const state = useSelector(uiActor, (state) => state);
-  const isCreateDialogOpen = state.matches("create");
-  const isEditDialogOpen = state.matches("edit");
-  const isDeleteDialogOpen = state.matches("delete");
-  logger(state);
+  const uiActorState = useSelector(uiActor, (state) => state);
+  const isCreateDialogOpen = uiActorState.matches("create");
+  const isEditDialogOpen = uiActorState.matches("edit");
+  const isDeleteDialogOpen = uiActorState.matches("delete");
+  logger(uiActorState);
 
   return (
     <header className="flex justify-end">
