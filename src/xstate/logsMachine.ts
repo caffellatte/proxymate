@@ -3,14 +3,12 @@ import { createMachine, createActor, assign } from "xstate";
 import { ILogsRecord } from "@/types";
 
 const logsMachine = createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5QBsD2VYDoCWFlgGIBjAJzAEMAXMAbQAYBdRUAB1Vm0u1QDtmQAHogC0ARgAsAZkyTJAJgCsC8eICck1QA5RAdh0AaEAE8RO8Zjqbxc1XIBsa0ZMuSAvq8NoMOPIQCuLBBUtIz8bBxcvPxCCMIKctKSOqJ2knaqdAopmnKGJrFmFlY29o7Omm4eIF5YuPjE+OQk9ExIIOGc3HxtMXHOmHKaqnaZdkrZucaIdnaY4jp0GuKaCpbpuu5VPKgQcPw1YeydUT0iCjqaA0MjCmNZdjl5IimimArFtg6qTpZy7p7oWq+Q4RLrRETyVSYBY6c4qTITJ4IaRyWG-SSrTTrdIKTauIA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QBsD2VYGIDGAnMAhgC5gDaADALqKgAOqsAlkY6gHY0gAeiAtAMwAWAJwA6AEwBGSYIAc5AGwBWJZIWzxAGhABPPuOWjZC4YLmzhwyf3KyAvne1oMmAK60IxMlU70mLdk4eBF4AdnDRfiUpciVlVXUtXT5QhVFyYRjVEWtbcQcndCxsZEJcCmokED9mVg4q4LDFUUsFBX4TWLUNbT0Q-hkW9slhWQsrG3sCkDZUCDhOZ3gqmoD60EalUNkJCwVY+O6kvt41SVElWUFxTIUcyfyHOyA */
   id: "logs",
 
   context: {
     logs: {},
   },
-
-  initial: "idle",
 
   types: {} as {
     context: {
@@ -30,20 +28,12 @@ const logsMachine = createMachine({
         };
   },
 
-  states: {
-    idle: {
-      on: {
-        create: "idle",
-        update: "idle",
-        clear: "idle",
-      },
-    },
-  },
-
   on: {
     create: {
       actions: assign({
         logs: ({ context, event }) => {
+          console.log("TEST create:", event.newLog);
+          console.log("TEST create:", event.newLog.url);
           return {
             ...context.logs,
             [Number(event.newLog.connectionId)]: {
@@ -63,6 +53,7 @@ const logsMachine = createMachine({
     update: {
       actions: assign({
         logs: ({ context, event }) => {
+          console.log("TEST update:", event.updatedLog);
           const { [Number(event.updatedLog.connectionId)]: log, ...rest } =
             context.logs;
           return {

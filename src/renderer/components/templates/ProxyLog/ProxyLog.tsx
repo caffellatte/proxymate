@@ -16,7 +16,7 @@ const ProxyLog = () => {
 
   const _logs = useSelector(logsActor, (state) => state.context.logs);
 
-  debug(JSON.stringify(_logs));
+  logger(JSON.stringify(_logs));
 
   useEffect(() => {
     const removeEventListener = window.electronAPI.updateLogs(
@@ -24,7 +24,9 @@ const ProxyLog = () => {
         logger(value);
         if (logId !== value.proxyId) return;
 
-        logsActor.send({ type: "create", newLog: value });
+        logsActor.send({ type: "update", updatedLog: value });
+
+        logger(JSON.stringify(_logs));
 
         setLogs((prevState) => ({
           ...prevState,
@@ -47,7 +49,9 @@ const ProxyLog = () => {
         logger(value);
         if (logId !== value.proxyId) return;
 
-        logsActor.send({ type: "update", updatedLog: value });
+        logsActor.send({ type: "create", newLog: value });
+
+        logger(JSON.stringify(_logs));
 
         setLogs((prevState) => ({
           ...prevState,
