@@ -32,8 +32,6 @@ const logsMachine = createMachine({
     create: {
       actions: assign({
         logs: ({ context, event }) => {
-          console.log("TEST create:", event.newLog);
-          console.log("TEST create:", event.newLog.url);
           return {
             ...context.logs,
             [Number(event.newLog.connectionId)]: {
@@ -53,19 +51,11 @@ const logsMachine = createMachine({
     update: {
       actions: assign({
         logs: ({ context, event }) => {
-          console.log("TEST update:", event.updatedLog);
-          const { [Number(event.updatedLog.connectionId)]: log, ...rest } =
-            context.logs;
           return {
-            ...rest,
+            ...context.logs,
             [Number(event.updatedLog.connectionId)]: {
-              stats: {
-                srcTxBytes: 0,
-                srcRxBytes: 0,
-                trgTxBytes: 0,
-                trgRxBytes: 0,
-              },
-              url: log.url,
+              stats: event.updatedLog.stats,
+              url: context.logs[event.updatedLog.connectionId].url,
             },
           };
         },

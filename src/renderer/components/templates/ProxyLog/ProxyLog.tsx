@@ -3,20 +3,15 @@ import { uiActor, logsActor } from "@/xstate";
 import { XCircle, Trash2 } from "lucide-react";
 import { useSelector } from "@xstate/react";
 import debug from "debug";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { ILogsRecord } from "@/types";
 import { LogsRecord } from "@/renderer/components/templates";
 const logger = debug("Renderer:ProxyLog");
 
 const ProxyLog = () => {
-  const [logs, setLogs] = useState<
-    Record<number, Omit<ILogsRecord, "proxyId" | "connectionId">>
-  >({});
   const logId = useSelector(uiActor, (state) => state.context.logId);
 
-  const _logs = useSelector(logsActor, (state) => state.context.logs);
-
-  logger(JSON.stringify(_logs));
+  const logs = useSelector(logsActor, (state) => state.context.logs);
 
   useEffect(() => {
     const removeEventListener = window.electronAPI.updateLogs(
@@ -25,16 +20,6 @@ const ProxyLog = () => {
         if (logId !== value.proxyId) return;
 
         logsActor.send({ type: "update", updatedLog: value });
-
-        logger(JSON.stringify(_logs));
-
-        setLogs((prevState) => ({
-          ...prevState,
-          [Number(value.connectionId)]: {
-            stats: value.stats,
-            url: value.url,
-          },
-        }));
       }
     );
 
@@ -50,16 +35,6 @@ const ProxyLog = () => {
         if (logId !== value.proxyId) return;
 
         logsActor.send({ type: "create", newLog: value });
-
-        logger(JSON.stringify(_logs));
-
-        setLogs((prevState) => ({
-          ...prevState,
-          [Number(value.connectionId)]: {
-            stats: value.stats,
-            url: value.url,
-          },
-        }));
       }
     );
 
@@ -88,7 +63,7 @@ const ProxyLog = () => {
           size="sm"
           onClick={() => {
             window.electronAPI.clearLogs(logId);
-            setLogs([]);
+            logsActor.send({ type: "clear" });
           }}
           className="self-end"
         >
@@ -99,18 +74,10 @@ const ProxyLog = () => {
       {logId}
       <ScrollArea className="h-full w-full rounded-md border p-4">
         <div className="flex flex-col gap-2">
-          {/* {Object.keys(logs).map((connectionId) => {
+          {Object.keys(logs).map((connectionId) => {
             const log = {
               connectionId: Number(connectionId),
               ...logs[Number(connectionId)],
-            };
-
-            return <LogsRecord key={connectionId} log={log} />;
-          })} */}
-          {Object.keys(_logs).map((connectionId) => {
-            const log = {
-              connectionId: Number(connectionId),
-              ..._logs[Number(connectionId)],
             };
 
             return <LogsRecord key={connectionId} log={log} />;
