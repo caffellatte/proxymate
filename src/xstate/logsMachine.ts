@@ -42,6 +42,8 @@ const logsMachine = createMachine({
                 trgRxBytes: 0,
               },
               url: event.newLog.url,
+              created: event.newLog.created,
+              updated: event.newLog.updated,
             },
           };
         },
@@ -56,6 +58,8 @@ const logsMachine = createMachine({
             [Number(event.updatedLog.connectionId)]: {
               stats: event.updatedLog.stats,
               url: context.logs[event.updatedLog.connectionId].url,
+              created: context.logs[event.updatedLog.connectionId].created,
+              updated: event.updatedLog.updated,
             },
           };
         },
