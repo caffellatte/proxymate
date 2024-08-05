@@ -11,6 +11,8 @@ const LogsRecord: FC<LogsRecord> = ({ log }) => {
     connectionId,
     url,
     stats: { srcTxBytes, srcRxBytes, trgTxBytes, trgRxBytes },
+    created,
+    updated,
   } = log;
   return (
     <div className="flex flex-col gap-2 border rounded-md">
@@ -21,6 +23,18 @@ const LogsRecord: FC<LogsRecord> = ({ log }) => {
       </div>
       {/* stats */}
       <div className="flex flex-col gap-3">
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Typography variant="small" className="col-span-3">
+            Created:
+          </Typography>
+          <Typography variant="small">{created}</Typography>
+        </div>
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Typography variant="small" className="col-span-3">
+            Updated:
+          </Typography>
+          <Typography variant="small">{updated}</Typography>
+        </div>
         <div className="grid grid-cols-4 items-center gap-4">
           <Typography variant="small" className="col-span-3">
             Number of bytes sent to client:

@@ -36,7 +36,10 @@ class Logs {
     logger(`Add: ${proxyId} in ${this.logs}`);
   }
 
-  create(proxyId: string, log: Omit<ILogsRecord, "proxyId" | "stats">) {
+  create(
+    proxyId: string,
+    log: Omit<ILogsRecord, "proxyId" | "stats" | "updated">
+  ) {
     if (!this.logs.includes(proxyId)) this.init(proxyId);
     return new Promise((resolve, reject) => {
       const { connectionId } = log;
@@ -48,6 +51,7 @@ class Logs {
           trgTxBytes: 0,
           trgRxBytes: 0,
         },
+        updated: 0,
       };
       this.logsSublevels[proxyId].put(connectionId.toString(), data, (err) => {
         if (err) reject(err);
@@ -62,7 +66,7 @@ class Logs {
 
   update(
     proxyId: string,
-    log: Omit<ILogsRecord, "proxyId" | "url">
+    log: Omit<ILogsRecord, "proxyId" | "url" | "created">
   ): Promise<ILogsRecord> {
     if (!this.logs.includes(proxyId)) this.init(proxyId);
     return new Promise((resolve, reject) => {
@@ -74,6 +78,7 @@ class Logs {
           const data: Omit<ILogsRecord, "proxyId"> = {
             ...log,
             url: result?.url ?? "",
+            created: result?.created ?? 0,
           };
           this.logsSublevels[proxyId].put(
             connectionId.toString(),

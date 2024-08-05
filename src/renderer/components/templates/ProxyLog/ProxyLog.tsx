@@ -26,7 +26,7 @@ const ProxyLog = () => {
     return () => {
       removeEventListener();
     };
-  }, []);
+  }, []); // eslint-disable-line
 
   useEffect(() => {
     const removeEventListener = window.electronAPI.createLogs(
@@ -41,7 +41,7 @@ const ProxyLog = () => {
     return () => {
       removeEventListener();
     };
-  }, []);
+  }, []); // eslint-disable-line
 
   return (
     <div className="flex flex-col items-start gap-4 p-2 border rounded-md w-full">

@@ -37,7 +37,8 @@ class Chain {
           proxyId: id,
           connectionId: connectionId,
           url: request.url,
-        } as Omit<ILogsRecord, "stats">);
+          created: new Date().getTime(),
+        } as Omit<ILogsRecord, "stats" | "updated">);
         return {
           upstreamProxyUrl: authentication
             ? `${proxy_protocol}://${username}:${password}@${proxy_host}:${proxy_port}`
@@ -56,7 +57,8 @@ class Chain {
         proxyId: id,
         connectionId: connectionId,
         stats: stats,
-      } as Omit<ILogsRecord, "url">);
+        updated: new Date().getTime(),
+      } as Omit<ILogsRecord, "url" | "created">);
       console.log(`Connection ${connectionId} closed`);
       console.dir(stats);
     });

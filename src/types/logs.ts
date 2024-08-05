@@ -10,4 +10,6 @@ export interface ILogsRecord {
   connectionId: number;
   url: string;
   stats: IProxyChainStats;
+  created: number;
+  updated: number;
 }
