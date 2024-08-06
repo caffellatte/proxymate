@@ -85,12 +85,14 @@ class Core {
       return record;
     });
     this.eventBus.on("logs:update", async (data) => {
-      const record = await this.ipc.logUpdate(
-        data as Omit<ILogsRecord, "url" | "created">
-      );
-      logger(record);
-      this.mainWindow.webContents.send("update-logs", record);
-      return record;
+      if (data.stats) {
+        const record = await this.ipc.logUpdate(
+          data as Omit<ILogsRecord, "url" | "created">
+        );
+        logger(record);
+        this.mainWindow.webContents.send("update-logs", record);
+        return record;
+      }
     });
     ipcMain.handle("logs:clear", (event, ...args) => {
       return this.ipc.logClear({
