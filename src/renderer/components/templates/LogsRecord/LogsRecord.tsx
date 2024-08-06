@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { ILogsRecord } from "@/types";
 import { Typography } from "@/renderer/components/ui";
+import { dateTimeformatter } from "@/renderer/lib/utils";
 
 interface LogsRecord {
   log: Omit<ILogsRecord, "proxyId">;
@@ -24,16 +25,20 @@ const LogsRecord: FC<LogsRecord> = ({ log }) => {
       {/* stats */}
       <div className="flex flex-col gap-3">
         <div className="grid grid-cols-4 items-center gap-4">
-          <Typography variant="small" className="col-span-3">
+          <Typography variant="small" className="col-span-1">
             Created:
           </Typography>
-          <Typography variant="small">{created}</Typography>
+          <Typography variant="small" className="col-span-3">
+            {dateTimeformatter.format(created)}
+          </Typography>
         </div>
         <div className="grid grid-cols-4 items-center gap-4">
-          <Typography variant="small" className="col-span-3">
+          <Typography variant="small" className="col-span-1">
             Updated:
           </Typography>
-          <Typography variant="small">{updated}</Typography>
+          <Typography variant="small" className="col-span-3">
+            {dateTimeformatter.format(updated)}
+          </Typography>
         </div>
         <div className="grid grid-cols-4 items-center gap-4">
           <Typography variant="small" className="col-span-3">

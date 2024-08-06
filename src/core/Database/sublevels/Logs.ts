@@ -12,6 +12,7 @@ class Logs {
   }
 
   clear(proxyId: string) {
+    if (!this.logsSublevels[proxyId]) return;
     return new Promise((resolve, reject) => {
       this.logsSublevels[proxyId].clear({}, (err) => {
         if (err) reject(err);

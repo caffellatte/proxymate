@@ -4,6 +4,7 @@ import { X, Play, Pause, ListIcon } from "lucide-react";
 import { uiActor, proxyMachine } from "@/xstate";
 import { ActorRefFrom } from "xstate";
 import { useSelector } from "@xstate/react";
+import { dateTimeformatter } from "@/renderer/lib/utils";
 
 interface IProxyCardProps {
   proxy: ActorRefFrom<typeof proxyMachine>;
@@ -14,15 +15,6 @@ const ProxyCard: FC<IProxyCardProps> = ({ proxy }) => {
     proxy.getSnapshot().context;
 
   const state = useSelector(proxy, (state) => state.value);
-
-  const dateTimeformatter = new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
 
   return (
     <div className="flex flex-col gap-4 p-2 border rounded-md">
