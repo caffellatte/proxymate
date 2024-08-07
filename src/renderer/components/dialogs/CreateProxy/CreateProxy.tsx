@@ -106,7 +106,7 @@ const CreateProxy: FC = () => {
       });
       if (response) {
         logger(response);
-        uiActor.send({ type: "list" });
+        uiActor.send({ type: "idle" });
         proxiesActor.send({ type: "add", newProxy: response });
       }
     } catch (error) {
@@ -120,7 +120,7 @@ const CreateProxy: FC = () => {
   return (
     <DialogContent
       onInteractOutside={() => {
-        uiActor.send({ type: "list" });
+        uiActor.send({ type: "idle" });
       }}
       className="max-w-[604px]"
     >
@@ -134,7 +134,7 @@ const CreateProxy: FC = () => {
       />
       <DialogClose
         onClick={() => {
-          uiActor.send({ type: "list" });
+          uiActor.send({ type: "idle" });
         }}
       />
     </DialogContent>

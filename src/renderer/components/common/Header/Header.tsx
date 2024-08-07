@@ -6,6 +6,7 @@ import {
   CreateProxy,
   DeleteProxy,
   EditProxy,
+  Settings,
 } from "@/renderer/components/dialogs";
 import debug from "debug";
 const logger = debug("renderer:Header");
@@ -15,11 +16,20 @@ const Header: FC = () => {
   const isCreateDialogOpen = uiActorState.matches("create");
   const isEditDialogOpen = uiActorState.matches("edit");
   const isDeleteDialogOpen = uiActorState.matches("delete");
+  const isSettingsDialogOpen = uiActorState.matches("settings");
   logger(uiActorState);
 
   return (
     <header className="flex justify-end">
-      <Dialog open={isCreateDialogOpen}>
+      <div className="flex items-center gap-3">
+        <Button
+          onClick={() => {
+            uiActor.send({ type: "settings" });
+          }}
+          variant="outline"
+        >
+          Settings
+        </Button>
         <Button
           onClick={() => {
             uiActor.send({ type: "create" });
@@ -28,6 +38,8 @@ const Header: FC = () => {
         >
           Create Proxy
         </Button>
+      </div>
+      <Dialog open={isCreateDialogOpen}>
         <CreateProxy />
       </Dialog>
       <Dialog open={isEditDialogOpen}>
@@ -35,6 +47,9 @@ const Header: FC = () => {
       </Dialog>
       <Dialog open={isDeleteDialogOpen}>
         <DeleteProxy />
+      </Dialog>
+      <Dialog open={isSettingsDialogOpen}>
+        <Settings />
       </Dialog>
     </header>
   );

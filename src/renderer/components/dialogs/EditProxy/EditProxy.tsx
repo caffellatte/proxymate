@@ -151,7 +151,7 @@ const EditProxy: FC = () => {
       });
       if (response) {
         // TODO: communication between actors
-        uiActor.send({ type: "list" });
+        uiActor.send({ type: "idle" });
         proxiesActor.send({
           type: "update",
           editedProxy: { id: proxyId, ...proxy },
@@ -168,7 +168,7 @@ const EditProxy: FC = () => {
   return (
     <DialogContent
       onInteractOutside={() => {
-        uiActor.send({ type: "list" });
+        uiActor.send({ type: "idle" });
       }}
       className="max-w-[604px]"
     >
@@ -182,7 +182,7 @@ const EditProxy: FC = () => {
       />
       <DialogClose
         onClick={() => {
-          uiActor.send({ type: "list" });
+          uiActor.send({ type: "idle" });
         }}
       />
     </DialogContent>
