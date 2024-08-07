@@ -23,7 +23,7 @@ const App = () => {
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        uiActor.send({ type: "list" });
+        uiActor.send({ type: "idle" });
       }
     };
     window.addEventListener("keydown", handleEsc);

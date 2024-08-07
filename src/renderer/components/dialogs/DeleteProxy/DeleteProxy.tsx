@@ -17,7 +17,7 @@ const DeleteProxy: FC = () => {
     if (!proxyId) return;
     window.electronAPI.proxyDelete(proxyId).then((data) => {
       // intagrate this is xstate as fromPromise
-      if (data) uiActor.send({ type: "list" });
+      if (data) uiActor.send({ type: "idle" });
     });
     proxiesActor.send({ type: "remove", id: proxyId });
   };
@@ -25,7 +25,7 @@ const DeleteProxy: FC = () => {
   return (
     <DialogContent
       onInteractOutside={() => {
-        uiActor.send({ type: "list" });
+        uiActor.send({ type: "idle" });
       }}
       className="max-w-[604px]"
     >
@@ -40,7 +40,7 @@ const DeleteProxy: FC = () => {
           type="button"
           variant="outline"
           onClick={() => {
-            uiActor.send({ type: "list" });
+            uiActor.send({ type: "idle" });
           }}
         >
           Cancal
