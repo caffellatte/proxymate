@@ -3,8 +3,6 @@ import { Main } from "@/renderer/components/views";
 import { uiActor, logsActor } from "@/xstate";
 import { useSelector } from "@xstate/react";
 
-// TODO: listen to ESC button
-
 const Layout = () => {
   const uiActorState = useSelector(uiActor, (state) => state);
   const logsActorState = useSelector(logsActor, (state) => state);
