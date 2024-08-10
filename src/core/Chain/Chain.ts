@@ -8,7 +8,7 @@ const logger = debug("chain");
  * TODO: rename class Chain to Proxy | Server | ProxyServer
  */
 class Chain {
-  private servers: Record<string, Server> = {};
+  public servers: Record<string, Server> = {};
   private eventBus: EventEmitter;
 
   constructor({ eventBus }: { eventBus: EventEmitter }) {

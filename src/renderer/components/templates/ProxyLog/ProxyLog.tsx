@@ -9,9 +9,16 @@ const logger = debug("Renderer:ProxyLog");
 const ProxyLog = () => {
   const logId = useSelector(uiActor, (state) => state.context.logId);
 
+  const logsActorState = useSelector(logsActor, (state) => state);
+
   logger("logId:", logId);
 
-  const logsActorState = useSelector(logsActor, (state) => state);
+  const logs = useSelector(
+    logsActor,
+    (state) => state.context.logs[logId as string]
+  );
+
+  const logActorState = useSelector(logs, (state) => state);
 
   return (
     <div className="flex flex-col items-start gap-4 p-2 border rounded-md w-full">
@@ -45,14 +52,10 @@ const ProxyLog = () => {
       {logId && (
         <ScrollArea className="h-full w-full rounded-md border p-4">
           <div className="flex flex-col gap-2">
-            {Object.keys(
-              logsActorState.context.logs[logId].getSnapshot().context.log
-            ).map((connectionId) => {
+            {Object.keys(logActorState.context.log).map((connectionId) => {
               const logRecord = {
                 connectionId: Number(connectionId),
-                ...logsActorState.context.logs[logId].getSnapshot().context.log[
-                  Number(connectionId)
-                ],
+                ...logActorState.context.log[Number(connectionId)],
               };
 
               return <LogsRecord key={connectionId} log={logRecord} />;
