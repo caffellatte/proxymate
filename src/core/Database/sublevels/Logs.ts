@@ -97,6 +97,11 @@ class Logs {
       );
     });
   }
+
+  async getAll(proxyId: string) {
+    if (!this.logs.includes(proxyId)) this.init(proxyId);
+    return await this.logsSublevels[proxyId].iterator().all();
+  }
 }
 
 export { Logs };

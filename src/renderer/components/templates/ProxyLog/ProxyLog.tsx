@@ -4,6 +4,7 @@ import { XCircle, Trash2 } from "lucide-react";
 import { useSelector } from "@xstate/react";
 import debug from "debug";
 import { LogsRecord } from "@/renderer/components/templates";
+import { useEffect } from "react";
 const logger = debug("Renderer:ProxyLog");
 
 const ProxyLog = () => {
@@ -19,6 +20,27 @@ const ProxyLog = () => {
   );
 
   const logActorState = useSelector(logs, (state) => state);
+
+  useEffect(() => {
+    window.electronAPI.logGetAll(logId as string).then((data) => {
+      logger(data);
+      for (const [key, value] of data) {
+        logger("key:", key);
+        logger("value:", value);
+        logs.send({
+          // TODO: remove `getSnapshot`
+          type: "create",
+          newLog: {
+            proxyId: logId as string,
+            connectionId: Number(key),
+            url: value.url,
+            created: value.created,
+            updated: value.updated,
+          },
+        });
+      }
+    });
+  }, []); // eslint-disable-line
 
   return (
     <div className="flex flex-col items-start gap-4 p-2 border rounded-md w-full">

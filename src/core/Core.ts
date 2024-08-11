@@ -7,7 +7,7 @@ import EventEmitter from "eventemitter3";
 const logger = debug("core");
 
 class Core {
-  private chain: Chain;
+  public chain: Chain;
   private database: Database;
   private ipc: Ipc;
   private eventBus: EventEmitter;
@@ -96,6 +96,12 @@ class Core {
     });
     ipcMain.handle("logs:clear", (event, ...args) => {
       return this.ipc.logClear({
+        event: event,
+        proxyId: args[0],
+      });
+    });
+    ipcMain.handle("logs:getAll", (event, ...args) => {
+      return this.ipc.logGetAll({
         event: event,
         proxyId: args[0],
       });

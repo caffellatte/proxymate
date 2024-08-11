@@ -10,6 +10,7 @@ const logsMachine = createMachine({
   types: {} as {
     context: {
       logs: Record<string, ActorRefFrom<typeof logMachine>>;
+      timestamp: number;
     };
     events: {
       type: "init";
@@ -18,6 +19,7 @@ const logsMachine = createMachine({
   },
   context: {
     logs: {},
+    timestamp: Date.now(),
   },
   on: {
     init: {
