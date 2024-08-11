@@ -23,6 +23,10 @@ export interface IElectronAPI {
   updateLogs: (callback: (value: ILogsRecord) => void) => () => void;
 
   clearLogs: (proxyId: string) => Promise<string>;
+
+  logGetAll: (
+    proxyId: string
+  ) => Promise<[string, Omit<ILogsRecord, "proxyId" | "connectionId">][]>;
 }
 
 declare global {
