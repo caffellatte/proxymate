@@ -79,7 +79,7 @@ app.on("before-quit", (event) => {
   console.log(core.chain.servers);
 
   const stopServers = Object.keys(core.chain.servers).map((server) => {
-    new Promise((resolve) => {
+    return new Promise((resolve) => {
       core.chain.stop(server);
       resolve(server);
     });

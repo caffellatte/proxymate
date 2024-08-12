@@ -32,8 +32,18 @@ class Core {
     this.mainWindow = mainWindow;
   }
 
+  private clearLogs() {
+    this.database.proxies.getAll().then((data) => {
+      data.forEach((entity) => {
+        logger("clear:", entity[0].toString());
+        this.database.logs.clear(entity[0].toString());
+      });
+    });
+  }
+
   public start() {
     logger("CORE START");
+    this.clearLogs();
     ipcMain.handle("proxy:create", (event, ...args) => {
       return this.ipc.proxyCreate({
         event: event,
