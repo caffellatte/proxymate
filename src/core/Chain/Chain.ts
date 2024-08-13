@@ -8,16 +8,16 @@ const logger = debug("chain");
  * TODO: rename class Chain to Proxy | Server | ProxyServer
  */
 class Chain {
-  public servers: Record<string, Server> = {};
+  private servers: Record<string, Server> = {};
   private eventBus: EventEmitter;
 
   constructor({ eventBus }: { eventBus: EventEmitter }) {
     this.eventBus = eventBus;
   }
 
-  // public getServerIds() {
-  //   return [];
-  // } // TODO: xstate proxyMachine state
+  public getServerIds() {
+    return Object.keys(this.servers);
+  }
 
   public start(proxy: IProxy) {
     const {

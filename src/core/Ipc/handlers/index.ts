@@ -9,3 +9,4 @@ export * from "./proxyGet";
 export * from "./proxyList";
 export * from "./proxyStart";
 export * from "./proxyStop";
+export * from "./serversGetIds";

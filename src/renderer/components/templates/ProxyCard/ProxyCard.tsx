@@ -1,10 +1,13 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Button, Label, Typography } from "@/renderer/components/ui";
 import { X, Play, Pause, ListIcon } from "lucide-react";
 import { uiActor, proxyMachine } from "@/xstate";
 import { ActorRefFrom } from "xstate";
 import { useSelector } from "@xstate/react";
 import { dateTimeformatter } from "@/renderer/lib/utils";
+import debug from "debug";
+
+const logger = debug("ProxyCard");
 
 interface IProxyCardProps {
   proxy: ActorRefFrom<typeof proxyMachine>;
@@ -15,6 +18,15 @@ const ProxyCard: FC<IProxyCardProps> = ({ proxy }) => {
     proxy.getSnapshot().context;
 
   const state = useSelector(proxy, (state) => state.value);
+
+  useEffect(() => {
+    window.electronAPI.serversGetIds().then((data) => {
+      logger(data);
+      if (data.indexOf(id) !== -1) {
+        proxy.send({ type: "activate" });
+      }
+    }); // TODO: move serverIds to xstate ?
+  }, []); //eslint-disable-line
 
   return (
     <div className="flex flex-col gap-4 p-2 border rounded-md">

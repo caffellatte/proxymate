@@ -11,6 +11,7 @@ import {
   proxyList,
   proxyStart,
   proxyStop,
+  serversGetIds,
 } from "./handlers";
 
 class Ipc {
@@ -33,6 +34,7 @@ class Ipc {
   public proxyList = proxyList(this);
   public proxyStart = proxyStart(this);
   public proxyStop = proxyStop(this);
+  public serversGetIds = serversGetIds(this);
 }
 
 export default Ipc;
