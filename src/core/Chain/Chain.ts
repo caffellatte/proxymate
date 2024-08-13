@@ -15,6 +15,10 @@ class Chain {
     this.eventBus = eventBus;
   }
 
+  // public getServerIds() {
+  //   return [];
+  // } // TODO: xstate proxyMachine state
+
   public start(proxy: IProxy) {
     const {
       id,
