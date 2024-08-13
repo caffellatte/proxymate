@@ -116,6 +116,11 @@ class Core {
         proxyId: args[0],
       });
     });
+    ipcMain.handle("servers:getIds", (event) => {
+      return this.ipc.serversGetIds({
+        event: event,
+      });
+    });
   }
 }
 

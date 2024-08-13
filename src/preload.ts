@@ -63,4 +63,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
    * clearLogs
    */
   logGetAll: (proxyId: string) => ipcRenderer.invoke("logs:getAll", proxyId),
+  /**
+   * serversGetIds
+   */
+  serversGetIds: () => ipcRenderer.invoke("servers:getIds"),
 });

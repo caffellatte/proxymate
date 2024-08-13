@@ -11,6 +11,7 @@ import { app, BrowserWindow } from "electron";
 import Core from "@/core";
 
 debug.enable("*");
+const logger = debug("main");
 const core = new Core();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -73,12 +74,14 @@ app.whenReady().then(() => {
 // code. You can also put them in separate files and import them here.
 
 app.on("before-quit", (event) => {
-  console.log("Caught before-quit...");
+  logger("Caught before-quit...");
   event.preventDefault();
 
-  console.log(core.chain.servers);
+  const serverIds = core.chain.getServerIds();
 
-  const stopServers = Object.keys(core.chain.servers).map((server) => {
+  logger("serverIds:", serverIds);
+
+  const stopServers = serverIds.map((server) => {
     return new Promise((resolve) => {
       core.chain.stop(server);
       resolve(server);

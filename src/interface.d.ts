@@ -27,6 +27,8 @@ export interface IElectronAPI {
   logGetAll: (
     proxyId: string
   ) => Promise<[string, Omit<ILogsRecord, "proxyId" | "connectionId">][]>;
+
+  serversGetIds: () => Promise<string[]>;
 }
 
 declare global {
