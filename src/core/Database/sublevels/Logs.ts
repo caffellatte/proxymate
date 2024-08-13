@@ -1,5 +1,6 @@
 import { ILogsRecord, ILogsDatabase, ILevelDatabase } from "@/types";
 import debug from "debug";
+
 const logger = debug("sublevels:logs");
 
 class Logs {
@@ -12,7 +13,7 @@ class Logs {
   }
 
   clear(proxyId: string) {
-    if (!this.logsSublevels[proxyId]) return;
+    if (!this.logsSublevels[proxyId]) this.init(proxyId);
     return new Promise((resolve, reject) => {
       this.logsSublevels[proxyId].clear({}, (err) => {
         if (err) reject(err);

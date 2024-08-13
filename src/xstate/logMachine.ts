@@ -24,6 +24,10 @@ const logMachine = createMachine({
           updatedLog: Omit<ILogsRecord, "url">;
         }
       | {
+          type: "add";
+          log: ILogsRecord;
+        }
+      | {
           type: "clear";
         };
   },
@@ -60,6 +64,22 @@ const logMachine = createMachine({
               url: context.log[event.updatedLog.connectionId].url,
               created: context.log[event.updatedLog.connectionId].created,
               updated: event.updatedLog.updated,
+            },
+          };
+        },
+      }),
+    },
+
+    add: {
+      actions: assign({
+        log: ({ context, event }) => {
+          return {
+            ...context.log,
+            [Number(event.log.connectionId)]: {
+              stats: event.log.stats,
+              url: event.log.url,
+              created: event.log.created,
+              updated: event.log.updated,
             },
           };
         },
