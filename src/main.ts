@@ -1,10 +1,3 @@
-/**
- * TODO: add debug
- */
-
-declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
-declare const MAIN_WINDOW_VITE_NAME: string;
-
 import path from "path";
 import debug from "debug";
 import { app, BrowserWindow } from "electron";
@@ -44,10 +37,36 @@ const createWindow = () => {
   mainWindow.webContents.openDevTools();
 };
 
+const createBrowserWindow = () => {
+  // Create the browser window.
+  const browserWindow = new BrowserWindow({
+    width: 1280,
+    height: 960,
+    webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
+    },
+  });
+
+  // and load the index.html of the app.
+  if (BROWSER_WINDOW_VITE_DEV_SERVER_URL) {
+    browserWindow.loadURL(BROWSER_WINDOW_VITE_DEV_SERVER_URL);
+  } else {
+    browserWindow.loadFile(
+      path.join(__dirname, `../browser/${BROWSER_WINDOW_VITE_NAME}/index.html`)
+    );
+  }
+
+  // Open the DevTools.
+  browserWindow.webContents.openDevTools();
+};
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", createWindow);
+app.on("ready", () => {
+  createWindow();
+  createBrowserWindow();
+});
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
