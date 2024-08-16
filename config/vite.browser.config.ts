@@ -7,7 +7,7 @@ import path from "path";
 
 // https://vitejs.dev/config
 export default defineConfig((env) => {
-  const forgeEnv = env as ConfigEnv<"browser">;
+  const forgeEnv = env as ConfigEnv<"renderer">;
   const { root, mode, forgeConfigSelf } = forgeEnv;
   const name = forgeConfigSelf.name ?? "";
 
