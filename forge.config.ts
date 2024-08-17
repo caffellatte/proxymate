@@ -36,11 +36,11 @@ const config: ForgeConfig = {
       renderer: [
         {
           name: "main_window",
-          config: "config/vite.renderer.config.ts",
+          config: "config/vite.main_window.config.ts",
         },
         {
           name: "browser_window",
-          config: "config/vite.browser.config.ts",
+          config: "config/vite.browser_window.config.ts",
         },
       ],
     }),

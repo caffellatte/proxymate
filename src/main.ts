@@ -12,7 +12,7 @@ if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
-const createWindow = () => {
+const createMainWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1280,
@@ -29,7 +29,7 @@ const createWindow = () => {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
     mainWindow.loadFile(
-      path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)
+      path.join(__dirname, `../main/${MAIN_WINDOW_VITE_NAME}/index.html`)
     );
   }
 
@@ -64,7 +64,7 @@ const createBrowserWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", () => {
-  createWindow();
+  createMainWindow();
   createBrowserWindow();
 });
 
@@ -85,7 +85,7 @@ app.whenReady().then(() => {
   app.on("activate", () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    if (BrowserWindow.getAllWindows().length === 0) createMainWindow();
   });
 });
 
