@@ -1,6 +1,6 @@
 import { createMachine, createActor, assign } from "xstate";
 
-import { ILogsRecord } from "@/types";
+import { ILogsRecord } from "@/interfaces";
 
 const logMachine = createMachine({
   /** @xstate-layout N4IgpgJg5mDOIC5QBsD2VYGIDGAnMAhgC5gDaADALqKgAOqsAlkY6gHY0gAeiAtAMwAWAJwA6AEwBGSYIAc5AGwBWJZIWzxAGhABPPuOWjZC4YLmzhwyf3KyAvne1oMmAK60IxMlU70mLdk4eBF4AdnDRfiUpciVlVXUtXT5QhVFyYRjVEWtbcQcndCxsZEJcCmokED9mVg4q4LDFUUsFBX4TWLUNbT0Q-hkW9slhWQsrG3sCkDZUCDhOZ3gqmoD60EalUNkJCwVY+O6kvt41SVElWUFxTIUcyfyHOyA */
