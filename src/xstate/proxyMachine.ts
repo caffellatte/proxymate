@@ -1,5 +1,5 @@
 import { setup } from "xstate";
-import { IProxy } from "@/types";
+import { IProxy } from "@/interfaces";
 
 const proxyMachine = setup({
   types: {

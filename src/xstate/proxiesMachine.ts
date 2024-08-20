@@ -6,7 +6,7 @@ import {
   createActor,
 } from "xstate";
 import { proxyMachine } from "./proxyMachine";
-import { IProxy } from "@/types";
+import { IProxy } from "@/interfaces";
 // import debug from "debug";
 
 // debug.enable("*");
