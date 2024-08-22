@@ -9,6 +9,9 @@ const logger = debug("browser:App");
 const App = () => {
   useEffect(() => {
     tabsActor.start();
+    /**
+     * TODO: Create first tab
+     */
   }, []); // eslint-disable-line
 
   logger("Hello World!");

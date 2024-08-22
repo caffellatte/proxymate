@@ -12,15 +12,22 @@ interface TabsBarProps {}
 
 const TabsBar: FC<TabsBarProps> = () => {
   const tabs = useSelector(tabsActor, (state) => state.context.tabs);
+  const activeTab = useSelector(tabsActor, (state) => state.context.activeTab);
 
   return (
     <div className="flex items-center gap-4">
       <div className=" flex items-center gap-1">
         {Object.keys(tabs).map((tabId) => {
           return (
-            <div key={tabId}>
+            <Button
+              variant={activeTab === Number(tabId) ? "default" : "outline"}
+              key={tabId}
+              onClick={() => {
+                tabsActor.send({ type: "activate", id: tabId });
+              }}
+            >
               <Typography variant="muted">{tabs[tabId].id}</Typography>
-            </div>
+            </Button>
           );
         })}
       </div>
