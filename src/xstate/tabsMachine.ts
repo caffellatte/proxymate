@@ -13,8 +13,13 @@ const tabsMachine = createMachine({
     context: {
       tabs: Record<string, ITab>;
       tabIds: number[];
+      activeTab: number | null;
     };
     events:
+      | {
+          type: "activate";
+          id: string;
+        }
       | {
           type: "add";
           newTab: Omit<ITab, "id">;
@@ -31,8 +36,15 @@ const tabsMachine = createMachine({
   context: {
     tabs: {},
     tabIds: [],
+    activeTab: null,
   },
   on: {
+    activate: {
+      guard: ({ context, event }) => context.tabIds.includes(Number(event.id)),
+      actions: assign({
+        activeTab: ({ event }) => Number(event.id),
+      }),
+    },
     add: {
       actions: assign({
         tabs: ({ context, event }) => {
