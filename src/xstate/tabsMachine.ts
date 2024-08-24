@@ -8,14 +8,14 @@ const tabsMachine = createMachine(
     id: "tabs",
     types: {} as {
       context: {
-        tabs: Record<string, ITab>;
+        tabs: Record<number, ITab>;
         tabIds: number[];
         activeTab: number | null;
       };
       events:
         | {
             type: "activate";
-            id: string;
+            id: number;
           }
         | {
             type: "add";
@@ -23,7 +23,7 @@ const tabsMachine = createMachine(
           }
         | {
             type: "close";
-            id: string;
+            id: number;
           }
         | {
             type: "update";
@@ -44,7 +44,7 @@ const tabsMachine = createMachine(
           }),
         },
         actions: assign({
-          activeTab: ({ event }) => Number(event.id),
+          activeTab: ({ event }) => event.id,
         }),
       },
       add: {
@@ -100,15 +100,15 @@ const tabsMachine = createMachine(
             return rest;
           },
           tabIds: ({ context, event }) =>
-            context.tabIds.filter((tabId) => tabId !== Number(event.id)),
+            context.tabIds.filter((tabId) => tabId !== event.id),
         }),
       },
     },
   },
   {
     guards: {
-      isValidId: ({ context }, params: { id: string }) =>
-        context.tabIds.includes(Number(params.id)),
+      isValidId: ({ context }, params: { id: number }) =>
+        context.tabIds.includes(params.id),
     },
   }
 );

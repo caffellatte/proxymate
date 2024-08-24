@@ -19,7 +19,8 @@ const TabsBar: FC<TabsBarProps> = () => {
   return (
     <div className="flex items-center gap-4">
       <div className=" flex items-center gap-1">
-        {Object.keys(tabs).map((tabId) => {
+        {Object.keys(tabs).map((key) => {
+          const tabId = Number(key);
           return (
             <div key={tabId} className="flex items-center">
               <Button
@@ -45,7 +46,7 @@ const TabsBar: FC<TabsBarProps> = () => {
       <Button
         variant="ghost"
         onClick={() => {
-          tabsActor.send({ type: "add", newTab: { url: "test" } });
+          tabsActor.send({ type: "add", newTab: { url: "" } });
         }}
       >
         <Plus />

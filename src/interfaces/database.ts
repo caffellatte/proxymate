@@ -1,6 +1,6 @@
 import { ClassicLevel } from "classic-level";
 import { AbstractSublevel } from "abstract-level";
-import { AnyJson, IProxy, ILogsRecord } from "@/types";
+import { AnyJson, IProxy, ILogsRecord } from "@/interfaces";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ILevelDatabase extends ClassicLevel<string, AnyJson> {}

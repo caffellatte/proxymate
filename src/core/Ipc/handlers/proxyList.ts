@@ -1,5 +1,5 @@
 import { Ipc } from "@/core";
-import { IProxy } from "@/types";
+import { IProxy } from "@/interfaces";
 import { IpcMainInvokeEvent } from "electron";
 
 interface IProxyListParams {

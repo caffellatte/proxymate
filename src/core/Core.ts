@@ -2,7 +2,7 @@ import path from "path";
 import { Ipc, Database, Chain } from "@/core";
 import { app, ipcMain, BrowserWindow } from "electron";
 import debug from "debug";
-import { ILogsRecord } from "@/types";
+import { ILogsRecord } from "@/interfaces";
 import EventEmitter from "eventemitter3";
 const logger = debug("core");
 
@@ -12,6 +12,7 @@ class Core {
   private ipc: Ipc;
   private eventBus: EventEmitter;
   public mainWindow: BrowserWindow;
+  public bowserWindow: BrowserWindow;
 
   constructor() {
     this.eventBus = new EventEmitter();
@@ -30,6 +31,10 @@ class Core {
 
   public setMainWindow(mainWindow: BrowserWindow) {
     this.mainWindow = mainWindow;
+  }
+
+  public setBrowserWindow(bowserWindow: BrowserWindow) {
+    this.bowserWindow = bowserWindow;
   }
 
   private clearLogs() {

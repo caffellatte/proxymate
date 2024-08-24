@@ -1,5 +1,5 @@
 import ProxyChain, { Server } from "proxy-chain";
-import { IProxy, ILogsRecord } from "@/types";
+import { IProxy, ILogsRecord } from "@/interfaces";
 import debug from "debug";
 import EventEmitter from "eventemitter3";
 const logger = debug("chain");

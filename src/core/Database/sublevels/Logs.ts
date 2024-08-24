@@ -1,4 +1,4 @@
-import { ILogsRecord, ILogsDatabase, ILevelDatabase } from "@/types";
+import { ILogsRecord, ILogsDatabase, ILevelDatabase } from "@/interfaces";
 import debug from "debug";
 
 const logger = debug("sublevels:logs");

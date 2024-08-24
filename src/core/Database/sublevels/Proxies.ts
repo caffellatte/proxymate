@@ -1,4 +1,4 @@
-import { IProxy, IProxiesDatabase } from "@/types";
+import { IProxy, IProxiesDatabase } from "@/interfaces";
 import debug from "debug";
 const logger = debug("sublevels:proxies");
 
