@@ -47,6 +47,8 @@ const createBrowserWindow = () => {
     },
   });
 
+  core.setBrowserWindow(browserWindow);
+
   // and load the index.html of the app.
   if (BROWSER_WINDOW_VITE_DEV_SERVER_URL) {
     browserWindow.loadURL(BROWSER_WINDOW_VITE_DEV_SERVER_URL);

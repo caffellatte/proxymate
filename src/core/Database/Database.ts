@@ -1,5 +1,10 @@
 import { ClassicLevel } from "classic-level";
-import { AnyJson, ILevelDatabase, IProxiesDatabase, IProxy } from "@/types";
+import {
+  AnyJson,
+  ILevelDatabase,
+  IProxiesDatabase,
+  IProxy,
+} from "@/interfaces";
 import { Proxies, Logs } from "./sublevels";
 
 class Database {

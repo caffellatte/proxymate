@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
-import { IProxy, ILogsRecord } from "@/types";
+import { IProxy, ILogsRecord } from "@/interfaces";
 
 contextBridge.exposeInMainWorld("electronAPI", {
   /**

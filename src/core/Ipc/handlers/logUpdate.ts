@@ -1,6 +1,6 @@
 import { Ipc } from "@/core";
 import debug from "debug";
-import { ILogsRecord } from "@/types";
+import { ILogsRecord } from "@/interfaces";
 const logger = debug("ipc:handlers:logUpdate");
 
 /**
