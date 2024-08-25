@@ -3,3 +3,4 @@ export * from "./helpers";
 export * from "./json";
 export * from "./logs";
 export * from "./proxy";
+export * from "./tab";

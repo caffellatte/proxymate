@@ -1,4 +1,4 @@
-import { ITab } from "@/interfaces/tab";
+import { ITab } from "@/interfaces";
 
 import { createMachine, createActor, assign } from "xstate";
 
@@ -101,6 +101,12 @@ const tabsMachine = createMachine(
           },
           tabIds: ({ context, event }) =>
             context.tabIds.filter((tabId) => tabId !== event.id),
+          activeTab: ({ context, event }) => {
+            if (event.id === context.activeTab) {
+              return null;
+            }
+            return context.activeTab;
+          },
         }),
       },
     },
