@@ -1,7 +1,13 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
-import { IProxy, ILogsRecord } from "@/interfaces";
+import { IProxy, ILogsRecord, ITab } from "@/interfaces";
 
 contextBridge.exposeInMainWorld("electronAPI", {
+  /**
+   *
+   * MAIN WINDOW
+   *
+   */
+
   /**
    * proxyCreate
    */
@@ -67,4 +73,14 @@ contextBridge.exposeInMainWorld("electronAPI", {
    * serversGetIds
    */
   serversGetIds: () => ipcRenderer.invoke("servers:getIds"),
+
+  /**
+   *
+   * BROWSER WINDOW
+   *
+   */
+  /**
+   * loadURL
+   */
+  loadURL: (tab: ITab) => ipcRenderer.invoke("browser:loadURL", tab),
 });

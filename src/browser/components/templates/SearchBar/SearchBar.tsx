@@ -53,39 +53,45 @@ const SearchBar: FC<SearchBarProps> = () => {
 
   const searchBarOnSubmit = async ({ address }: SearchBarFormSchema) => {
     logger("address", address);
+    if (!activeTab) return;
+    window.electronAPI.loadURL(tabsActor.getSnapshot().context.tabs[activeTab]);
   };
 
   return (
-    <form
-      onSubmit={searchBarHandleSubmit(searchBarOnSubmit)}
-      className="flex flex-col gap-2"
-    >
-      <div className="flex items-center gap-4">
-        <Controller
-          name="address"
-          control={searchBarControl}
-          defaultValue={""}
-          render={({ field: { onChange, value, name, ref } }) => (
-            <Input
-              placeholder=""
-              maxLength={2048}
-              id="address"
-              type="text"
-              name={name}
-              value={value}
-              onChange={onChange}
-              ref={ref}
+    <>
+      {activeTab && (
+        <form
+          onSubmit={searchBarHandleSubmit(searchBarOnSubmit)}
+          className="flex flex-col gap-2"
+        >
+          <div className="flex items-center gap-4">
+            <Controller
+              name="address"
+              control={searchBarControl}
+              defaultValue={""}
+              render={({ field: { onChange, value, name, ref } }) => (
+                <Input
+                  placeholder=""
+                  maxLength={2048}
+                  id="address"
+                  type="text"
+                  name={name}
+                  value={value}
+                  onChange={onChange}
+                  ref={ref}
+                />
+              )}
             />
+            <Button variant="outline">Go</Button>
+          </div>
+          {searchBarErrors.address && (
+            <Typography variant="small" color="error">
+              {searchBarErrors.address.message}
+            </Typography>
           )}
-        />
-        <Button variant="outline">Go</Button>
-      </div>
-      {searchBarErrors.address && (
-        <Typography variant="small" color="error">
-          {searchBarErrors.address.message}
-        </Typography>
+        </form>
       )}
-    </form>
+    </>
   );
 };
 

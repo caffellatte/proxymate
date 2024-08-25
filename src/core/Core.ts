@@ -1,14 +1,15 @@
 import path from "path";
-import { Ipc, Database, Chain } from "@/core";
-import { app, ipcMain, BrowserWindow } from "electron";
+import { Ipc, Database, Chain, Views } from "@/core";
+import { app, ipcMain, BrowserWindow, WebContentsView } from "electron";
 import debug from "debug";
-import { ILogsRecord } from "@/interfaces";
+import { ILogsRecord, ITab } from "@/interfaces";
 import EventEmitter from "eventemitter3";
 const logger = debug("core");
 
 class Core {
   public chain: Chain;
   private database: Database;
+  private views: Views;
   private ipc: Ipc;
   private eventBus: EventEmitter;
   public mainWindow: BrowserWindow;
@@ -125,6 +126,21 @@ class Core {
       return this.ipc.serversGetIds({
         event: event,
       });
+    });
+    ipcMain.handle("browser:loadURL", (event, ...args) => {
+      /**
+       * TODO: move to IPC & Views (Tabs)
+       */
+      logger("browser:loadURL ...args:", args);
+      const { url } = args[0] as ITab;
+      const view = new WebContentsView();
+
+      view.webContents.loadURL(url);
+
+      // view.setBounds(this.bowserWindow.getBounds());
+      view.setBounds({ x: 200, y: 200, width: 400, height: 400 });
+
+      this.bowserWindow.contentView.addChildView(view);
     });
   }
 }

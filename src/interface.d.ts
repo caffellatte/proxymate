@@ -1,10 +1,10 @@
-declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
-declare const MAIN_WINDOW_VITE_NAME: string;
-
-declare const BROWSER_WINDOW_VITE_DEV_SERVER_URL: string;
-declare const BROWSER_WINDOW_VITE_NAME: string;
-
 import { IProxy } from "./types";
+
+declare global {
+  interface Window {
+    electronAPI: IElectronAPI;
+  }
+}
 
 export interface IElectronAPI {
   proxyCreate: (proxy: Omit<IProxy, "id">) => Promise<IProxy>;
@@ -35,10 +35,6 @@ export interface IElectronAPI {
   ) => Promise<[string, Omit<ILogsRecord, "proxyId" | "connectionId">][]>;
 
   serversGetIds: () => Promise<string[]>;
-}
 
-declare global {
-  interface Window {
-    electronAPI: IElectronAPI;
-  }
+  loadURL: (tab: ITab) => void;
 }
