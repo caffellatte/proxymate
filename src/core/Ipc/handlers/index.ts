@@ -1,3 +1,4 @@
+export * from "./loadUrl";
 export * from "./logClear";
 export * from "./logCreate";
 export * from "./logGetAll";
