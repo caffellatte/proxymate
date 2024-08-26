@@ -36,5 +36,5 @@ export interface IElectronAPI {
 
   serversGetIds: () => Promise<string[]>;
 
-  loadURL: (tab: ITab) => void;
+  loadUrl: (tab: ITab) => void;
 }

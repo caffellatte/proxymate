@@ -1,8 +1,8 @@
 import path from "path";
 import { Ipc, Database, Chain, Views } from "@/core";
-import { app, ipcMain, BrowserWindow, WebContentsView } from "electron";
+import { app, ipcMain, BrowserWindow } from "electron";
 import debug from "debug";
-import { ILogsRecord, ITab } from "@/interfaces";
+import { ILogsRecord } from "@/interfaces";
 import EventEmitter from "eventemitter3";
 const logger = debug("core");
 
@@ -13,9 +13,9 @@ class Core {
   private ipc: Ipc;
   private eventBus: EventEmitter;
   public mainWindow: BrowserWindow;
-  public bowserWindow: BrowserWindow;
 
   constructor() {
+    this.views = new Views();
     this.eventBus = new EventEmitter();
     this.chain = new Chain({ eventBus: this.eventBus });
     const databaseLocationPath = path.join(app.getPath("userData"), "db");
@@ -27,6 +27,7 @@ class Core {
     this.ipc = new Ipc({
       database: this.database,
       chain: this.chain,
+      views: this.views,
     });
   }
 
@@ -35,7 +36,7 @@ class Core {
   }
 
   public setBrowserWindow(bowserWindow: BrowserWindow) {
-    this.bowserWindow = bowserWindow;
+    this.views.setBrowserWindow(bowserWindow);
   }
 
   private clearLogs() {
@@ -127,20 +128,12 @@ class Core {
         event: event,
       });
     });
-    ipcMain.handle("browser:loadURL", (event, ...args) => {
-      /**
-       * TODO: move to IPC & Views (Tabs)
-       */
-      logger("browser:loadURL ...args:", args);
-      const { url } = args[0] as ITab;
-      const view = new WebContentsView();
-
-      view.webContents.loadURL(url);
-
-      // view.setBounds(this.bowserWindow.getBounds());
-      view.setBounds({ x: 200, y: 200, width: 400, height: 400 });
-
-      this.bowserWindow.contentView.addChildView(view);
+    ipcMain.handle("browser:loadUrl", (event, ...args) => {
+      logger("browser:loadUrl ...args:", args);
+      return this.ipc.loadUrl({
+        event: event,
+        tab: args[0],
+      });
     });
   }
 }
