@@ -1,10 +1,11 @@
 import type {
   Database as IDatabase,
   Chain as IChain,
-  Views as IViews,
+  Tabs as ITabs,
 } from "@/core";
 import {
-  loadUrl,
+  tabCreate,
+  tabGo,
   logClear,
   logCreate,
   logGetAll,
@@ -22,23 +23,24 @@ import {
 class Ipc {
   public database: IDatabase;
   public chain: IChain;
-  public views: IViews;
+  public tabs: ITabs;
 
   constructor({
     database,
     chain,
-    views,
+    tabs,
   }: {
     database: IDatabase;
     chain: IChain;
-    views: IViews;
+    tabs: ITabs;
   }) {
     this.database = database;
     this.chain = chain;
-    this.views = views;
+    this.tabs = tabs;
   }
 
-  public loadUrl = loadUrl(this);
+  public tabCreate = tabCreate(this);
+  public tabGo = tabGo(this);
   public logClear = logClear(this);
   public logCreate = logCreate(this);
   public logGetAll = logGetAll(this);

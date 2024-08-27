@@ -47,6 +47,7 @@ const TabsBar: FC<TabsBarProps> = () => {
         variant="ghost"
         onClick={() => {
           tabsActor.send({ type: "add", newTab: { url: "" } });
+          // Todo: add window.electronAPI.tabCreate()
         }}
       >
         <Plus />

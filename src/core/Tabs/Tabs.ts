@@ -24,8 +24,8 @@ class Views {
     this.browserWindow = browserWindow;
   }
 
-  public async loadUrl(tab: ITab) {
-    logger(tab);
+  public async go(tab: ITab) {
+    logger("loadUrl:", tab);
     const { url } = tab;
     const view = new WebContentsView();
 
@@ -35,6 +35,10 @@ class Views {
     view.setBounds({ x: 200, y: 200, width: 400, height: 400 });
 
     this.browserWindow.contentView.addChildView(view);
+  }
+
+  public create(tab: ITab) {
+    logger("openTab:", tab);
   }
 }
 

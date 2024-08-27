@@ -1,4 +1,4 @@
-import { IProxy } from "./types";
+import { IProxy, ITab } from "./types";
 
 declare global {
   interface Window {
@@ -36,5 +36,7 @@ export interface IElectronAPI {
 
   serversGetIds: () => Promise<string[]>;
 
-  loadUrl: (tab: ITab) => void;
+  tabGo: (tab: ITab) => void;
+
+  tabCreate: (tab: ITab) => Promise<Omit<ITab, "url">>;
 }

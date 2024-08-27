@@ -4,14 +4,14 @@ import { IpcMainInvokeEvent } from "electron";
 import { ITab } from "@/interfaces";
 const logger = debug("ipc:handlers:loadUrl");
 
-interface ILogClearParams {
+interface ITabOpenParams {
   event: IpcMainInvokeEvent;
   tab: ITab;
 }
 
-const loadUrl = (ipc: Ipc) => async (params: ILogClearParams) => {
+const tabCreate = (ipc: Ipc) => async (params: ITabOpenParams) => {
   logger("tab:", params.tab);
-  return await ipc.views.loadUrl(params.tab);
+  return await ipc.tabs.create(params.tab);
 };
 
-export { loadUrl };
+export { tabCreate };

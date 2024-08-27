@@ -54,7 +54,7 @@ const SearchBar: FC<SearchBarProps> = () => {
   const searchBarOnSubmit = async ({ address }: SearchBarFormSchema) => {
     logger("address", address);
     if (!activeTab) return;
-    window.electronAPI.loadUrl(tabsActor.getSnapshot().context.tabs[activeTab]);
+    window.electronAPI.tabGo(tabsActor.getSnapshot().context.tabs[activeTab]);
   };
 
   return (
