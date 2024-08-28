@@ -80,11 +80,15 @@ contextBridge.exposeInMainWorld("electronAPI", {
    *
    */
   /**
-   * tabGo
+   * tabClose
    */
-  tabGo: (tab: ITab) => ipcRenderer.invoke("browser:tabGo", tab),
+  tabClose: (id: number) => ipcRenderer.invoke("browser:tabClose", id),
   /**
    * tabCreate
    */
-  tabCreate: (tab: ITab) => ipcRenderer.invoke("browser:tabCreate", tab),
+  tabCreate: () => ipcRenderer.invoke("browser:tabCreate"),
+  /**
+   * tabGo
+   */
+  tabGo: (tab: ITab) => ipcRenderer.invoke("browser:tabGo", tab),
 });

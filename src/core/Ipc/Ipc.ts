@@ -4,8 +4,6 @@ import type {
   Tabs as ITabs,
 } from "@/core";
 import {
-  tabCreate,
-  tabGo,
   logClear,
   logCreate,
   logGetAll,
@@ -18,6 +16,9 @@ import {
   proxyStart,
   proxyStop,
   serversGetIds,
+  tabClose,
+  tabCreate,
+  tabGo,
 } from "./handlers";
 
 class Ipc {
@@ -39,8 +40,6 @@ class Ipc {
     this.tabs = tabs;
   }
 
-  public tabCreate = tabCreate(this);
-  public tabGo = tabGo(this);
   public logClear = logClear(this);
   public logCreate = logCreate(this);
   public logGetAll = logGetAll(this);
@@ -53,6 +52,9 @@ class Ipc {
   public proxyStart = proxyStart(this);
   public proxyStop = proxyStop(this);
   public serversGetIds = serversGetIds(this);
+  public tabClose = tabClose(this);
+  public tabCreate = tabCreate(this);
+  public tabGo = tabGo(this);
 }
 
 export default Ipc;

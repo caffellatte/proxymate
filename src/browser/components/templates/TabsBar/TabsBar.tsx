@@ -34,7 +34,11 @@ const TabsBar: FC<TabsBarProps> = () => {
               <Button
                 variant="ghost"
                 onClick={() => {
-                  tabsActor.send({ type: "close", id: tabId });
+                  window.electronAPI.tabClose(tabId).then((id) => {
+                    if (id) {
+                      tabsActor.send({ type: "close", id: id });
+                    }
+                  });
                 }}
               >
                 <X />
@@ -46,8 +50,9 @@ const TabsBar: FC<TabsBarProps> = () => {
       <Button
         variant="ghost"
         onClick={() => {
-          tabsActor.send({ type: "add", newTab: { url: "" } });
-          // Todo: add window.electronAPI.tabCreate()
+          window.electronAPI.tabCreate().then((id) => {
+            tabsActor.send({ type: "add", newTab: { id: id, url: "" } });
+          });
         }}
       >
         <Plus />

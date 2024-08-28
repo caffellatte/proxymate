@@ -26,8 +26,8 @@ class Views {
 
   public async go(tab: ITab) {
     logger("loadUrl:", tab);
-    const { url } = tab;
-    const view = new WebContentsView();
+    const { id, url } = tab;
+    const { view } = this.views[id];
 
     view.webContents.loadURL(url);
 
@@ -37,13 +37,30 @@ class Views {
     this.browserWindow.contentView.addChildView(view);
   }
 
-  public create(tab: ITab) {
-    logger("openTab:", tab);
+  public async create() {
+    const id = Object.keys(this.views).length + 1;
+    const view: IView = {
+      id: id,
+      url: "",
+      view: new WebContentsView(),
+    };
+    logger("view:", view);
+    this.views[id] = view;
+    return id;
+  }
+
+  public async close(id: number) {
+    const { view } = this.views[id];
+    if (view) {
+      const parentWindow = BrowserWindow.fromWebContents(view.webContents);
+      if (parentWindow) {
+        parentWindow.contentView.removeChildView(view);
+        delete this.views[id];
+        return id;
+      }
+    }
+    return null;
   }
 }
 
 export default Views;
-
-/**
- * TODO: Events for maintain Tabs & Views
- */

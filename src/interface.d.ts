@@ -36,7 +36,9 @@ export interface IElectronAPI {
 
   serversGetIds: () => Promise<string[]>;
 
-  tabGo: (tab: ITab) => void;
+  tabClose: (id: number) => Promise<number | null>;
 
-  tabCreate: (tab: ITab) => Promise<Omit<ITab, "url">>;
+  tabCreate: () => Promise<number>;
+
+  tabGo: (tab: ITab) => void;
 }
