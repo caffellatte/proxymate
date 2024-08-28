@@ -19,7 +19,7 @@ const tabsMachine = createMachine(
           }
         | {
             type: "add";
-            newTab: Omit<ITab, "id">;
+            newTab: ITab;
           }
         | {
             type: "close";
@@ -50,18 +50,15 @@ const tabsMachine = createMachine(
       add: {
         actions: assign({
           tabs: ({ context, event }) => {
-            const id = context.tabIds.length + 1;
             return {
               ...context.tabs,
-              [id]: {
-                id,
+              [event.newTab.id]: {
                 ...event.newTab,
               },
             };
           },
-          tabIds: ({ context }) => {
-            const id = context.tabIds.length + 1;
-            return context.tabIds.concat(id);
+          tabIds: ({ context, event }) => {
+            return context.tabIds.concat(event.newTab.id);
           },
         }),
       },

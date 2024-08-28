@@ -128,8 +128,21 @@ class Core {
         event: event,
       });
     });
+    ipcMain.handle("browser:tabClose", (event, ...args) => {
+      logger("browser:tabClose");
+      return this.ipc.tabClose({
+        event: event,
+        id: args[0],
+      });
+    });
+    ipcMain.handle("browser:tabCreate", (event) => {
+      logger("browser:tabCreate");
+      return this.ipc.tabCreate({
+        event: event,
+      });
+    });
     ipcMain.handle("browser:tabGo", (event, ...args) => {
-      logger("browser:loadUrl ...args:", args);
+      logger("browser:tabGo ...args:", args);
       return this.ipc.tabGo({
         event: event,
         tab: args[0],
