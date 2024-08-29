@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
-import { IProxy, ILogsRecord, ITab } from "@/interfaces";
+import { IProxy, ILogsRecord, ITab, IViewSize } from "@/interfaces";
 
 contextBridge.exposeInMainWorld("electronAPI", {
   /**
@@ -91,4 +91,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
    * tabGo
    */
   tabGo: (tab: ITab) => ipcRenderer.invoke("browser:tabGo", tab),
+  /**
+   * sendResizeEvent
+   */
+  sendResizeEvent: (viewSize: IViewSize) =>
+    ipcRenderer.invoke("browser:sendResizeEvent", viewSize),
 });

@@ -148,6 +148,11 @@ class Core {
         tab: args[0],
       });
     });
+    ipcMain.handle("browser:sendResizeEvent", (event, ...args) => {
+      logger("browser:sendResizeEvent ...args:", args);
+      return this.tabs.setBounds(args[0]);
+      // TODO: add IPC handler
+    });
   }
 }
 

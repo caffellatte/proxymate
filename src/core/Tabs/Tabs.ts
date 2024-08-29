@@ -1,4 +1,4 @@
-import { ITab } from "@/interfaces";
+import { ITab, IViewSize } from "@/interfaces";
 import { WebContentsView, BrowserWindow } from "electron";
 import debug from "debug";
 
@@ -60,6 +60,19 @@ class Views {
       }
     }
     return null;
+  }
+
+  public async setBounds(viewSize: IViewSize) {
+    const { topOffset, width, height } = viewSize;
+    Object.keys(this.views).forEach((key) => {
+      const id = Number(key);
+      this.views[id].view.setBounds({
+        x: 0,
+        y: topOffset,
+        width: width,
+        height: height,
+      });
+    });
   }
 }
 

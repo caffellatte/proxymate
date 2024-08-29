@@ -5,6 +5,12 @@ export interface ITab {
   url: string;
 }
 
+export interface IViewSize {
+  width: number;
+  height: number;
+  topOffset: number;
+}
+
 /**
  * searchBarSchema
  */
