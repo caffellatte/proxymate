@@ -1,4 +1,4 @@
-import { IProxy, ITab } from "./types";
+import { IProxy, ITab, IViewSize } from "./types";
 
 declare global {
   interface Window {
@@ -41,4 +41,6 @@ export interface IElectronAPI {
   tabCreate: () => Promise<number>;
 
   tabGo: (tab: ITab) => void;
+
+  sendResizeEvent: (viewSize: IViewSize) => void;
 }
