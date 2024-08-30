@@ -19,6 +19,7 @@ import {
   tabClose,
   tabCreate,
   tabGo,
+  tabSetBounds,
 } from "./handlers";
 
 class Ipc {
@@ -55,6 +56,7 @@ class Ipc {
   public tabClose = tabClose(this);
   public tabCreate = tabCreate(this);
   public tabGo = tabGo(this);
+  public tabSetBounds = tabSetBounds(this);
 }
 
 export default Ipc;

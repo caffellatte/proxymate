@@ -22,7 +22,7 @@ const Layout = () => {
         };
         logger("viewParams:", viewParams);
         // a function defined in the context bridge that sends the dimensions back via IPC
-        window.electronAPI.sendResizeEvent(viewParams);
+        window.electronAPI.tabSetBounds(viewParams);
       }
     };
     // Do this once on init

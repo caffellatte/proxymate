@@ -2,7 +2,7 @@ import { ITab, IViewSize } from "@/interfaces";
 import { WebContentsView, BrowserWindow } from "electron";
 import debug from "debug";
 
-const logger = debug("core:Views");
+const logger = debug("core:Tabs");
 
 interface IView extends ITab {
   view: WebContentsView;
@@ -15,6 +15,7 @@ interface IView extends ITab {
 class Views {
   private views: Record<number, IView>;
   private browserWindow: BrowserWindow;
+  private bounds: IViewSize;
 
   constructor() {
     this.views = {};
@@ -31,8 +32,8 @@ class Views {
 
     view.webContents.loadURL(url);
 
-    // view.setBounds(this.bowserWindow.getBounds());
-    view.setBounds({ x: 200, y: 200, width: 400, height: 400 });
+    const { topOffset, width, height } = this.bounds;
+    view.setBounds({ x: 0, y: topOffset, width: width, height: height });
 
     this.browserWindow.contentView.addChildView(view);
   }
@@ -63,6 +64,7 @@ class Views {
   }
 
   public async setBounds(viewSize: IViewSize) {
+    this.bounds = viewSize;
     const { topOffset, width, height } = viewSize;
     Object.keys(this.views).forEach((key) => {
       const id = Number(key);

@@ -42,5 +42,5 @@ export interface IElectronAPI {
 
   tabGo: (tab: ITab) => void;
 
-  sendResizeEvent: (viewSize: IViewSize) => void;
+  tabSetBounds: (viewSize: IViewSize) => void;
 }
