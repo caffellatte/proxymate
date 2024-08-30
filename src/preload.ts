@@ -92,8 +92,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
    */
   tabGo: (tab: ITab) => ipcRenderer.invoke("browser:tabGo", tab),
   /**
-   * sendResizeEvent
+   * tabSetBounds
    */
-  sendResizeEvent: (viewSize: IViewSize) =>
-    ipcRenderer.invoke("browser:sendResizeEvent", viewSize),
+  tabSetBounds: (viewSize: IViewSize) =>
+    ipcRenderer.invoke("browser:tabSetBounds", viewSize),
 });

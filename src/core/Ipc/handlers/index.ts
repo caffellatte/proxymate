@@ -13,3 +13,4 @@ export * from "./serversGetIds";
 export * from "./tabClose";
 export * from "./tabCreate";
 export * from "./tabGo";
+export * from "./tabSetBounds";
