@@ -37,6 +37,8 @@ const TabsBar: FC<TabsBarProps> = () => {
                   window.electronAPI.tabClose(tabId).then((id) => {
                     if (id) {
                       tabsActor.send({ type: "close", id: id });
+                    } else {
+                      tabsActor.send({ type: "close", id: tabId });
                     }
                   });
                 }}
