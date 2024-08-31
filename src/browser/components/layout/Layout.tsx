@@ -1,4 +1,8 @@
-import { SearchBar, TabsBar } from "@/browser/components/templates";
+import {
+  SearchBar,
+  SessionSwitcher,
+  TabsBar,
+} from "@/browser/components/templates";
 import { tabsActor } from "@/xstate/tabsMachine";
 import { useSelector } from "@xstate/react";
 import { useLayoutEffect, useRef } from "react";
@@ -38,6 +42,7 @@ const Layout = () => {
         <p>{JSON.stringify(tabsState.value)}</p>
         <p>{JSON.stringify(tabsState.context)}</p>
       </div>
+      <SessionSwitcher />
       <TabsBar />
       <SearchBar />
     </div>
