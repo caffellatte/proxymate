@@ -1,6 +1,6 @@
 import Layout from "@/browser/components/layout";
 import { useEffect } from "react";
-import { tabsActor } from "@/xstate/tabsMachine";
+import { tabsActor, sessionActor } from "@/xstate";
 import debug from "debug";
 debug.enable("*");
 
@@ -9,6 +9,7 @@ const logger = debug("browser:App");
 const App = () => {
   useEffect(() => {
     tabsActor.start();
+    sessionActor.start();
     /**
      * TODO: Create first tab
      */
