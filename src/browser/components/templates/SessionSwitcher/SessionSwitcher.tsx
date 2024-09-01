@@ -1,4 +1,6 @@
 import { FC, useState } from "react";
+import { sessionActor } from "@/xstate";
+import { useSelector } from "@xstate/react";
 
 import { ChevronsUpDownIcon, CheckIcon, PlusCircleIcon } from "lucide-react";
 
@@ -70,7 +72,8 @@ type PopoverTriggerProps = React.ComponentPropsWithoutRef<
 interface ISessionSwitcherProps extends PopoverTriggerProps {}
 
 const SessionSwitcher: FC<ISessionSwitcherProps> = ({ className }) => {
-  const [open, setOpen] = useState(false);
+  const sessionActorState = useSelector(sessionActor, (state) => state);
+  const isMenuOpen = sessionActorState.matches("menu");
   const [showNewSessionDialog, setShowNewSessionDialog] = useState(false);
   const [selectedSession, setSelectedSession] = useState<Session>(
     groups[0].sessions[0]
@@ -78,14 +81,17 @@ const SessionSwitcher: FC<ISessionSwitcherProps> = ({ className }) => {
 
   return (
     <Dialog open={showNewSessionDialog} onOpenChange={setShowNewSessionDialog}>
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover open={isMenuOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             role="combobox"
-            aria-expanded={open}
+            aria-expanded={isMenuOpen}
             aria-label="Select a session"
             className={cn("w-[200px] justify-between", className)}
+            onClick={() => {
+              sessionActor.send({ type: "menu" });
+            }}
           >
             <Avatar className="mr-2 h-5 w-5">
               <AvatarImage
@@ -99,7 +105,12 @@ const SessionSwitcher: FC<ISessionSwitcherProps> = ({ className }) => {
             <ChevronsUpDownIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[200px] p-0">
+        <PopoverContent
+          className="w-[200px] p-0"
+          onInteractOutside={() => {
+            sessionActor.send({ type: "idle" });
+          }}
+        >
           <Command>
             <CommandInput placeholder="Search session..." />
             <CommandList>
@@ -111,7 +122,7 @@ const SessionSwitcher: FC<ISessionSwitcherProps> = ({ className }) => {
                       key={session.value}
                       onSelect={() => {
                         setSelectedSession(session);
-                        setOpen(false);
+                        sessionActor.send({ type: "idle" });
                       }}
                       className="text-sm"
                     >
@@ -143,7 +154,7 @@ const SessionSwitcher: FC<ISessionSwitcherProps> = ({ className }) => {
                 <DialogTrigger asChild>
                   <CommandItem
                     onSelect={() => {
-                      setOpen(false);
+                      sessionActor.send({ type: "idle" });
                       setShowNewSessionDialog(true);
                     }}
                   >
