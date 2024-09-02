@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { sessionActor } from "@/xstate";
 import { useSelector } from "@xstate/react";
 
@@ -42,8 +42,8 @@ const groups = [
     label: "Persistent",
     sessions: [
       {
-        label: "Session One",
-        value: "1",
+        id: 1,
+        name: "Session One",
       },
     ],
   },
@@ -51,18 +51,16 @@ const groups = [
     label: "In-Memory",
     sessions: [
       {
-        label: "Session Two",
-        value: "2",
+        id: 2,
+        name: "Session Two",
       },
       {
-        label: "Session Three",
-        value: "3",
+        id: 3,
+        name: "Session Three",
       },
     ],
   },
 ];
-
-type Session = (typeof groups)[number]["sessions"][number];
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
@@ -74,99 +72,108 @@ interface ISessionSwitcherProps extends PopoverTriggerProps {}
 const SessionSwitcher: FC<ISessionSwitcherProps> = ({ className }) => {
   const sessionActorState = useSelector(sessionActor, (state) => state);
   const isMenuOpen = sessionActorState.matches("menu");
-  const [showNewSessionDialog, setShowNewSessionDialog] = useState(false);
-  const [selectedSession, setSelectedSession] = useState<Session>(
-    groups[0].sessions[0]
+  const selectedSession = useSelector(
+    sessionActor,
+    (state) => state.context.selectedSession
   );
+  const [showNewSessionDialog, setShowNewSessionDialog] = useState(false);
+
+  useEffect(() => {
+    sessionActor.send({ type: "select", session: groups[0].sessions[0] });
+  }, []);
 
   return (
     <Dialog open={showNewSessionDialog} onOpenChange={setShowNewSessionDialog}>
-      <Popover open={isMenuOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            role="combobox"
-            aria-expanded={isMenuOpen}
-            aria-label="Select a session"
-            className={cn("w-[200px] justify-between", className)}
-            onClick={() => {
-              sessionActor.send({ type: "menu" });
+      {selectedSession && (
+        <Popover open={isMenuOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={isMenuOpen}
+              aria-label="Select a session"
+              className={cn("w-[200px] justify-between", className)}
+              onClick={() => {
+                sessionActor.send({ type: "menu" });
+              }}
+            >
+              <Avatar className="mr-2 h-5 w-5">
+                <AvatarImage
+                  src={`https://avatar.vercel.sh/${selectedSession.id}.png`}
+                  alt={selectedSession.name}
+                  className="grayscale"
+                />
+                <AvatarFallback>SC</AvatarFallback>
+              </Avatar>
+              {selectedSession.name}
+              <ChevronsUpDownIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent
+            className="w-[200px] p-0"
+            onInteractOutside={() => {
+              sessionActor.send({ type: "idle" });
             }}
           >
-            <Avatar className="mr-2 h-5 w-5">
-              <AvatarImage
-                src={`https://avatar.vercel.sh/${selectedSession.value}.png`}
-                alt={selectedSession.label}
-                className="grayscale"
-              />
-              <AvatarFallback>SC</AvatarFallback>
-            </Avatar>
-            {selectedSession.label}
-            <ChevronsUpDownIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent
-          className="w-[200px] p-0"
-          onInteractOutside={() => {
-            sessionActor.send({ type: "idle" });
-          }}
-        >
-          <Command>
-            <CommandInput placeholder="Search session..." />
-            <CommandList>
-              <CommandEmpty>No team found.</CommandEmpty>
-              {groups.map((group) => (
-                <CommandGroup key={group.label} heading={group.label}>
-                  {group.sessions.map((session) => (
-                    <CommandItem
-                      key={session.value}
-                      onSelect={() => {
-                        setSelectedSession(session);
-                        sessionActor.send({ type: "idle" });
-                      }}
-                      className="text-sm"
-                    >
-                      <Avatar className="mr-2 h-5 w-5">
-                        <AvatarImage
-                          src={`https://avatar.vercel.sh/${session.value}.png`}
-                          alt={session.label}
-                          className="grayscale"
+            <Command>
+              <CommandInput placeholder="Search session..." />
+              <CommandList>
+                <CommandEmpty>No team found.</CommandEmpty>
+                {groups.map((group) => (
+                  <CommandGroup key={group.label} heading={group.label}>
+                    {group.sessions.map((session) => (
+                      <CommandItem
+                        key={session.id}
+                        onSelect={() => {
+                          sessionActor.send({
+                            type: "select",
+                            session: session,
+                          });
+                        }}
+                        className="text-sm"
+                      >
+                        <Avatar className="mr-2 h-5 w-5">
+                          <AvatarImage
+                            src={`https://avatar.vercel.sh/${session.id}.png`}
+                            alt={session.name}
+                            className="grayscale"
+                          />
+                          <AvatarFallback>SC</AvatarFallback>
+                        </Avatar>
+                        {session.name}
+                        <CheckIcon
+                          className={cn(
+                            "ml-auto h-4 w-4",
+                            selectedSession.id === session.id
+                              ? "opacity-100"
+                              : "opacity-0"
+                          )}
                         />
-                        <AvatarFallback>SC</AvatarFallback>
-                      </Avatar>
-                      {session.label}
-                      <CheckIcon
-                        className={cn(
-                          "ml-auto h-4 w-4",
-                          selectedSession.value === session.value
-                            ? "opacity-100"
-                            : "opacity-0"
-                        )}
-                      />
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                ))}
+              </CommandList>
+              <CommandSeparator />
+              <CommandList>
+                <CommandGroup>
+                  <DialogTrigger asChild>
+                    <CommandItem
+                      onSelect={() => {
+                        sessionActor.send({ type: "idle" });
+                        setShowNewSessionDialog(true);
+                      }}
+                    >
+                      <PlusCircleIcon className="mr-2 h-5 w-5" />
+                      Create Session
                     </CommandItem>
-                  ))}
+                  </DialogTrigger>
                 </CommandGroup>
-              ))}
-            </CommandList>
-            <CommandSeparator />
-            <CommandList>
-              <CommandGroup>
-                <DialogTrigger asChild>
-                  <CommandItem
-                    onSelect={() => {
-                      sessionActor.send({ type: "idle" });
-                      setShowNewSessionDialog(true);
-                    }}
-                  >
-                    <PlusCircleIcon className="mr-2 h-5 w-5" />
-                    Create Session
-                  </CommandItem>
-                </DialogTrigger>
-              </CommandGroup>
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
+      )}
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create session</DialogTitle>
