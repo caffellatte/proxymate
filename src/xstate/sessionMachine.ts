@@ -1,12 +1,34 @@
-import { createMachine, createActor } from "xstate";
-const sessionMachine = createMachine({
+import { ISession } from "@/interfaces";
+import { assign, createActor, setup } from "xstate";
+
+const sessionMachine = setup({
+  types: {
+    events: {} as
+      | { type: "idle" }
+      | { type: "menu" }
+      | { type: "select"; session: ISession },
+    context: {} as {
+      selectedSession: ISession | null;
+    },
+  },
+}).createMachine({
   id: "session",
   initial: "idle",
-  context: {},
+  context: {
+    selectedSession: null,
+  },
   states: {
     idle: {
       on: {
         menu: "menu",
+
+        select: {
+          target: "idle",
+          reenter: true,
+          actions: assign({
+            selectedSession: ({ event }) => event.session,
+          }),
+        },
       },
     },
 
@@ -15,6 +37,14 @@ const sessionMachine = createMachine({
         idle: {
           target: "idle",
           reenter: true,
+        },
+
+        select: {
+          target: "idle",
+          reenter: true,
+          actions: assign({
+            selectedSession: ({ event }) => event.session,
+          }),
         },
       },
     },
