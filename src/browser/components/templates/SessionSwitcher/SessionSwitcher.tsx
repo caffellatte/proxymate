@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useEffect } from "react";
 import { sessionActor } from "@/xstate";
 import { useSelector } from "@xstate/react";
 
@@ -37,6 +37,9 @@ import {
   SelectValue,
 } from "@/shared/ui";
 
+import debug from "debug";
+const logger = debug("browser:SessionSwitcher");
+
 const groups = [
   {
     label: "Persistent",
@@ -72,18 +75,18 @@ interface ISessionSwitcherProps extends PopoverTriggerProps {}
 const SessionSwitcher: FC<ISessionSwitcherProps> = ({ className }) => {
   const sessionActorState = useSelector(sessionActor, (state) => state);
   const isMenuOpen = sessionActorState.matches("menu");
+  const isCreateOpen = sessionActorState.matches("create");
   const selectedSession = useSelector(
     sessionActor,
     (state) => state.context.selectedSession
   );
-  const [showNewSessionDialog, setShowNewSessionDialog] = useState(false);
 
   useEffect(() => {
     sessionActor.send({ type: "select", session: groups[0].sessions[0] });
   }, []);
 
   return (
-    <Dialog open={showNewSessionDialog} onOpenChange={setShowNewSessionDialog}>
+    <Dialog open={isCreateOpen}>
       {selectedSession && (
         <Popover open={isMenuOpen}>
           <PopoverTrigger asChild>
@@ -112,7 +115,9 @@ const SessionSwitcher: FC<ISessionSwitcherProps> = ({ className }) => {
           <PopoverContent
             className="w-[200px] p-0"
             onInteractOutside={() => {
-              sessionActor.send({ type: "idle" });
+              if (!isCreateOpen) {
+                sessionActor.send({ type: "idle" });
+              }
             }}
           >
             <Command>
@@ -160,8 +165,9 @@ const SessionSwitcher: FC<ISessionSwitcherProps> = ({ className }) => {
                   <DialogTrigger asChild>
                     <CommandItem
                       onSelect={() => {
-                        sessionActor.send({ type: "idle" });
-                        setShowNewSessionDialog(true);
+                        logger("create");
+
+                        sessionActor.send({ type: "create" });
                       }}
                     >
                       <PlusCircleIcon className="mr-2 h-5 w-5" />
@@ -174,7 +180,11 @@ const SessionSwitcher: FC<ISessionSwitcherProps> = ({ className }) => {
           </PopoverContent>
         </Popover>
       )}
-      <DialogContent>
+      <DialogContent
+        onInteractOutside={() => {
+          sessionActor.send({ type: "idle" });
+        }}
+      >
         <DialogHeader>
           <DialogTitle>Create session</DialogTitle>
           <DialogDescription>
@@ -210,7 +220,9 @@ const SessionSwitcher: FC<ISessionSwitcherProps> = ({ className }) => {
         <DialogFooter>
           <Button
             variant="outline"
-            onClick={() => setShowNewSessionDialog(false)}
+            onClick={() => {
+              sessionActor.send({ type: "idle" });
+            }}
           >
             Cancel
           </Button>

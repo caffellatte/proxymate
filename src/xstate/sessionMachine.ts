@@ -6,7 +6,8 @@ const sessionMachine = setup({
     events: {} as
       | { type: "idle" }
       | { type: "menu" }
-      | { type: "select"; session: ISession },
+      | { type: "select"; session: ISession }
+      | { type: "create" },
     context: {} as {
       selectedSession: ISession | null;
     },
@@ -45,6 +46,18 @@ const sessionMachine = setup({
           actions: assign({
             selectedSession: ({ event }) => event.session,
           }),
+        },
+
+        create: {
+          target: "create",
+        },
+      },
+    },
+
+    create: {
+      on: {
+        idle: {
+          target: "idle",
         },
       },
     },
