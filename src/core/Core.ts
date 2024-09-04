@@ -20,9 +20,14 @@ class Core {
     this.chain = new Chain({ eventBus: this.eventBus });
     const databaseLocationPath = path.join(app.getPath("userData"), "db");
     const logsLocationPath = path.join(app.getPath("userData"), "logs");
+    const sessionssLocationPath = path.join(
+      app.getPath("userData"),
+      "sessions"
+    );
     this.database = new Database({
       databaseLocationPath: databaseLocationPath,
       logsLocationPath: logsLocationPath,
+      sessionssLocationPath: sessionssLocationPath,
     });
     this.ipc = new Ipc({
       database: this.database,
