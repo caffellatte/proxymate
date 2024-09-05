@@ -1,4 +1,4 @@
-import { IProxy, ITab, IViewSize } from "./types";
+import { IProxy, ISession, ITab, IViewSize } from "@/interfaces";
 
 declare global {
   interface Window {
@@ -24,11 +24,11 @@ export interface IElectronAPI {
 
   proxyStop: (id: string) => void;
 
-  createLogs: (callback: (value: ILogsRecord) => void) => () => void;
+  createLogs: (callback: (value: ILogsRecord) => void) => () => void; // Todo: rename: logCreate or logsCreate
 
-  updateLogs: (callback: (value: ILogsRecord) => void) => () => void;
+  updateLogs: (callback: (value: ILogsRecord) => void) => () => void; // Todo: rename: logUpdate or logsUpdate
 
-  clearLogs: (proxyId: string) => Promise<string>;
+  clearLogs: (proxyId: string) => Promise<string>; // Todo: rename: logClear or logsClear
 
   logGetAll: (
     proxyId: string
@@ -43,4 +43,6 @@ export interface IElectronAPI {
   tabGo: (tab: ITab) => void;
 
   tabSetBounds: (viewSize: IViewSize) => void;
+
+  sessionCreate: (session: Omit<ISession, "id">) => Promise<ISession>;
 }

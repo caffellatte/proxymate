@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
-import { IProxy, ILogsRecord, ITab, IViewSize } from "@/interfaces";
+import { ILogsRecord, IProxy, ISession, ITab, IViewSize } from "@/interfaces";
 
 contextBridge.exposeInMainWorld("electronAPI", {
   /**
@@ -96,4 +96,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
    */
   tabSetBounds: (viewSize: IViewSize) =>
     ipcRenderer.invoke("browser:tabSetBounds", viewSize),
+  /**
+   * sessionCreate
+   */
+  sessionCreate: (session: Omit<ISession, "id">) =>
+    ipcRenderer.invoke("browser:sessionCreate", session),
 });
