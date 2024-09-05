@@ -1,4 +1,5 @@
 export interface ISession {
-  id: number;
+  id: string;
   name: string;
+  type: "persistent" | "inmemory";
 }
