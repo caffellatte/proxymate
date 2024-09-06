@@ -16,6 +16,7 @@ import {
   proxyStart,
   proxyStop,
   serversGetIds,
+  sessionCreate,
   tabClose,
   tabCreate,
   tabGo,
@@ -53,6 +54,7 @@ class Ipc {
   public proxyStart = proxyStart(this);
   public proxyStop = proxyStop(this);
   public serversGetIds = serversGetIds(this);
+  public sessionCreate = sessionCreate(this);
   public tabClose = tabClose(this);
   public tabCreate = tabCreate(this);
   public tabGo = tabGo(this);
