@@ -98,7 +98,7 @@ export const proxySchema = z.object({
         return true;
       },
       {
-        message: "Port field is required",
+        message: "Protocol field is required",
         path: [""],
       }
     ),

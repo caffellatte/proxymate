@@ -160,6 +160,13 @@ class Core {
         viewSize: args[0],
       });
     });
+    ipcMain.handle("browser:sessionCreate", (event, ...args) => {
+      logger("browser:sessionCreate ...args:", args);
+      return this.ipc.sessionCreate({
+        event: event,
+        session: args[0],
+      });
+    });
   }
 }
 
