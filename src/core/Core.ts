@@ -167,6 +167,12 @@ class Core {
         session: args[0],
       });
     });
+    ipcMain.handle("browser:sessionGetAll", (event) => {
+      logger("browser:sessionGetAll:");
+      return this.ipc.sessionGetAll({
+        event: event,
+      });
+    });
   }
 }
 

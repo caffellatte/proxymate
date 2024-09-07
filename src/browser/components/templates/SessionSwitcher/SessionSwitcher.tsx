@@ -79,6 +79,9 @@ const SessionSwitcher: FC<ISessionSwitcherProps> = ({ className }) => {
 
   useEffect(() => {
     sessionActor.send({ type: "select", session: groups[0].sessions[0] });
+    window.electronAPI.sessionGetAll().then((data) => {
+      logger("sessionGetAll data:", data);
+    });
   }, []);
 
   return (
