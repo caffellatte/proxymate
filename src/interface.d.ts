@@ -45,4 +45,6 @@ export interface IElectronAPI {
   tabSetBounds: (viewSize: IViewSize) => void;
 
   sessionCreate: (session: Omit<ISession, "id">) => Promise<ISession>;
+
+  sessionGetAll: () => Promise<[string, ISession][]>;
 }
