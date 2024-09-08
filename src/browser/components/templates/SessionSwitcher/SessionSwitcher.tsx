@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { sessionActor } from "@/xstate";
 import { useSelector } from "@xstate/react";
 import { CreateSession } from "@/browser/components/dialogs";
@@ -28,38 +28,8 @@ import {
 
 import debug from "debug";
 import { ISession } from "@/interfaces";
-const logger = debug("browser:SessionSwitcher");
 
-const groups: {
-  label: string;
-  sessions: ISession[];
-}[] = [
-  {
-    label: "Persistent",
-    sessions: [
-      {
-        id: "1",
-        name: "Session One",
-        type: "persistent",
-      },
-    ],
-  },
-  {
-    label: "In-Memory",
-    sessions: [
-      {
-        id: "2",
-        name: "Session Two",
-        type: "inmemory",
-      },
-      {
-        id: "3",
-        name: "Session Three",
-        type: "inmemory",
-      },
-    ],
-  },
-];
+const logger = debug("browser:SessionSwitcher");
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
@@ -71,18 +41,72 @@ interface ISessionSwitcherProps extends PopoverTriggerProps {}
 const SessionSwitcher: FC<ISessionSwitcherProps> = ({ className }) => {
   const sessionActorState = useSelector(sessionActor, (state) => state);
   const isMenuOpen = sessionActorState.matches("menu");
-  const isCreateOpen = sessionActorState.matches("create");
+  const isCreateOpen = sessionActorState.matches("createSessionDialog");
   const selectedSession = useSelector(
     sessionActor,
     (state) => state.context.selectedSession
   );
+  const sessions = useSelector(sessionActor, (state) => state.context.sessions);
+
+  const groups = useMemo(() => {
+    const sessionsArray = Object.keys(sessions).map(
+      (session) => sessions[session]
+    );
+    const data = sessionsArray.reduce(
+      (acc, currentValue) => {
+        if (acc.length > 0) {
+          const group = acc.find((group) => {
+            if (group.label === currentValue.type) {
+              return group;
+            }
+          });
+          const otherGroups = acc.filter((group) => {
+            if (group.label === currentValue.type) {
+              return group;
+            }
+          });
+          if (group) {
+            group.sessions.push(currentValue);
+            otherGroups.concat(group);
+          } else {
+            const currentGroup = {
+              label: currentValue.type,
+              sessions: [currentValue],
+            };
+            otherGroups.concat(currentGroup);
+          }
+          return otherGroups;
+        } else {
+          const group = {
+            label: currentValue.type,
+            sessions: [currentValue],
+          };
+          acc.push(group);
+          return acc;
+        }
+      },
+      [] as {
+        label: string;
+        sessions: ISession[];
+      }[]
+    );
+    return data;
+  }, [sessions]);
 
   useEffect(() => {
-    sessionActor.send({ type: "select", session: groups[0].sessions[0] });
     window.electronAPI.sessionGetAll().then((data) => {
       logger("sessionGetAll data:", data);
+      data.forEach((session) => {
+        sessionActor.send({ type: "add", session: session[1] });
+      });
     });
   }, []);
+
+  useEffect(() => {
+    if (groups[0]?.sessions?.[0]) {
+      sessionActor.send({ type: "select", session: groups[0].sessions[0] });
+    }
+  }, [groups]);
 
   return (
     <Dialog open={isCreateOpen}>
@@ -166,7 +190,7 @@ const SessionSwitcher: FC<ISessionSwitcherProps> = ({ className }) => {
                       onSelect={() => {
                         logger("create");
 
-                        sessionActor.send({ type: "create" });
+                        sessionActor.send({ type: "createSessionDialog" });
                       }}
                     >
                       <PlusCircleIcon className="mr-2 h-5 w-5" />

@@ -7,9 +7,11 @@ const sessionMachine = setup({
       | { type: "idle" }
       | { type: "menu" }
       | { type: "select"; session: ISession }
-      | { type: "create" },
+      | { type: "add"; session: ISession }
+      | { type: "createSessionDialog" },
     context: {} as {
       selectedSession: ISession | null;
+      sessions: Record<string, ISession>;
     },
   },
 }).createMachine({
@@ -17,6 +19,7 @@ const sessionMachine = setup({
   initial: "idle",
   context: {
     selectedSession: null,
+    sessions: {},
   },
   states: {
     idle: {
@@ -48,18 +51,33 @@ const sessionMachine = setup({
           }),
         },
 
-        create: {
-          target: "create",
+        createSessionDialog: {
+          target: "createSessionDialog",
         },
       },
     },
 
-    create: {
+    createSessionDialog: {
       on: {
         idle: {
           target: "idle",
         },
       },
+    },
+  },
+
+  on: {
+    add: {
+      actions: assign({
+        sessions: ({ context, event }) => {
+          return {
+            ...context.sessions,
+            [event.session.id]: {
+              ...event.session,
+            },
+          };
+        },
+      }),
     },
   },
 });
