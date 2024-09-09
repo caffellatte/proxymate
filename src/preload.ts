@@ -102,6 +102,11 @@ contextBridge.exposeInMainWorld("electronAPI", {
   sessionCreate: (session: Omit<ISession, "id">) =>
     ipcRenderer.invoke("browser:sessionCreate", session),
   /**
+   * sessionCreate
+   */
+  sessionDelete: (id: string) =>
+    ipcRenderer.invoke("browser:sessionDelete", id),
+  /**
    * sessionGetAll
    */
   sessionGetAll: () => ipcRenderer.invoke("browser:sessionGetAll"),
