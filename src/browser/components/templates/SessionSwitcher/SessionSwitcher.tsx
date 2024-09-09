@@ -48,6 +48,8 @@ const SessionSwitcher: FC<ISessionSwitcherProps> = ({ className }) => {
   );
   const sessions = useSelector(sessionActor, (state) => state.context.sessions);
 
+  logger("state sessions:", sessions);
+
   const groups = useMemo(() => {
     const sessionsArray = Object.keys(sessions).map(
       (session) => sessions[session]
@@ -61,21 +63,21 @@ const SessionSwitcher: FC<ISessionSwitcherProps> = ({ className }) => {
             }
           });
           const otherGroups = acc.filter((group) => {
-            if (group.label === currentValue.type) {
+            if (group.label !== currentValue.type) {
               return group;
             }
           });
           if (group) {
             group.sessions.push(currentValue);
-            otherGroups.concat(group);
+            return otherGroups.concat(group);
           } else {
             const currentGroup = {
               label: currentValue.type,
               sessions: [currentValue],
             };
             otherGroups.concat(currentGroup);
+            return otherGroups.concat(otherGroups);
           }
-          return otherGroups;
         } else {
           const group = {
             label: currentValue.type,
@@ -103,8 +105,12 @@ const SessionSwitcher: FC<ISessionSwitcherProps> = ({ className }) => {
   }, []);
 
   useEffect(() => {
+    logger("groups:", groups);
     if (groups[0]?.sessions?.[0]) {
-      sessionActor.send({ type: "select", session: groups[0].sessions[0] });
+      sessionActor.send({
+        type: "select",
+        session: groups[0].sessions[groups[0].sessions.length - 1],
+      });
     }
   }, [groups]);
 

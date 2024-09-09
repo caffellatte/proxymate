@@ -46,5 +46,7 @@ export interface IElectronAPI {
 
   sessionCreate: (session: Omit<ISession, "id">) => Promise<ISession>;
 
+  sessionDelete: (id: string) => Promise<string>;
+
   sessionGetAll: () => Promise<[string, ISession][]>;
 }

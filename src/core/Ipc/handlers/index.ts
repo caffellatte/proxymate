@@ -11,6 +11,7 @@ export * from "./proxyStart";
 export * from "./proxyStop";
 export * from "./serversGetIds";
 export * from "./sessionCreate";
+export * from "./sessionDelete";
 export * from "./sessionGetAll";
 export * from "./tabClose";
 export * from "./tabCreate";

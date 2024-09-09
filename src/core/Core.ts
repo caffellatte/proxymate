@@ -167,6 +167,13 @@ class Core {
         session: args[0],
       });
     });
+    ipcMain.handle("browser:sessionDelete", (event, ...args) => {
+      logger("browser:sessionDelete ...args:", args);
+      return this.ipc.sessionDelete({
+        event: event,
+        id: args[0],
+      });
+    });
     ipcMain.handle("browser:sessionGetAll", (event) => {
       logger("browser:sessionGetAll:");
       return this.ipc.sessionGetAll({

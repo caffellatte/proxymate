@@ -57,14 +57,15 @@ const CreateSession: FC = () => {
         type: type as SessionType,
       };
 
-      const response = await window.electronAPI.sessionCreate(session);
+      const createdSession = await window.electronAPI.sessionCreate(session);
       // console.log(response);
       sessionCreateReset({
         name: "",
         type: "",
       });
-      if (response) {
-        logger(response);
+      if (createdSession) {
+        logger(createdSession);
+        sessionActor.send({ type: "add", session: createdSession });
         sessionActor.send({ type: "idle" });
       }
     } catch (error) {
