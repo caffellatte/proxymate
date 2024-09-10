@@ -1,6 +1,10 @@
 import { ISession } from "@/interfaces";
 import { assign, createActor, setup } from "xstate";
 
+/**
+ * Todo: Add guards for undeletable default session
+ */
+
 const sessionMachine = setup({
   types: {
     events: {} as
@@ -8,7 +12,8 @@ const sessionMachine = setup({
       | { type: "menu" }
       | { type: "select"; session: ISession }
       | { type: "add"; session: ISession }
-      | { type: "createSessionDialog" },
+      | { type: "createSessionDialog" }
+      | { type: "delete"; id: string },
     context: {} as {
       selectedSession: ISession | null;
       sessions: Record<string, ISession>;
@@ -19,7 +24,13 @@ const sessionMachine = setup({
   initial: "idle",
   context: {
     selectedSession: null,
-    sessions: {},
+    sessions: {
+      0: {
+        id: "0",
+        name: "default",
+        type: "persistent",
+      },
+    },
   },
   states: {
     idle: {
@@ -76,6 +87,20 @@ const sessionMachine = setup({
               ...event.session,
             },
           };
+        },
+      }),
+    },
+
+    delete: {
+      actions: assign({
+        sessions: ({ context, event }) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { [event.id]: value, ...rest } = context.sessions;
+          return rest;
+        },
+        selectedSession: ({ context }) => {
+          const sessions = Object.values(context.sessions);
+          return sessions[sessions.length - 1];
         },
       }),
     },
