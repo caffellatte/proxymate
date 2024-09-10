@@ -23,5 +23,8 @@ export default defineConfig((env) => {
       preserveSymlinks: true,
     },
     clearScreen: false,
+    optimizeDeps: {
+      exclude: ["blip-ds/loader"],
+    },
   } as UserConfig;
 });
