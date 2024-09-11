@@ -45,6 +45,10 @@ const CreateSession: FC = () => {
     resolver: proxyResolver,
   });
 
+  /**
+   * Todo: use on reopen: sessionCreateClearErrors();
+   */
+
   const sessionCreateOnSubmit = async ({
     name,
     type,

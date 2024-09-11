@@ -5,7 +5,7 @@
   "description": "Desktop application for proxy tunneling",
   "main": ".vite/build/main.js",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "rm -rf ./node_modules/.vite && electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",

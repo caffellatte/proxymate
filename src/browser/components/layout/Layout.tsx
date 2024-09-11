@@ -1,9 +1,5 @@
-import {
-  SearchBar,
-  SessionSwitcher,
-  TabsBar,
-} from "@/browser/components/templates";
-import { tabsActor, sessionActor } from "@/xstate";
+import { SearchBar, TabsBar } from "@/browser/components/templates";
+import { tabsActor } from "@/xstate";
 import { useSelector } from "@xstate/react";
 import { useLayoutEffect, useRef } from "react";
 import debug from "debug";
@@ -11,7 +7,6 @@ const logger = debug("browser:Layout");
 
 const Layout = () => {
   const tabsState = useSelector(tabsActor, (state) => state);
-  const sessionState = useSelector(sessionActor, (state) => state);
 
   const layoutRef = useRef<HTMLDivElement>(null);
 
@@ -42,10 +37,7 @@ const Layout = () => {
       <div className="p-4 bg-slate-500 rounded-sm">
         <p>{JSON.stringify(tabsState.value)}</p>
         <p>{JSON.stringify(tabsState.context)}</p>
-        <p>{JSON.stringify(sessionState.value)}</p>
-        <p>{JSON.stringify(sessionState.context)}</p>
       </div>
-      <SessionSwitcher />
       <TabsBar />
       <SearchBar />
     </div>

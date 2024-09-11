@@ -1,7 +1,6 @@
 import { FC, useEffect, useMemo } from "react";
 import { sessionActor } from "@/xstate";
 import { useSelector } from "@xstate/react";
-import { CreateSession } from "@/browser/components/dialogs";
 
 import { ChevronsUpDownIcon, CheckIcon, PlusCircleIcon } from "lucide-react";
 
@@ -19,8 +18,6 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-  Dialog,
-  DialogTrigger,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -115,7 +112,7 @@ const SessionSwitcher: FC<ISessionSwitcherProps> = ({ className }) => {
   }, [groups]);
 
   return (
-    <Dialog open={isCreateOpen}>
+    <>
       {selectedSession && (
         <div className="flex items-center gap-4">
           <Popover open={isMenuOpen}>
@@ -192,18 +189,16 @@ const SessionSwitcher: FC<ISessionSwitcherProps> = ({ className }) => {
                 <CommandSeparator />
                 <CommandList>
                   <CommandGroup>
-                    <DialogTrigger asChild>
-                      <CommandItem
-                        onSelect={() => {
-                          logger("create");
+                    <CommandItem
+                      onSelect={() => {
+                        logger("create");
 
-                          sessionActor.send({ type: "createSessionDialog" });
-                        }}
-                      >
-                        <PlusCircleIcon className="mr-2 h-5 w-5" />
-                        Create Session
-                      </CommandItem>
-                    </DialogTrigger>
+                        sessionActor.send({ type: "createSessionDialog" });
+                      }}
+                    >
+                      <PlusCircleIcon className="mr-2 h-5 w-5" />
+                      Create Session
+                    </CommandItem>
                   </CommandGroup>
                 </CommandList>
               </Command>
@@ -223,8 +218,7 @@ const SessionSwitcher: FC<ISessionSwitcherProps> = ({ className }) => {
           </Button>
         </div>
       )}
-      <CreateSession />
-    </Dialog>
+    </>
   );
 };
 

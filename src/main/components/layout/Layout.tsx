@@ -1,11 +1,12 @@
 import { Header } from "@/main/components/common";
 import { Main } from "@/main/components/views";
-import { uiActor, logsActor } from "@/xstate";
+import { uiActor, logsActor, sessionActor } from "@/xstate";
 import { useSelector } from "@xstate/react";
 
 const Layout = () => {
   const uiActorState = useSelector(uiActor, (state) => state);
   const logsActorState = useSelector(logsActor, (state) => state);
+  const sessionState = useSelector(sessionActor, (state) => state);
 
   return (
     <div className="container py-5 flex flex-col gap-6">
@@ -14,6 +15,8 @@ const Layout = () => {
         <p>{JSON.stringify(uiActorState.context)}</p>
         <p>{JSON.stringify(logsActorState.value)}</p>
         <p>{JSON.stringify(logsActorState.context)}</p>
+        <p>{JSON.stringify(sessionState.value)}</p>
+        <p>{JSON.stringify(sessionState.context)}</p>
       </div>
       <Header />
       <Main />
