@@ -1,7 +1,7 @@
 import { assign, createActor, createMachine } from "xstate";
 
 /**
- * Todo: think about rename to mainWindowUiMachine
+ * Todo: think about rename to mainWindowUiMachine or proxyUiMachine
  */
 
 const uiMachine = createMachine({
