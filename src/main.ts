@@ -37,37 +37,11 @@ const createMainWindow = () => {
   mainWindow.webContents.openDevTools();
 };
 
-const createBrowserWindow = () => {
-  // Create the browser window.
-  const browserWindow = new BrowserWindow({
-    width: 1280,
-    height: 960,
-    webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
-    },
-  });
-
-  core.setBrowserWindow(browserWindow);
-
-  // and load the index.html of the app.
-  if (BROWSER_WINDOW_VITE_DEV_SERVER_URL) {
-    browserWindow.loadURL(BROWSER_WINDOW_VITE_DEV_SERVER_URL);
-  } else {
-    browserWindow.loadFile(
-      path.join(__dirname, `../browser/${BROWSER_WINDOW_VITE_NAME}/index.html`)
-    );
-  }
-
-  // Open the DevTools.
-  browserWindow.webContents.openDevTools();
-};
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", () => {
   createMainWindow();
-  createBrowserWindow();
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

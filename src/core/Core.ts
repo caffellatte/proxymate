@@ -1,5 +1,5 @@
 import path from "path";
-import { Ipc, Database, Chain, Tabs } from "@/core";
+import { Ipc, Database, Chain, Tabs, Windows } from "@/core";
 import { app, ipcMain, BrowserWindow } from "electron";
 import debug from "debug";
 import { ILogsRecord } from "@/interfaces";
@@ -11,6 +11,7 @@ class Core {
   private database: Database;
   private tabs: Tabs;
   private ipc: Ipc;
+  private windows: Windows;
   private eventBus: EventEmitter;
   public mainWindow: BrowserWindow;
 
@@ -18,6 +19,7 @@ class Core {
     this.tabs = new Tabs();
     this.eventBus = new EventEmitter();
     this.chain = new Chain({ eventBus: this.eventBus });
+    this.windows = new Windows();
     const databaseLocationPath = path.join(app.getPath("userData"), "db");
     const logsLocationPath = path.join(app.getPath("userData"), "logs");
     const sessionssLocationPath = path.join(
@@ -33,6 +35,7 @@ class Core {
       database: this.database,
       chain: this.chain,
       tabs: this.tabs,
+      windows: this.windows,
     });
   }
 
@@ -178,6 +181,13 @@ class Core {
       logger("browser:sessionGetAll:");
       return this.ipc.sessionGetAll({
         event: event,
+      });
+    });
+    ipcMain.handle("browser:windowOpen", (event, ...args) => {
+      logger("browser:windowOpen:");
+      return this.ipc.windowOpen({
+        event: event,
+        session: args[0],
       });
     });
   }

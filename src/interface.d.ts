@@ -49,4 +49,6 @@ export interface IElectronAPI {
   sessionDelete: (id: string) => Promise<string>;
 
   sessionGetAll: () => Promise<[string, ISession][]>;
+
+  windowOpen: (session: ISession) => void;
 }
