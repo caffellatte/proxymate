@@ -2,6 +2,7 @@ import type {
   Database as IDatabase,
   Chain as IChain,
   Tabs as ITabs,
+  Windows as IWindows,
 } from "@/core";
 import {
   logClear,
@@ -23,25 +24,30 @@ import {
   tabCreate,
   tabGo,
   tabSetBounds,
+  windowOpen,
 } from "./handlers";
 
 class Ipc {
   public database: IDatabase;
   public chain: IChain;
   public tabs: ITabs;
+  public windows: IWindows;
 
   constructor({
     database,
     chain,
     tabs,
+    windows,
   }: {
     database: IDatabase;
     chain: IChain;
     tabs: ITabs;
+    windows: IWindows;
   }) {
     this.database = database;
     this.chain = chain;
     this.tabs = tabs;
+    this.windows = windows;
   }
 
   public logClear = logClear(this);
@@ -63,6 +69,7 @@ class Ipc {
   public tabCreate = tabCreate(this);
   public tabGo = tabGo(this);
   public tabSetBounds = tabSetBounds(this);
+  public windowOpen = windowOpen(this);
 }
 
 export default Ipc;
