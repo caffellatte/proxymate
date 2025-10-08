@@ -30,7 +30,7 @@ class Chain {
     } = proxy;
     this.servers[id] = new ProxyChain.Server({
       port: port,
-      host: "localhost",
+      host: "0.0.0.0",
       verbose: false,
 
       prepareRequestFunction: ({ request, connectionId }) => {
